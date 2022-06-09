@@ -75,8 +75,6 @@
 
 # Use Cases
 
-> GitHub Wiki에 따로 기록하겠음
-
 # DB ERD
 
 # 아키텍처
