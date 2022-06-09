@@ -20,8 +20,6 @@
 
 # UI
 
-> 오븐 통해서 이미지 첨가할 것
-
 # Github
 
 ### Branch Rule
