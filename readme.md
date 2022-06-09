@@ -18,13 +18,9 @@
 
 - 단순 기능 구현에 그치지 않고, 부하 테스트를 통한 대용량 트래픽을 처리하기 위해 노력합니다.
 
-### UI
+# UI
 
 > 오븐 통해서 이미지 첨가할 것
-
-# Use Cases
-
-> GitHub Wiki에 따로 기록하겠음
 
 # Github
 
@@ -72,20 +68,19 @@
 
 ### 그 외 규칙
 
-> *규칙은 아닌데, github Wiki 를 최대한 활용했으면 좋겠습니다!*
->
-
 1. commit message 깔끔하게 유지 → 최대한 basic merge를 사용하지 말고, rebase를 사용
     - “Merge remote-tracking branch '...' into develop” 이런 내용을 commit 내력에 최대한 남기지 말자.
 2. Github Issue 기반으로 프로젝트 진행하기
     - Issue Number 최대한 적극적으로 활용
 
+# Use Cases
+
+> GitHub Wiki에 따로 기록하겠음
+
+# DB ERD
+
 # 아키텍처
 
 ### 배포 방식
 
-# DB ERD
-
 # 기술적 이슈
-
-# History
