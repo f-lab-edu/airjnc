@@ -3,7 +3,8 @@ name: Refactor request
 about: Request Refactoring
 title: REFACTOR
 labels: refactoring
-assignees: ""
+assignees: ''
+
 ---
 
 # 어느 부분을 리팩토링해야 하는가요?

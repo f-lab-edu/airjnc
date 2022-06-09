@@ -3,7 +3,8 @@ name: Feature request
 about: Suggest an idea for this project
 title: FEATURE
 labels: enhancement
-assignees: ""
+assignees: ''
+
 ---
 
 # 추가해야 할 기능들은 무엇인가요?
