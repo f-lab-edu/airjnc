@@ -20,8 +20,6 @@
 
 # UI
 
-> 오븐 통해서 이미지 첨가할 것
-
 # Github
 
 ### Branch Rule
@@ -74,8 +72,6 @@
     - Issue Number 최대한 적극적으로 활용
 
 # Use Cases
-
-> GitHub Wiki에 따로 기록하겠음
 
 # DB ERD
 
