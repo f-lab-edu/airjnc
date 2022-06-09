@@ -1,9 +1,10 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: BUG
-labels: bug
+name: Bug Report
+about: 버그 발견
+title: Bug Report
+labels: 'Type: Bug'
 assignees: ''
+
 ---
 
 # Describe the bug

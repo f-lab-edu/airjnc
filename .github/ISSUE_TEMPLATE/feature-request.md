@@ -1,9 +1,10 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: FEATURE
-labels: enhancement
-assignees: ""
+name: Feature Request
+about: 기능 추가
+title: Feature Request
+labels: 'Type: Feature'
+assignees: ''
+
 ---
 
 # 추가해야 할 기능들은 무엇인가요?

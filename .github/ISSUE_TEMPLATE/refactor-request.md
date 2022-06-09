@@ -1,9 +1,10 @@
 ---
-name: Refactor request
-about: Request Refactoring
-title: REFACTOR
-labels: refactoring
-assignees: ""
+name: Refactor Request
+about: 리팩토링 필요
+title: Refactor Request
+labels: 'Type: Refactor'
+assignees: ''
+
 ---
 
 # 어느 부분을 리팩토링해야 하는가요?
