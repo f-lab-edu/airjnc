@@ -77,6 +77,8 @@
     - Projects 필수
 2. 해당 Issue에 대한 PR을 Draft로 등록
     - Projects 필수
+2. 해당 Issue에 대한 PR을 Draft로 등록
+    - Project 필수
 3. 해당 작업이 모두 완료되면 Draft 제거
 4. 리뷰 받기
     - 리뷰를 받고 수정해야 할 작업이 있다면, PR Title에 "wip"를 추가하고 진행한다. 이후, 모두 완료되었으면 "wip" 제거
