@@ -1,4 +1,4 @@
-package com.example.airjnc;
+package com.airjnc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
