@@ -222,16 +222,16 @@ CREATE TABLE IF NOT EXISTS `airbnb`.`room_photo`
 
 CREATE TABLE IF NOT EXISTS `airbnb`.`room_price`
 (
-    `id`           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id`                    BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     -- 1,2,3,4,5,6,7,8,9,10,11,12 월
-    `month`        INT UNSIGNED    NOT NULL,
+    `month`                 INT UNSIGNED    NOT NULL,
     -- 월별 기본 가격
-    `price`        INT UNSIGNED    NOT NULL,
+    `price`                 INT UNSIGNED    NOT NULL,
     -- 월별 주간 할인 가격
-    `weekly_price` INT UNSIGNED    NOT NULL,
-    `currency`     VARCHAR(20)     NOT NULL,
+    `weekly_discount_price` INT UNSIGNED    NOT NULL,
+    `currency`              VARCHAR(20)     NOT NULL,
 
-    `room_id`      BIGINT UNSIGNED NOT NULL,
+    `room_id`               BIGINT UNSIGNED NOT NULL,
 
     PRIMARY KEY (`id`),
     key `room_id-idx` (`room_id`)
