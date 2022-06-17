@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS `airbnb`.`room_type`
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
+-- 다대다 테이블임을 명시적으로 보여주기 위해 "__"를 중간에 넣음
 CREATE TABLE IF NOT EXISTS `airbnb`.`room_category`
 (
     `id`                    BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -84,7 +85,6 @@ CREATE TABLE IF NOT EXISTS `airbnb`.`room_category`
     `room_type_id`          BIGINT UNSIGNED NOT NULL,
 
     PRIMARY KEY (`id`),
-    UNIQUE KEY `room_category-unique` (`room_leaf_category_id`, `room_type_id`),
     KEY `room_leaf_category_id-idx` (`room_leaf_category_id`),
     KEY `room_type_id-idx` (`room_type_id`)
 ) ENGINE = InnoDB;
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `airbnb`.`wish_room`
     `room_id`    BIGINT UNSIGNED NOT NULL,
 
     PRIMARY KEY (`id`),
-    UNIQUE KEY `wish_room-unique` (`user_id`, `room_id`),
+    UNIQUE INDEX `user_wish_room-unique` (`user_id`, `room_id`),
     KEY `user_id-idx` (`user_id`),
     KEY `room_id-idx` (`room_id`)
 ) ENGINE = InnoDB;
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `airbnb`.`room_review`
     KEY `user_id-idx` (`user_id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `airbnb`.`facility_category`
+CREATE TABLE IF NOT EXISTS `airbnb`.`room_facility_category`
 (
     `id`   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(20)     NOT NULL,
@@ -177,20 +177,20 @@ CREATE TABLE IF NOT EXISTS `airbnb`.`facility_category`
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `airbnb`.`facility`
+CREATE TABLE IF NOT EXISTS `airbnb`.`room_facility`
 (
-    `id`                   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name`                 VARCHAR(20)     NOT NULL,
-    `description`          VARCHAR(50)     NULL DEFAULT NULL,
+    `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name`        VARCHAR(20)     NOT NULL,
+    `description` VARCHAR(50)     NULL DEFAULT NULL,
 
-    `facility_category_id` BIGINT UNSIGNED NOT NULL,
+    `category_id` BIGINT UNSIGNED NOT NULL,
 
     PRIMARY KEY (`id`),
-    KEY `facility_category_id-idx` (`facility_category_id`)
+    KEY `category_id-idx` (`category_id`)
 ) ENGINE = InnoDB;
 
 -- 다대다 테이블임을 명시적으로 보여주기 위해 "__"를 중간에 넣음
-CREATE TABLE IF NOT EXISTS `airbnb`.`room__facility`
+CREATE TABLE IF NOT EXISTS `airbnb`.`room__room_facility`
 (
     `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 
@@ -198,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `airbnb`.`room__facility`
     `facility_id` BIGINT UNSIGNED NOT NULL,
 
     PRIMARY KEY (`id`),
-    UNIQUE KEY `room__facility-unique` (`room_id`, `facility_id`), -- 특정 방에 대해서 편의시설 중복 방지
+    UNIQUE KEY `room_room_facility-unique` (`room_id`, `facility_id`), -- 특정 방에 대해서 편의시설 중복 방지
     KEY `room_id-idx` (`room_id`),
     KEY `facility_id-idx` (`facility_id`)
 ) ENGINE = InnoDB;
