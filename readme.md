@@ -22,47 +22,19 @@
 
 # Github
 
+- Github Flow 를 따른다.
+
 ### Branch Rule
 
-[Git Flow와 자주 사용되는 Git 명령어들](https://www.holaxprogramming.com/2018/11/01/git-commands/)
-
-[우린 Git-flow를 사용하고 있어요 | 우아한형제들 기술블로그](https://techblog.woowahan.com/2553/)
-
-| Branch Name            | Description                                                                                                                                            |
-|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| master                 | 제품으로 출시될 수 있는 브랜치                                                                                                                                      |
-| develop                | 다음 출시 버전을 개발하는 브랜치                                                                                                                                     |
-| feat/#<ISSUE_NUMBER>   | 기능을 개발하는 브랜치 <br/> - 브랜치가 생성되는 대상 → develop<br/> - merge 대상 → develop                                                                                  |
-| release                | 이번 출시 버전을 준비하는 브랜치 <br/>- 브랜치가 생성되는 대상 → develop<br/> - merge 대상 → develop, master                                                                     |
-| hotfix/#<ISSUE_NUMBER> | 배포 이후에 생긴 치명적인 버그는 즉시 해결해야 하기 때문에, 문제가 생기면 `master` 브랜치에 만들어둔 tag로 부터 긴급수정을 위한 브랜치를 생성한다.<br/>- 브랜치가 생성되는 대상 → master<br/>- merge 대상 → develop, master |
-
-### Commit Rule
-
-[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
-
-[Semantic Commit Messages](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716)
-
-1. `feat(#<ISSUE_NUMBER>): MESSAGE`
-
-    ```
-    feat(#3): 로그인 기능
-    
-    - 이메일, 비밀번호 로그인 기능 추가
-    - 세션 기반
-    ```
-
-    - new feature for the user, not a new feature for build script
-2. `hotfix(#<ISSUE_NUMBER>): MESSAGE`
-    - bug fix for the user, not a fix to a build script
-3. `refactor(#<ISSUE_NUMBER>): MESSAGE`
-    - refactoring production code, eg. renaming a variable
-    - 코드 리팩토링
-4. `test(#<ISSUE_NUMBER>): MESSAGE`
-    - adding missing tests, refactoring tests; no production code change
-    - 테스트 코드 작성
-5. `chore(#<ISSUE_NUMBER>): MESSAGE`
-    - updating grunt tasks etc; no production code change
-    - **(코드변경없음)**빌드업무수정, 패키지 매니저 수정, 환경설정, 기타등등
+- BRANCH
+    - master
+    - feature/#(ISSUE_NUMBER)
+    - chore/#(ISSUE_NUMBER)
+- COMMIT
+    - feature:#(ISSUE_NUMBER)
+    - refactor:#(ISSUE_NUMBER)
+    - chore:#(ISSUE_NUMBER)
+    - hotfix:#(ISSUE_NUMBER)
 
 ### 그 외 규칙
 
@@ -84,10 +56,16 @@
 
 # Use Cases
 
+- Github Wiki에 작성했습니다.
+
 # DB ERD
+
+![airjnc-ERD](https://user-images.githubusercontent.com/41284492/174721953-13a253bb-7ae5-4822-9999-2280bfc3cf0d.png)
 
 # 아키텍처
 
 ### 배포 방식
 
-# 기술적 이슈
+# 기술적 이슈 관련 포스팅
+
+- 한재남: [노션 링크](https://jnam.notion.site/cb6e110e5b3340f49ab3e568674a57db?v=2217c4920bf54590afc7f41e382b1746)로 대체합니다.
