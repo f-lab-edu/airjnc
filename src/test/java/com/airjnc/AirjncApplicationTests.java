@@ -1,4 +1,4 @@
-package com.example.airjnc;
+package com.airjnc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
