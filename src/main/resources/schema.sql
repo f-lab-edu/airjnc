@@ -32,12 +32,7 @@ CREATE TABLE IF NOT EXISTS `airbnb`.`host`
 CREATE TABLE IF NOT EXISTS `airbnb`.`room_category`
 (
     `id`               BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `root_category`    VARCHAR(20)     NOT NULL,
-    `reaf_category`    VARCHAR(20)     NOT NULL,
-    -- WHOLE[집 전체] : 게스트가 침실, 욕실, 주방을 비롯한 숙소 전체 공간을 단독으로 사용합니다.
-    -- PRIVATE[개인실] : 게스트가 일부 공간을 다른 사람과 공유하나 침실은 단독으로 사용합니다.
-    -- SHARED[다인실] : 게스트가 침실을 단독으로 사용하지 않습니다.
-    `room_type`        VARCHAR(20)     NOT NULL,
+    `name`             VARCHAR(20)     NOT NULL,
     `is_several_rooms` BOOLEAN         NOT NULL,
 
     PRIMARY KEY (`id`)
