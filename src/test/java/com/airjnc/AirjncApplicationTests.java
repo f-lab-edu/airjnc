@@ -1,4 +1,4 @@
-package com.example.airjnc;
+package com.airjnc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -6,8 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class AirjncApplicationTests {
 
-  @Test
-  void contextLoads() {
-  }
+//  @Test
+//  void contextLoads() {
+//  }
 
 }
