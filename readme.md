@@ -31,10 +31,10 @@
     - feature/#(ISSUE_NUMBER)
     - chore/#(ISSUE_NUMBER)
 - COMMIT
-    - feature:#(ISSUE_NUMBER)
-    - refactor:#(ISSUE_NUMBER)
-    - chore:#(ISSUE_NUMBER)
-    - hotfix:#(ISSUE_NUMBER)
+    - feature#(ISSUE_NUMBER):MESSAGE
+    - refactor#(ISSUE_NUMBER):MESSAGE
+    - chore#(ISSUE_NUMBER):MESSAGE
+    - hotfix#(ISSUE_NUMBER):MESSAGE
 
 ### 그 외 규칙
 
