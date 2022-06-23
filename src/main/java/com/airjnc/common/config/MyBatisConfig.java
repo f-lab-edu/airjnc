@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @RequiredArgsConstructor
-@MapperScan(basePackages = "com.airjnc.*.dao.mapper")
+@MapperScan(basePackages = "com.airjnc.*.dao.mapper") // @Mppaer 스캔 경로
 public class MyBatisConfig {
     private final ApplicationContext context;
 

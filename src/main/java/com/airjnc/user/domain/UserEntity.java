@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter // ModelMapper의 `map`을 통하여 매핑시킬 경우, 필요하다.
+@NoArgsConstructor // ModelMapper의 `map`을 통하여 매핑시킬 경우, 필요하다.
 public class UserEntity {
     public enum Gender {
         FEMALE, MALE
