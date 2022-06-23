@@ -38,3 +38,7 @@ out/
 
 ### mac ###
 .DS_Store
+
+### application.properties ###
+application.properties
+application-local.properties
