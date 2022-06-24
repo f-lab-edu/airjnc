@@ -1,7 +1,6 @@
 package com.airjnc.user.service;
 
 import com.airjnc.user.util.SessionKey;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,8 +22,7 @@ class SessionAuthServiceTest {
 
 
     @Test
-    @DisplayName("logIn) 세션을 저장해야 한다.")
-    void logIn() {
+    void sessionShouldBeSaved() {
         //when
         int expire = 1_800;
         SessionKey key = SessionKey.USER;
@@ -38,8 +36,7 @@ class SessionAuthServiceTest {
     }
 
     @Test
-    @DisplayName("logOut) 저장되어 있는 세션을 제거해야 한다.")
-    void logOut() {
+    void sessionShouldBeRemoved() {
         //when
         SessionKey key = SessionKey.USER;
         //then

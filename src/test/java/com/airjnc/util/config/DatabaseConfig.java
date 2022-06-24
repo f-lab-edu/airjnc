@@ -40,7 +40,6 @@ public class DatabaseConfig {
         JdbcTemplate template = new JdbcTemplate(dataSource);
         UserEntity user = UserEntityFixture.getBuilder().build();
         template.update("insert into `user` (id, email, password, name, gender, phone_number, address, is_active," +
-                " " +
                 "birthdate, created_at, updated_at, deleted_at)" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             user.getId(), user.getEmail(), user.getPassword(), user.getName(), user.getGender().name(),

@@ -18,17 +18,17 @@ public class MybatisUserRepository implements UserRepository {
 
     @Override
     public Optional<UserEntity> findById(Long id) {
-        return this.userMapper.findById(id);
+        return userMapper.findById(id);
     }
 
     @Override
     public Optional<UserEntity> findByEmail(String email) {
-        return this.userMapper.findByEmail(email);
+        return userMapper.findByEmail(email);
     }
 
     @Override
     public UserEntity save(SignUpDTO signUpDTO) {
-        this.userMapper.save(signUpDTO);
-        return this.modelMapper.map(signUpDTO, UserEntity.class);
+        userMapper.save(signUpDTO);
+        return modelMapper.map(signUpDTO, UserEntity.class);
     }
 }

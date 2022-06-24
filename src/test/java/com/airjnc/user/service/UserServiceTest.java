@@ -8,7 +8,6 @@ import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.util.validator.EmailDuplicateValidator;
 import com.airjnc.util.fixture.UserDTOFixture;
 import com.airjnc.util.fixture.UserEntityFixture;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,8 +33,7 @@ class UserServiceTest {
     UserService userService;
 
     @Test()
-    @DisplayName("create")
-    void create() {
+    void userShouldBeCreated() {
         //given
         SignUpDTO signUpDTO = mock(SignUpDTO.class);
         UserEntity userEntity = UserEntityFixture.getBuilder().build();

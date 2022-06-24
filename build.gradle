@@ -28,12 +28,10 @@ dependencies {
     testImplementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter-test', version: '2.2.2'
 
     compileOnly 'org.projectlombok:lombok'
-    testCompileOnly 'org.projectlombok:lombok' //테스트에서 lombok 사용
 
     runtimeOnly 'mysql:mysql-connector-java'
 
     annotationProcessor 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {

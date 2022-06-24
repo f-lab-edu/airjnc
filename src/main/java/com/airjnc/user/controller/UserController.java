@@ -4,6 +4,7 @@ import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.AuthService;
 import com.airjnc.user.service.UserService;
+import com.airjnc.user.util.SessionKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +22,7 @@ public class UserController {
     public UserDTO signUp(@RequestBody @Validated SignUpDTO signUpDTO) {
         UserDTO userDTO = this.userService.create(signUpDTO);
         // 회원가입과 동시에 로그인 진행 [세션 저장(or)JWT 토큰 발급]
-        authService.logIn(AuthService.Key.USER, userDTO.getId());
+        authService.logIn(SessionKey.USER, userDTO.getId());
         return userDTO;
     }
 }

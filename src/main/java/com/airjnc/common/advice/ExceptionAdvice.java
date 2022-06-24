@@ -1,7 +1,7 @@
 package com.airjnc.common.advice;
 
 import com.airjnc.common.dto.ErrorResponse;
-import com.airjnc.user.util.exception.DuplicatedEmailException;
+import com.airjnc.user.exception.DuplicatedEmailException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;

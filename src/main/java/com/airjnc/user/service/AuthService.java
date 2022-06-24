@@ -1,12 +1,10 @@
 package com.airjnc.user.service;
 
 
+import com.airjnc.user.util.SessionKey;
+
 public interface AuthService {
-    enum Key {
-        USER
-    }
+    void logIn(SessionKey key, Long userId);
 
-    void logIn(AuthService.Key key, Long userId);
-
-    void logOut(AuthService.Key key);
+    void logOut(SessionKey key);
 }

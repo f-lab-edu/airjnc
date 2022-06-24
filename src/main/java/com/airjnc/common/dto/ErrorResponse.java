@@ -1,6 +1,5 @@
 package com.airjnc.common.dto;
 
-import com.airjnc.common.advice.ExceptionAdvice;
 import lombok.Getter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
@@ -11,6 +10,7 @@ import org.springframework.validation.ObjectError;
 
 import java.util.*;
 
+@Getter
 public class ErrorResponse {
     private final String exceptionType;
     private final List<String> global;

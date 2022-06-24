@@ -1,8 +1,6 @@
 package com.airjnc.util.fixture;
 
 import com.airjnc.user.domain.UserEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

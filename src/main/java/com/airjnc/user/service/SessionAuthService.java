@@ -1,5 +1,6 @@
 package com.airjnc.user.service;
 
+import com.airjnc.user.util.SessionKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,13 @@ public class SessionAuthService implements AuthService {
 
 
     @Override
-    public void logIn(AuthService.Key key, Long userId) {
+    public void logIn(SessionKey key, Long userId) {
         this.httpSession.setMaxInactiveInterval(this.expire);
         this.httpSession.setAttribute(key.name(), userId);
     }
 
     @Override
-    public void logOut(AuthService.Key key) {
+    public void logOut(SessionKey key) {
         this.httpSession.removeAttribute(key.name());
     }
 }

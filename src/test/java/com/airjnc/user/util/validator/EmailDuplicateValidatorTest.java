@@ -1,11 +1,12 @@
 package com.airjnc.user.util.validator;
 
 import com.airjnc.user.dao.UserRepository;
-import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.SignUpDTO;
-import com.airjnc.user.util.exception.DuplicatedEmailException;
+import com.airjnc.user.exception.DuplicatedEmailException;
+import com.airjnc.util.fixture.SignUpDTOFixture;
 import com.airjnc.util.fixture.UserEntityFixture;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,12 +31,11 @@ class EmailDuplicateValidatorTest {
 
     @BeforeEach
     void beforeEach() {
-        this.signUpDTO = SignUpDTO.builder().build();
+        this.signUpDTO = SignUpDTOFixture.getBuilder().build();
     }
 
     @Test
-    @DisplayName("supports 메소드는 SignUpDTO 타입에 대해서 TRUE를 반환해야 한다.")
-    void supports() {
+    void whenPassSignUpDTOReturnValueShouldBeTrue() {
         //when
         boolean supports = emailDuplicateValidator.supports(signUpDTO.getClass());
         //then
@@ -43,8 +43,7 @@ class EmailDuplicateValidatorTest {
     }
 
     @Test
-    @DisplayName("중복되지 않는 이메일이라면, 에러를 던지지 않고, rejectValue가 호출되지 않아야 한다.")
-    void notDuplicatedEmail() {
+    void whenEmailOfSignUpDTOisEmptyExceptionShouldNotBeThrown() {
         // given
         when(userRepository.findByEmail(this.signUpDTO.getEmail())).thenReturn(Optional.empty());
         //when
@@ -55,8 +54,7 @@ class EmailDuplicateValidatorTest {
     }
 
     @Test
-    @DisplayName("중복되는 이메일이라면, DuplicatedEmailException을 던지고, rejectValue가 한 번 호출되야 한다.")
-    void duplicatedEmail() {
+    void whenEmailOfSignUpDTOisDuplicatedExceptionShouldBeThrown() {
         // given
         when(userRepository.findByEmail(this.signUpDTO.getEmail())).thenReturn(Optional.of(UserEntityFixture.getBuilder().build()));
         //when
