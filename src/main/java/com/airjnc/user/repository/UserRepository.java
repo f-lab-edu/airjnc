@@ -1,13 +1,13 @@
 package com.airjnc.user.repository;
 
-import com.airjnc.user.dto.UserDTO;
-import com.airjnc.user.entity.UserEntity;
-
-import java.util.Optional;
+import com.airjnc.user.domain.User;
 
 
 public interface UserRepository {
 
-    public UserEntity findUserById(Long id);
-    
+    public User selectUserById(Long id);
+
+    public User selectUserByEmail(String email);
+
+    public void insertUser(User user);
 }

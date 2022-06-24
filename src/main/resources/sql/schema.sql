@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`user`
     `deleted_at`   TIMESTAMP,
 
     PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `airjnc`.`host`
 (
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`host`
 
     PRIMARY KEY (`id`),
     KEY `user_id-idx` (`user_id`)
-    ) ENGINE = InnoDB;
+) ENGINE = InnoDB;
 
 
 CREATE TABLE IF NOT EXISTS `airjnc`.`room_category`
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`room_category`
     `is_several_rooms` BOOLEAN         NOT NULL,
 
     PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `airjnc`.`room`
 (
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`room`
     PRIMARY KEY (`id`),
     KEY `host_id-idx` (`host_id`),
     KEY `room_category_id-idx` (`room_category_id`)
-    ) ENGINE = InnoDB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `airjnc`.`room_reservation`
 (
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`room_reservation`
     PRIMARY KEY (`id`),
     KEY `user_id-idx` (`user_id`),
     KEY `room_id-idx` (`room_id`)
-    ) ENGINE = InnoDB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `airjnc`.`wish_room`
 (
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`wish_room`
     UNIQUE KEY `wish_room-unique` (`user_id`, `room_id`),
     KEY `user_id-idx` (`user_id`),
     KEY `room_id-idx` (`room_id`)
-    ) ENGINE = InnoDB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `airjnc`.`room_review`
 (
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`room_review`
     PRIMARY KEY (`id`),
     KEY `room_id-idx` (`room_id`),
     KEY `user_id-idx` (`user_id`)
-    ) ENGINE = InnoDB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `airjnc`.`facility`
 (
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`facility`
     `description` VARCHAR(50) DEFAULT NULL,
 
     PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB;
+) ENGINE = InnoDB;
 
 -- 다대다 테이블임을 명시적으로 보여주기 위해 "__"를 중간에 넣음
 CREATE TABLE IF NOT EXISTS `airjnc`.`room__facility`
@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`room__facility`
     UNIQUE KEY `room__facility-unique` (`room_id`, `facility_id`), -- 특정 방에 대해서 편의시설 중복 방지
     KEY `room_id-idx` (`room_id`),
     KEY `facility_id-idx` (`facility_id`)
-    ) ENGINE = InnoDB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `airjnc`.`room_photo`
 (
@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`room_photo`
 
     PRIMARY KEY (`id`),
     KEY `room_id-idx` (`room_id`)
-    ) ENGINE = InnoDB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `airjnc`.`room_price`
 (
@@ -171,4 +171,4 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`room_price`
 
     PRIMARY KEY (`id`),
     KEY `room_id-idx` (`room_id`)
-    ) ENGINE = InnoDB;
+) ENGINE = InnoDB;

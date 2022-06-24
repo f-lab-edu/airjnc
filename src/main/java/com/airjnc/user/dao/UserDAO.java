@@ -1,13 +1,15 @@
 package com.airjnc.user.dao;
 
-import com.airjnc.user.dto.UserDTO;
-import com.airjnc.user.entity.UserEntity;
-import org.springframework.context.annotation.Bean;
-
-import java.util.Optional;
+import com.airjnc.user.domain.User;
 
 
 public interface UserDAO {
+
+    public User selectUserById(Long id);
+
+    public User selectUserByEmail(String email);
+
+    public void insertUser(User userEntity);
     
-    public UserEntity findUserById(Long id);
+
 }
