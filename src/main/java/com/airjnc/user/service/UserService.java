@@ -32,7 +32,7 @@ public class UserService {
         this.validatorTemplate.validate(emailDuplicateValidator, signUpDTO);
         // 비밀번호 "평문->해시" 로 해시화
         signUpDTO.changePasswordToHash();
-        UserEntity user = this.userRepository.save(signUpDTO);
-        return this.modelMapper.map(user, UserDTO.class);
+        UserEntity userEntity = this.userRepository.save(signUpDTO);
+        return this.modelMapper.map(userEntity, UserDTO.class);
     }
 }

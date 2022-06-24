@@ -2,13 +2,16 @@ package com.airjnc.user.dto.request;
 
 import com.airjnc.common.util.BCryptHashEncrypter;
 import com.airjnc.user.domain.UserEntity;
-import lombok.Getter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE) // BeanValidation 을 사용하기 위해 필요합니다.
+@Builder
+@AllArgsConstructor
 public class SignUpDTO {
     private Long id;
     @NotNull

@@ -14,11 +14,12 @@ import javax.sql.DataSource;
 @Configuration
 @RequiredArgsConstructor
 @MapperScan(basePackages = "com.airjnc.*.dao.mapper") // @Mppaer 스캔 경로
-public class MyBatisConfig {
+public class MybatisConfig {
     private final ApplicationContext context;
+    private final DataSource dataSource;
 
     @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+    public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource);
         factoryBean.setTypeAliasesPackage("com.airjnc.*.domain"); // 매핑되는 자바 객체 경로 설정
