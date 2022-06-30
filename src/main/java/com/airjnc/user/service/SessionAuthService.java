@@ -17,12 +17,12 @@ public class SessionAuthService implements AuthService {
 
     @Override
     public void logIn(SessionKey key, Long userId) {
-        this.httpSession.setMaxInactiveInterval(this.expire);
-        this.httpSession.setAttribute(key.name(), userId);
+        httpSession.setMaxInactiveInterval(expire);
+        httpSession.setAttribute(key.name(), userId);
     }
 
     @Override
     public void logOut(SessionKey key) {
-        this.httpSession.removeAttribute(key.name());
+        httpSession.removeAttribute(key.name());
     }
 }

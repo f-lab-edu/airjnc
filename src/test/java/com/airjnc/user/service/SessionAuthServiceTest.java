@@ -33,6 +33,7 @@ class SessionAuthServiceTest {
         //then
         then(httpSession).should(times(1)).setMaxInactiveInterval(expire);
         then(httpSession).should(times(1)).setAttribute(key.name(), userId);
+
     }
 
     @Test

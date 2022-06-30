@@ -25,7 +25,7 @@ public class DatabaseConfig {
 
     @Bean
     DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource(this.url, this.username, this.password);
+        DriverManagerDataSource dataSource = new DriverManagerDataSource(url, username, password);
         clear(dataSource);
         initData(dataSource);
         return dataSource;

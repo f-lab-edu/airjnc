@@ -11,4 +11,6 @@ public interface UserRepository {
     Optional<UserEntity> findByEmail(String email);
 
     UserEntity save(SignUpDTO signUpDTO);
+
+    void remove(Long id);
 }

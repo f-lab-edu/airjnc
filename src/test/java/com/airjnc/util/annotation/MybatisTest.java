@@ -17,5 +17,5 @@ import java.lang.annotation.*;
 @AutoConfigureMybatis // MyBatis slice 테스트 [ MyBatis 관련 빈들만 등록 ]
 @ContextConfiguration(classes = DatabaseConfig.class) // 테스트용 컨텍스트 공유
 @TestPropertySource(locations = "classpath:/application-test.properties") // 테스트용 properties 설정‘
-public @interface DaoTest {
+public @interface MybatisTest {
 }
