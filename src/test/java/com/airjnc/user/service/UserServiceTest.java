@@ -1,6 +1,5 @@
 package com.airjnc.user.service;
 
-import com.airjnc.common.util.validator.ValidatorTemplate;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.SignUpDTO;
@@ -27,8 +26,6 @@ class UserServiceTest {
     ModelMapper modelMapper; // 라이브러리이므로, 목 메소드를 만들지 않고, 실제 메소드 호출로 테스트진행
     @Mock
     EmailDuplicateValidator emailDuplicateValidator;
-    @Mock
-    ValidatorTemplate validatorTemplate;
     @InjectMocks
     UserService userService;
 
@@ -43,10 +40,20 @@ class UserServiceTest {
         //when
         UserDTO result = userService.create(signUpDTO);
         //then
-        then(validatorTemplate).should(times(1)).validate(emailDuplicateValidator, signUpDTO);
         then(signUpDTO).should(times(1)).changePasswordToHash();
         then(userRepository).should(times(1)).save(signUpDTO);
         then(modelMapper).should(times(1)).map(userEntity, UserDTO.class);
         assertThat(result.getId()).isEqualTo(userDTO.getId());
     }
+
+    @Test
+    void userShouldBeRemoved() {
+        //given
+        UserEntity userEntity = UserEntityFixture.getBuilder().build();
+        //when
+        userService.remove(userEntity.getId());
+        //then
+        then(userRepository).should(times(1)).remove(userEntity.getId());
+    }
+
 }

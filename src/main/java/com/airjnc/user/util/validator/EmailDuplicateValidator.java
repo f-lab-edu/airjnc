@@ -6,30 +6,20 @@ import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.exception.DuplicatedEmailException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class EmailDuplicateValidator implements Validator {
+public class EmailDuplicateValidator {
     private final UserRepository userRepository;
 
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return SignUpDTO.class.isAssignableFrom(clazz);
-    }
-
-    @Override
-    public void validate(Object target, Errors errors) {
+    public void validate(Object target) {
         SignUpDTO signUpDTO = (SignUpDTO) target;
-        Optional<UserEntity> user = this.userRepository.findByEmail(signUpDTO.getEmail());
+        Optional<UserEntity> user = userRepository.findByEmail(signUpDTO.getEmail());
         if (user.isEmpty()) {
             return;
         }
-        errors.rejectValue("email", "duplicated");
-        throw new DuplicatedEmailException(errors);
-
+        throw new DuplicatedEmailException();
     }
 }
