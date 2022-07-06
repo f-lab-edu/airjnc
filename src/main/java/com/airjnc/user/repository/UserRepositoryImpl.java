@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-
-
+    
     @Autowired
     private UserDAO userDAO;
 
@@ -23,8 +22,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void insertUser(User user) {
+    public User insertUser(User user) {
         userDAO.insertUser(user);
+        return user;
     }
 
 

@@ -1,10 +1,13 @@
 package com.airjnc.user.service;
 
-import com.airjnc.user.domain.User;
+import com.airjnc.user.dto.request.SignUpDTO;
+import com.airjnc.user.dto.response.UserDTO;
 
 public interface UserService {
+    
+    public UserDTO findPasswordByEmail(String email);
 
-    public void join(User user);
+    public UserDTO create(SignUpDTO signUpDTO);
 
     public void checkDuplicateEmail(String email);
 }

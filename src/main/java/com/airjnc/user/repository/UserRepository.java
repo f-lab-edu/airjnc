@@ -9,5 +9,5 @@ public interface UserRepository {
 
     public User selectUserByEmail(String email);
 
-    public void insertUser(User user);
+    public User insertUser(User user);
 }

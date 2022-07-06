@@ -1,4 +1,4 @@
-package com.airjnc.user.dto;
+package com.airjnc.user.dto.response;
 
 
 import lombok.*;

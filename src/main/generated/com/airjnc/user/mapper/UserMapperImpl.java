@@ -1,20 +1,21 @@
 package com.airjnc.user.mapper;
 
 import com.airjnc.user.domain.User;
-import com.airjnc.user.dto.UserDTO;
+import com.airjnc.user.dto.request.SignUpDTO;
+import com.airjnc.user.dto.response.UserDTO;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-06-25T03:10:16+0900",
+    date = "2022-07-07T03:37:18+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 11.0.11 (AdoptOpenJDK)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
 
     @Override
-    public UserDTO toUserDTO(User user) {
+    public UserDTO userToUserDTO(User user) {
         if ( user == null ) {
             return null;
         }
@@ -38,7 +39,7 @@ public class UserMapperImpl implements UserMapper {
     }
 
     @Override
-    public User toUser(UserDTO userDTO) {
+    public User userDTOtoUser(UserDTO userDTO) {
         if ( userDTO == null ) {
             return null;
         }
@@ -57,6 +58,25 @@ public class UserMapperImpl implements UserMapper {
         user.createdAt( userDTO.getCreatedAt() );
         user.updatedAt( userDTO.getUpdatedAt() );
         user.deletedAt( userDTO.getDeletedAt() );
+
+        return user.build();
+    }
+
+    @Override
+    public User signupDTOtoUser(SignUpDTO signUpDTO) {
+        if ( signUpDTO == null ) {
+            return null;
+        }
+
+        User.UserBuilder user = User.builder();
+
+        user.email( signUpDTO.getEmail() );
+        user.password( signUpDTO.getPassword() );
+        user.name( signUpDTO.getName() );
+        user.gender( genderToGender2( signUpDTO.getGender() ) );
+        user.phoneNumber( signUpDTO.getPhoneNumber() );
+        user.address( signUpDTO.getAddress() );
+        user.birthDate( signUpDTO.getBirthDate() );
 
         return user.build();
     }
@@ -80,6 +100,24 @@ public class UserMapperImpl implements UserMapper {
     }
 
     protected User.Gender genderToGender1(UserDTO.Gender gender) {
+        if ( gender == null ) {
+            return null;
+        }
+
+        User.Gender gender1;
+
+        switch ( gender ) {
+            case FEMALE: gender1 = User.Gender.FEMALE;
+            break;
+            case MALE: gender1 = User.Gender.MALE;
+            break;
+            default: throw new IllegalArgumentException( "Unexpected enum constant: " + gender );
+        }
+
+        return gender1;
+    }
+
+    protected User.Gender genderToGender2(SignUpDTO.Gender gender) {
         if ( gender == null ) {
             return null;
         }

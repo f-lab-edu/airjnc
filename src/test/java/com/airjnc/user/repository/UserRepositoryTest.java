@@ -41,7 +41,7 @@ class UserRepositoryTest {
 
     @Test
     public void repositoryTest() {
-        userRepository.insertUser(user1);
+        User user = userRepository.insertUser(user1);
         assertThat(user1.getEmail()).isEqualTo(userRepository.selectUserById(user1.getId()).getEmail());
         assertThat(user1.getId()).isEqualTo(userRepository.selectUserByEmail("test@naver.com").getId());
     }
