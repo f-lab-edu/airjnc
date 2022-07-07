@@ -1,5 +1,6 @@
 package com.airjnc.user.dao;
 
+import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -8,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
+import util.UserFixture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,26 +27,17 @@ class UserDaoTest {
 
     @BeforeEach
     public void setUp() {
-        this.user1 = User.builder()
+
+        this.user1 = UserFixture.getUserBuilder()
+            .id(null)
             .email("test@naver.com")
-            .password("1234")
-            .name("창훈")
-            .gender(User.Gender.MALE)
-            .phoneNumber("010-2222-3333")
-            .address("서울시 강동구")
-            .active(true)
-            .birthDate(LocalDate.of(1995, 1, 25))
             .build();
 
-        this.user2 = User.builder()
+        this.user2 = UserFixture.getUserBuilder()
+            .id(null)
             .email("test2@naver.com")
-            .password("1234")
-            .name("창훈2")
-            .gender(User.Gender.FEMALE)
-            .phoneNumber("010-2222-3334")
-            .address("서울시 강동구")
-            .active(true)
-            .birthDate(LocalDate.of(1995, 1, 25))
+            .name("testUser2")
+            .gender(Gender.FEMALE)
             .build();
     }
 
@@ -54,7 +45,7 @@ class UserDaoTest {
     @DisplayName("Insert 후 이메일로 유저찾기")
     public void addAndGetByEmail() {
         userDAO.insertUser(user1);
-        assertThat(user1.getId()).isEqualTo(userDAO.selectUserByEmail("test@naver.com").getId());
+        assertThat(user1.getId()).isEqualTo(userDAO.selectUserByEmail(user1.getEmail()).getId());
     }
 
     @Test
@@ -62,6 +53,8 @@ class UserDaoTest {
     public void addAndGetById() {
         userDAO.insertUser(user1);
         assertThat(user1.getEmail()).isEqualTo(userDAO.selectUserById(user1.getId()).getEmail());
+
+
     }
 
     @Test

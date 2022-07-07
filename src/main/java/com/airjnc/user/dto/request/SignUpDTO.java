@@ -1,6 +1,7 @@
 package com.airjnc.user.dto.request;
 
 
+import com.airjnc.user.domain.Gender;
 import com.airjnc.user.dto.response.UserDTO;
 import lombok.*;
 
@@ -15,9 +16,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
 public class SignUpDTO {
-    public enum Gender {
-        FEMALE, MALE
-    }
     
     @NotNull
     @Email
@@ -28,7 +26,7 @@ public class SignUpDTO {
     @NotNull
     private String name;
     @NotNull
-    private SignUpDTO.Gender gender;
+    private Gender gender;
     @NotNull
     private String phoneNumber;
     @NotNull

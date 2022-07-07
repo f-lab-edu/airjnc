@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO create(SignUpDTO signUpDTO) {
-        User user = userMapper.signupDTOtoUser(signUpDTO);
+        User user = userMapper.signUpDTOtoUser(signUpDTO);
         User signupUser = userRepository.insertUser(user);
         UserDTO userDTO = userMapper.userToUserDTO(signupUser);
         

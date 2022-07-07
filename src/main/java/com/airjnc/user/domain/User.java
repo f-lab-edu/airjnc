@@ -12,15 +12,12 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 public class User {
-    public enum Gender {
-        FEMALE, MALE
-    }
 
     private Long id;
     private String email;
     private String password;
     private String name;
-    private User.Gender gender;
+    private Gender gender;
     private String phoneNumber;
     private String address;
     private boolean active;
@@ -31,7 +28,7 @@ public class User {
 
 
     @Builder
-    public User(String email, String password, String name, User.Gender gender, String phoneNumber, String address, LocalDate birthDate) {
+    public User(String email, String password, String name, Gender gender, String phoneNumber, String address, LocalDate birthDate) {
         this.email = email;
         this.password = password;
         this.name = name;

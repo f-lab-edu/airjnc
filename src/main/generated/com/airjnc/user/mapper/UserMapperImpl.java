@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-07T03:37:18+0900",
+    date = "2022-07-07T13:50:13+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 11.0.11 (AdoptOpenJDK)"
 )
 @Component
@@ -26,7 +26,7 @@ public class UserMapperImpl implements UserMapper {
         userDTO.email( user.getEmail() );
         userDTO.password( user.getPassword() );
         userDTO.name( user.getName() );
-        userDTO.gender( genderToGender( user.getGender() ) );
+        userDTO.gender( user.getGender() );
         userDTO.phoneNumber( user.getPhoneNumber() );
         userDTO.address( user.getAddress() );
         userDTO.active( user.isActive() );
@@ -50,7 +50,7 @@ public class UserMapperImpl implements UserMapper {
         user.email( userDTO.getEmail() );
         user.password( userDTO.getPassword() );
         user.name( userDTO.getName() );
-        user.gender( genderToGender1( userDTO.getGender() ) );
+        user.gender( userDTO.getGender() );
         user.phoneNumber( userDTO.getPhoneNumber() );
         user.address( userDTO.getAddress() );
         user.active( userDTO.isActive() );
@@ -63,7 +63,7 @@ public class UserMapperImpl implements UserMapper {
     }
 
     @Override
-    public User signupDTOtoUser(SignUpDTO signUpDTO) {
+    public User signUpDTOtoUser(SignUpDTO signUpDTO) {
         if ( signUpDTO == null ) {
             return null;
         }
@@ -73,65 +73,11 @@ public class UserMapperImpl implements UserMapper {
         user.email( signUpDTO.getEmail() );
         user.password( signUpDTO.getPassword() );
         user.name( signUpDTO.getName() );
-        user.gender( genderToGender2( signUpDTO.getGender() ) );
+        user.gender( signUpDTO.getGender() );
         user.phoneNumber( signUpDTO.getPhoneNumber() );
         user.address( signUpDTO.getAddress() );
         user.birthDate( signUpDTO.getBirthDate() );
 
         return user.build();
-    }
-
-    protected UserDTO.Gender genderToGender(User.Gender gender) {
-        if ( gender == null ) {
-            return null;
-        }
-
-        UserDTO.Gender gender1;
-
-        switch ( gender ) {
-            case FEMALE: gender1 = UserDTO.Gender.FEMALE;
-            break;
-            case MALE: gender1 = UserDTO.Gender.MALE;
-            break;
-            default: throw new IllegalArgumentException( "Unexpected enum constant: " + gender );
-        }
-
-        return gender1;
-    }
-
-    protected User.Gender genderToGender1(UserDTO.Gender gender) {
-        if ( gender == null ) {
-            return null;
-        }
-
-        User.Gender gender1;
-
-        switch ( gender ) {
-            case FEMALE: gender1 = User.Gender.FEMALE;
-            break;
-            case MALE: gender1 = User.Gender.MALE;
-            break;
-            default: throw new IllegalArgumentException( "Unexpected enum constant: " + gender );
-        }
-
-        return gender1;
-    }
-
-    protected User.Gender genderToGender2(SignUpDTO.Gender gender) {
-        if ( gender == null ) {
-            return null;
-        }
-
-        User.Gender gender1;
-
-        switch ( gender ) {
-            case FEMALE: gender1 = User.Gender.FEMALE;
-            break;
-            case MALE: gender1 = User.Gender.MALE;
-            break;
-            default: throw new IllegalArgumentException( "Unexpected enum constant: " + gender );
-        }
-
-        return gender1;
     }
 }

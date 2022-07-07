@@ -12,13 +12,15 @@ import org.mapstruct.*;
 public interface UserMapper {
 
     UserDTO userToUserDTO(User user);
-    
+
     User userDTOtoUser(UserDTO userDTO);
-    
+
     @Mapping(target="id", ignore = true)
     @Mapping(target="active", ignore = true)
     @Mapping(target="createdAt", ignore = true)
     @Mapping(target="updatedAt", ignore = true)
     @Mapping(target="deletedAt", ignore = true)
-    User signupDTOtoUser(SignUpDTO signUpDTO);
+    User signUpDTOtoUser(SignUpDTO signUpDTO);
+    
+    
 }
