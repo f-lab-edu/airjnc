@@ -2,7 +2,7 @@ package com.airjnc.common.exception.controller;
 
 import com.airjnc.common.exception.InvalidFormException;
 import com.airjnc.common.exception.code.ErrorCode;
-import com.airjnc.common.exception.dto.ErrorResponse;
+import com.airjnc.common.dto.ErrorResponseBodyHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,24 +10,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class ControllerExeptionHandler extends ResponseEntityExceptionHandler {
-
-    private HttpStatus getHttpStatus(ErrorCode errorCode) {
-        return HttpStatus.resolve(errorCode.getStatus());
-    }
-
-    private ErrorResponse setErrorResponse(ErrorCode errorCode) {
-        return ErrorResponse.builder()
-            .status(errorCode.getStatus())
-            .message(errorCode.getMessage())
-            .build();
-    }
-
+public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
+    
     @ExceptionHandler(InvalidFormException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidFormException(InvalidFormException ex) {
+    public ResponseEntity<ErrorResponseBodyHandler> handleInvalidFormException(InvalidFormException ex) {
 
         ErrorCode errorCode = ex.getErrorCode();
-        ErrorResponse errorResponse = setErrorResponse(errorCode);
+        
+        ErrorResponseBodyHandler errorResponse = new ErrorResponseBodyHandler();
+        errorResponse.setMessage(errorCode.getMessage());
         errorResponse.setCustomFieldErrors(ex.getErrors().getFieldErrors());
 
         return ResponseEntity.status(getHttpStatus(errorCode)).body(errorResponse);
@@ -40,4 +31,8 @@ public class ControllerExeptionHandler extends ResponseEntityExceptionHandler {
 //
 //        return ResponseEntity.status(getHttpStatus(errorCode)).body(response);
 //    }
+
+    private HttpStatus getHttpStatus(ErrorCode errorCode) {
+        return HttpStatus.resolve(errorCode.getStatus());
+    }
 }

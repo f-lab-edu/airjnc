@@ -1,4 +1,4 @@
-package com.airjnc.common.exception.dto;
+package com.airjnc.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,13 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ErrorResponse {
-
-    private LocalDateTime timestamp = LocalDateTime.now();
-    
-    private int status;
-
-    private String code;
+@Getter
+public class ErrorResponseBodyHandler {
     
     private String message;
     
@@ -25,13 +20,10 @@ public class ErrorResponse {
     @JsonProperty("errors")
     private List<CustomFieldError> customFieldErrors;
 
-    @Builder
-    public ErrorResponse(int status, String code, String message) {
-        this.status = status;
-        this.code = code;
+    public void setMessage(String message) {
         this.message = message;
     }
-
+    
     public void setCustomFieldErrors(List<FieldError> fieldErrors) {
         customFieldErrors = new ArrayList<>();
         fieldErrors.forEach(error -> {

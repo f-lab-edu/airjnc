@@ -4,13 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ResponseBodyHandler<T> {
+public class SuccessResponseBodyHandler<T> {
     
-    String message;
-    T data;
+    private final String message;
+    private final T data;
 
     @Builder
-    public ResponseBodyHandler(String message, T data) {
+    public SuccessResponseBodyHandler(String message, T data) {
         this.message = message;
         this.data = data;
     }

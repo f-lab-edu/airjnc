@@ -84,7 +84,7 @@ class UserControllerTest {
         mvc.perform(post("/user/signup").contentType(MediaType.APPLICATION_JSON).content(createUserJson))
             .andDo(print())
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("email").value(userDTO.getEmail()));
+            .andExpect(jsonPath("$.data.email").value(userDTO.getEmail()));
     }
 
     @Test
