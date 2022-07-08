@@ -12,7 +12,7 @@ public class UserFixture {
 
     public static final Long ID = 1L;
     public static final String EMAIL = "test@naver.com";
-    public static final String PASSWORD = "ch1234";
+    public static final String PASSWORD = "ch12345678";
     public static final String NAME = "testUser";
     public static final Gender GENDER = Gender.MALE;
     public static final String PHONE_NUMBER = "010-2222-3333";

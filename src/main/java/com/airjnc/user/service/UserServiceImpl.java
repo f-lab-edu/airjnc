@@ -22,7 +22,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findPasswordByEmail(String email){
         User user = userRepository.selectUserByEmail(email);
-        return userMapper.userToUserDTO(user);
+        return UserDTO.builder()
+            .password(user.getPassword())
+            .build();
     }
 
     @Override

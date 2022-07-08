@@ -5,22 +5,16 @@ import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import util.UserFixture;
-
-import java.util.HashMap;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 //@SpringBootTest
 //@AutoConfigureMockMvc
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(MockitoExtension.class)
 @WebMvcTest
 class UserControllerTest {
 
@@ -42,6 +36,7 @@ class UserControllerTest {
 
     private UserDTO userDTO;
     private SignUpDTO signUpDTO;
+    private SignUpDTO invalidSignUpDTO;
 
     @BeforeEach
     public void setUp() {
@@ -55,32 +50,27 @@ class UserControllerTest {
 
     @Test
     @DisplayName("존재하는 이메일 입력 패스워드 찾음")
-    public void whenExistsEmailThenGetPassword() throws Exception {
+    public void whenExistsEmailThenFindPassword() throws Exception {
         //given
-        Mockito.doReturn(userDTO).when(userService).findPasswordByEmail("test@naver.com");
+        BDDMockito.given(userService.findPasswordByEmail(userDTO.getEmail()))
+            .willReturn(userDTO);
 
         //when , then
-        mvc.perform(get("/user/login/findpassword").param("email", "test@naver.com"))
+        mvc.perform(get("/user/login/findpassword").param("email", userDTO.getEmail()))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("password").value(userDTO.getPassword()));
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+//            .andExpect(jsonPath("password").value(userDTO.getPassword()));
     }
 
     @Test
-    @DisplayName("패스워드 찾을경우 패스워드만 반환 -> Service로 로직 이전 여부 결정필요")
-    public void whenExistsEmailThenNotPasswordEmpty() throws Exception {
+    @DisplayName("비밀번호 찾기 시 유효성 검사")
+    public void validateWhenFindPasswordThenReturnErrorMessage() throws Exception {
         //given
-        Mockito.doReturn(userDTO).when(userService).findPasswordByEmail("test@naver.com");
-
-        //when
-        MvcResult mvcResult = mvc.perform(get("/user/login/findpassword").param("email", "test@naver.com"))
-            .andReturn();
-        //then
-        ObjectMapper mapper = new ObjectMapper();
-        HashMap<String, String> responseMap = mapper.readValue(mvcResult.getResponse().getContentAsString(), HashMap.class);
-        responseMap.entrySet().stream().filter(k -> !k.getKey().equals("password") && !k.getKey().equals("active"))
-            .forEach(v -> Assertions.assertThat(v.getValue()).isNull());
+        String unValidEmailForm = "justId";
+        //when, then
+        mvc.perform(get("/user/login/findpassword").param("email", unValidEmailForm))
+            .andDo(print());
     }
 
 
@@ -89,12 +79,35 @@ class UserControllerTest {
     public void whenJoinUserThenSuccessCreateUser() throws Exception {
         //given
         String createUserJson = new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(signUpDTO);
-        Mockito.doReturn(userDTO).when(userService).create(signUpDTO);
+        BDDMockito.given(userService.create(signUpDTO)).willReturn(userDTO);
         //when, then
         mvc.perform(post("/user/signup").contentType(MediaType.APPLICATION_JSON).content(createUserJson))
             .andDo(print())
             .andExpect(status().isCreated())
             .andExpect(jsonPath("email").value(userDTO.getEmail()));
+    }
+
+    @Test
+    @DisplayName("회원가입 폼 유효성 확인 후 반환")
+    public void validateWhenSignUpThenReturnErrorMessage() throws Exception {
+        //given
+        SignUpDTO invalidSignUpDTO = UserFixture.getSignUpDTOBuilder()
+            .email("just_id")
+            .password("tooLongPasswordInputNo")
+            .name(null)
+            .gender(null)
+            .phoneNumber(null)
+            .address(null)
+            .birthDate(null)
+            .build();
+
+        String invalidSignUpJson = new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(invalidSignUpDTO);
+
+        //when, then
+        mvc.perform(post("/user/signup").contentType(MediaType.APPLICATION_JSON).content(invalidSignUpJson))
+            .andDo(print())
+            .andExpect(status().is4xxClientError());
+        ;
     }
 
 

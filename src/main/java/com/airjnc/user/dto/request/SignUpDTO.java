@@ -2,36 +2,32 @@ package com.airjnc.user.dto.request;
 
 
 import com.airjnc.user.domain.Gender;
-import com.airjnc.user.dto.response.UserDTO;
 import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"email"})
 public class SignUpDTO {
-    
-    @NotNull
-    @Email
+
+    @NotBlank(message = "값을 입력해주세요")
+    @Email(message = "이메일 형식이 아닙니다.")
     private String email;
-    @NotNull
-    @Min(8) @Max(12)
+
+    @NotBlank(message = "값을 입력해주세요")
+    @Size(min = 8, max = 12, message = "비밀번호는 8~12자리를 입력해주세요")
     private String password;
-    @NotNull
+    @NotBlank(message = "값을 입력해주세요")
     private String name;
-    @NotNull
+    @NotNull(message = "값을 입력해주세요")
     private Gender gender;
-    @NotNull
+    @NotBlank(message = "값을 입력해주세요")
     private String phoneNumber;
-    @NotNull
+    @NotBlank(message = "값을 입력해주세요")
     private String address;
-    @NotNull
+    @Past(message = "생일은 과거여야합니다")
     private LocalDate birthDate;
 
     @Builder

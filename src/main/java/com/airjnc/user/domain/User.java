@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 @ToString
 public class User {
 
@@ -26,6 +24,21 @@ public class User {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
+    @Builder
+    public User(Long id, String email, String password, String name, Gender gender, String phoneNumber, String address, boolean active, LocalDate birthDate, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.active = active;
+        this.birthDate = birthDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+    }
 
     @Builder
     public User(String email, String password, String name, Gender gender, String phoneNumber, String address, LocalDate birthDate) {
@@ -37,8 +50,8 @@ public class User {
         this.address = address;
         this.birthDate = birthDate;
     }
-    
-    
+
+
 }
 
 
