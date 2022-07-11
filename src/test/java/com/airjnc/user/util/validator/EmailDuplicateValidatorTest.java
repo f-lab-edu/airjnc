@@ -1,19 +1,17 @@
 package com.airjnc.user.util.validator;
 
+import com.airjnc.common.exception.NotFoundException;
 import com.airjnc.user.dao.UserRepository;
-import com.airjnc.user.dto.request.SignUpDTO;
+import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.exception.DuplicatedEmailException;
-import com.airjnc.util.fixture.SignUpDTOFixture;
-import com.airjnc.util.fixture.UserEntityFixture;
+import com.airjnc.util.fixture.CreateDTOFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.validation.BindException;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.*;
@@ -24,37 +22,34 @@ class EmailDuplicateValidatorTest {
     UserRepository userRepository;
     @InjectMocks
     EmailDuplicateValidator emailDuplicateValidator;
-    SignUpDTO signUpDTO;
-    @Mock
-    BindException bindException;
+    CreateDTO createDTO;
 
     @BeforeEach
     void beforeEach() {
-        signUpDTO = SignUpDTOFixture.getBuilder().build();
+        createDTO = CreateDTOFixture.getBuilder().build();
     }
 
 
     @Test
     void whenEmailOfSignUpDTOisEmptyThenExceptionIsNotThrown() {
         // given
-        given(userRepository.findByEmail(signUpDTO.getEmail())).willReturn(Optional.empty());
+        given(userRepository.findByEmail(createDTO.getEmail())).willThrow(NotFoundException.class);
         //when
-        emailDuplicateValidator.validate(signUpDTO);
+        emailDuplicateValidator.validate(createDTO);
         //then
-        then(userRepository).should(times(1)).findByEmail(signUpDTO.getEmail());
-        then(bindException).should(times(0)).rejectValue("email", "duplicated");
+        then(userRepository).should(times(1)).findByEmail(createDTO.getEmail());
     }
 
     @Test
     void whenEmailOfSignUpDTOisDuplicatedThenExceptionIsThrown() {
         // given
-        when(userRepository.findByEmail(signUpDTO.getEmail())).thenReturn(Optional.of(UserEntityFixture.getBuilder().build()));
+        given(userRepository.findByEmail(createDTO.getEmail())).willReturn(UserEntity.builder().build());
         //when
         assertThrows(
             DuplicatedEmailException.class,
-            () -> emailDuplicateValidator.validate(signUpDTO)
+            () -> emailDuplicateValidator.validate(createDTO)
         );
         //then
-        then(userRepository).should(times(1)).findByEmail(signUpDTO.getEmail());
+        then(userRepository).should(times(1)).findByEmail(createDTO.getEmail());
     }
 }

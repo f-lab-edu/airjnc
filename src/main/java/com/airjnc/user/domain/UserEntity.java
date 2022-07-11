@@ -9,15 +9,12 @@ import java.time.LocalDateTime;
 @Setter // ModelMapper의 `map`을 통하여 매핑시킬 경우, 필요하다.
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // ModelMapper의 `map`을 통하여 매핑시킬 경우, 필요하다.
 public class UserEntity {
-    public enum Gender {
-        FEMALE, MALE
-    }
 
     private Long id;
     private String email;
     private String password;
     private String name;
-    private UserEntity.Gender gender;
+    private Gender gender;
     private String phoneNumber;
     private String address;
     private boolean isActive;

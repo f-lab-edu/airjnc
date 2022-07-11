@@ -1,5 +1,6 @@
 package com.airjnc.util.fixture;
 
+import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
 
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ public class UserEntityFixture {
     public static final String EMAIL = "test@naver.com";
     public static final String PASSWORD = "q1w2e3r4t5!";
     public static final String NAME = "testUser";
-    public static final UserEntity.Gender GENDER = UserEntity.Gender.MALE;
+    public static final Gender GENDER = Gender.MALE;
     public static final String PHONE_NUMBER = "010-1111-2222";
     public static final String ADDRESS = "서울 강남구";
     public static final boolean IS_ACTIVE = true;

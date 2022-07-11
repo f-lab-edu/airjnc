@@ -1,6 +1,6 @@
 package com.airjnc.user.dto.response;
 
-import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.domain.Gender;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -19,13 +19,13 @@ public class UserDTO {
     @NotNull
     private String name;
     @NotNull
-    private UserEntity.Gender gender;
+    private Gender gender;
     private String phoneNumber;
     private String address;
     private LocalDate birthDate;
 
     @Builder
-    public UserDTO(Long id, String email, String name, UserEntity.Gender gender, String phoneNumber, String address,
+    public UserDTO(Long id, String email, String name, Gender gender, String phoneNumber, String address,
                    LocalDate birthDate) {
         this.id = id;
         this.email = email;

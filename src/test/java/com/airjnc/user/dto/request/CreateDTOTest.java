@@ -1,7 +1,7 @@
 package com.airjnc.user.dto.request;
 
 import com.airjnc.common.util.BCryptHashEncrypter;
-import com.airjnc.util.fixture.SignUpDTOFixture;
+import com.airjnc.util.fixture.CreateDTOFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ import javax.validation.ValidatorFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SignUpDTOTest {
+class CreateDTOTest {
     Validator validator;
 
     @BeforeEach
@@ -24,11 +24,11 @@ class SignUpDTOTest {
     void plainShouldBeChangedToHash() {
         //given
         String plain = "q1w2e3r4!";
-        SignUpDTO signUpDTO = SignUpDTOFixture.getBuilder().password(plain).build();
+        CreateDTO createDTO = CreateDTOFixture.getBuilder().password(plain).build();
         //when
-        signUpDTO.changePasswordToHash();
+        createDTO.changePasswordToHash();
         //then
-        assertThat(signUpDTO.getPassword()).isNotEqualTo(plain);
-        assertThat(BCryptHashEncrypter.isMatch(plain, signUpDTO.getPassword())).isTrue();
+        assertThat(createDTO.getPassword()).isNotEqualTo(plain);
+        assertThat(BCryptHashEncrypter.isMatch(plain, createDTO.getPassword())).isTrue();
     }
 }
