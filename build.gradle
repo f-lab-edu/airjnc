@@ -20,14 +20,18 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // mybatis
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
-    // lombok
+    implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter-test', version: '2.2.2'
+
     compileOnly 'org.projectlombok:lombok'
+
+    runtimeOnly 'mysql:mysql-connector-java'
+
     annotationProcessor 'org.projectlombok:lombok'
-    // h2
-    runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
