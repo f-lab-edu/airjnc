@@ -1,11 +1,11 @@
 package com.airjnc.user.controller;
 
+import com.airjnc.common.util.constant.SessionKey;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.exception.DuplicatedEmailException;
 import com.airjnc.user.service.AuthService;
 import com.airjnc.user.service.UserService;
-import com.airjnc.user.util.SessionKey;
 import com.airjnc.util.fixture.SignUpDTOFixture;
 import com.airjnc.util.fixture.UserDTOFixture;
 import com.fasterxml.jackson.core.JsonProcessingException;

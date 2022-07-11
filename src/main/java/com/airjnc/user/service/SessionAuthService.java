@@ -1,6 +1,6 @@
 package com.airjnc.user.service;
 
-import com.airjnc.user.util.SessionKey;
+import com.airjnc.common.util.constant.SessionKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

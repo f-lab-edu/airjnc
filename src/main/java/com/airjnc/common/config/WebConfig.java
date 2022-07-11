@@ -1,6 +1,6 @@
 package com.airjnc.common.config;
 
-import com.airjnc.common.util.resolver.CurrentUserIdArgumentResolver;
+import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

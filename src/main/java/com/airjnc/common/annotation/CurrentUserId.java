@@ -1,4 +1,4 @@
-package com.airjnc.user.util.annotation;
+package com.airjnc.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

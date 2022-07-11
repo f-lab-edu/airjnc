@@ -1,7 +1,7 @@
 package com.airjnc.user.service;
 
 
-import com.airjnc.user.util.SessionKey;
+import com.airjnc.common.util.constant.SessionKey;
 
 public interface AuthService {
     void logIn(SessionKey key, Long userId);

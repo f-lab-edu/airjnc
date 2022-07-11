@@ -1,7 +1,7 @@
 package com.airjnc.common.exception;
 
 
-import com.airjnc.common.util.MessageCodes;
+import com.airjnc.common.util.constant.MessageCodes;
 
 public class DuplicatedException extends RuntimeException {
     private static final String CODE = MessageCodes.DUPLICATED.getCode();

@@ -1,4 +1,4 @@
-package com.airjnc.common.util;
+package com.airjnc.common.util.constant;
 
 public enum MessageCodes {
 

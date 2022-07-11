@@ -1,6 +1,6 @@
 package com.airjnc.user.service;
 
-import com.airjnc.user.util.SessionKey;
+import com.airjnc.common.util.constant.SessionKey;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

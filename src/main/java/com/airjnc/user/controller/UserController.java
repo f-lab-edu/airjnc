@@ -1,11 +1,11 @@
 package com.airjnc.user.controller;
 
+import com.airjnc.common.annotation.CurrentUserId;
+import com.airjnc.common.util.constant.SessionKey;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.AuthService;
 import com.airjnc.user.service.UserService;
-import com.airjnc.user.util.SessionKey;
-import com.airjnc.user.util.annotation.CurrentUserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;

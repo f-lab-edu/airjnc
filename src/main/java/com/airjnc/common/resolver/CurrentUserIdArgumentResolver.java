@@ -1,8 +1,8 @@
-package com.airjnc.common.util.resolver;
+package com.airjnc.common.resolver;
 
+import com.airjnc.common.annotation.CurrentUserId;
 import com.airjnc.common.exception.UnauthorizedException;
-import com.airjnc.user.util.SessionKey;
-import com.airjnc.user.util.annotation.CurrentUserId;
+import com.airjnc.common.util.constant.SessionKey;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
