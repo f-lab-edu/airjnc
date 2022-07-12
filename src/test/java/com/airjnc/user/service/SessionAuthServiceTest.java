@@ -1,6 +1,6 @@
 package com.airjnc.user.service;
 
-import com.airjnc.user.util.SessionKey;
+import com.airjnc.common.util.constant.SessionKey;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,6 +33,7 @@ class SessionAuthServiceTest {
         //then
         then(httpSession).should(times(1)).setMaxInactiveInterval(expire);
         then(httpSession).should(times(1)).setAttribute(key.name(), userId);
+
     }
 
     @Test

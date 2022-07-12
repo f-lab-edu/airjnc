@@ -13,4 +13,6 @@ public interface UserMapper {
     Optional<UserEntity> findByEmail(String email);
 
     int save(SignUpDTO signUpDTO);
+
+    int remove(Long id);
 }

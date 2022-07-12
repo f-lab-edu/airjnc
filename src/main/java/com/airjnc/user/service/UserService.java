@@ -1,6 +1,5 @@
 package com.airjnc.user.service;
 
-import com.airjnc.common.util.validator.ValidatorTemplate;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.SignUpDTO;
@@ -21,18 +20,17 @@ public class UserService {
      * ExceptionAdvice 에서 모두 Exception을 잡고 메시지를 전달해준다.
      */
     private final EmailDuplicateValidator emailDuplicateValidator;
-    /**
-     * Validator를 컨트롤러 계층이 아닌 서비스 계층에서 사용할 경우, BindingResult를 직접 생성해주어야함
-     * Validaotr를 사용할 때마다 BindingResult를 생성 로직 작성을 피하기 위해 VliadatorTemplate으로 묶음
-     */
-    private final ValidatorTemplate validatorTemplate;
 
     public UserDTO create(SignUpDTO signUpDTO) {
         // 이메일 중복 검사
-        this.validatorTemplate.validate(emailDuplicateValidator, signUpDTO);
+        emailDuplicateValidator.validate(signUpDTO);
         // 비밀번호 "평문->해시" 로 해시화
         signUpDTO.changePasswordToHash();
-        UserEntity userEntity = this.userRepository.save(signUpDTO);
-        return this.modelMapper.map(userEntity, UserDTO.class);
+        UserEntity userEntity = userRepository.save(signUpDTO);
+        return modelMapper.map(userEntity, UserDTO.class);
+    }
+
+    public void remove(Long id) {
+        userRepository.remove(id);
     }
 }

@@ -27,7 +27,7 @@ public class SignUpDTO {
     private UserEntity.Gender gender;
 
     public void changePasswordToHash() {
-        this.password = BCryptHashEncrypter.encrypt(this.password);
+        password = BCryptHashEncrypter.encrypt(this.password);
     }
 
     @Builder

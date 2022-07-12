@@ -15,7 +15,6 @@ import org.springframework.validation.BindException;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.*;
 
@@ -31,39 +30,31 @@ class EmailDuplicateValidatorTest {
 
     @BeforeEach
     void beforeEach() {
-        this.signUpDTO = SignUpDTOFixture.getBuilder().build();
+        signUpDTO = SignUpDTOFixture.getBuilder().build();
     }
 
-    @Test
-    void whenPassSignUpDTOReturnValueShouldBeTrue() {
-        //when
-        boolean supports = emailDuplicateValidator.supports(signUpDTO.getClass());
-        //then
-        assertThat(supports).isTrue();
-    }
 
     @Test
-    void whenEmailOfSignUpDTOisEmptyExceptionShouldNotBeThrown() {
+    void whenEmailOfSignUpDTOisEmptyThenExceptionIsNotThrown() {
         // given
-        when(userRepository.findByEmail(this.signUpDTO.getEmail())).thenReturn(Optional.empty());
+        given(userRepository.findByEmail(signUpDTO.getEmail())).willReturn(Optional.empty());
         //when
-        emailDuplicateValidator.validate(signUpDTO, bindException);
+        emailDuplicateValidator.validate(signUpDTO);
         //then
         then(userRepository).should(times(1)).findByEmail(signUpDTO.getEmail());
         then(bindException).should(times(0)).rejectValue("email", "duplicated");
     }
 
     @Test
-    void whenEmailOfSignUpDTOisDuplicatedExceptionShouldBeThrown() {
+    void whenEmailOfSignUpDTOisDuplicatedThenExceptionIsThrown() {
         // given
-        when(userRepository.findByEmail(this.signUpDTO.getEmail())).thenReturn(Optional.of(UserEntityFixture.getBuilder().build()));
+        when(userRepository.findByEmail(signUpDTO.getEmail())).thenReturn(Optional.of(UserEntityFixture.getBuilder().build()));
         //when
         assertThrows(
             DuplicatedEmailException.class,
-            () -> emailDuplicateValidator.validate(signUpDTO, bindException)
+            () -> emailDuplicateValidator.validate(signUpDTO)
         );
         //then
         then(userRepository).should(times(1)).findByEmail(signUpDTO.getEmail());
-        then(bindException).should(times(1)).rejectValue("email", "duplicated");
     }
 }
