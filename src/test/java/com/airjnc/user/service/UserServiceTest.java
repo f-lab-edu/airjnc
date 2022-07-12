@@ -5,6 +5,7 @@ import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.util.validator.EmailDuplicateValidator;
+import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.CreateDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
 import com.testutil.fixture.UserEntityFixture;
@@ -20,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@UnitTest
 class UserServiceTest {
     @Mock
     UserRepository userRepository;
@@ -58,3 +60,4 @@ class UserServiceTest {
         then(userRepository).should(times(1)).remove(userEntity.getId());
     }
 }
+

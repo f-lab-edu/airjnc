@@ -1,6 +1,7 @@
 package com.airjnc.user.service;
 
 import com.airjnc.common.util.constant.SessionKey;
+import com.testutil.annotation.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@UnitTest
 class SessionStateServiceTest {
 
     @Mock

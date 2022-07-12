@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@CommonTest
 @ContextConfiguration(classes = TestAopConfig.class)
+@IntegrationTest
 public @interface AopTest {
 }

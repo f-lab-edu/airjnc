@@ -11,8 +11,8 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@CommonTest
 @ContextConfiguration(classes = TestDatabaseConfig.class) // 테스트용 컨텍스트 공유
 @ExtendWith(SpringExtension.class) // Spring 관련 기능 확장
+@IntegrationTest
 public @interface MybatisTest {
 }

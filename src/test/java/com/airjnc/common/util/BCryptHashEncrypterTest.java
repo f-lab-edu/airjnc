@@ -1,9 +1,11 @@
 package com.airjnc.common.util;
 
+import com.testutil.annotation.UnitTest;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@UnitTest
 class BCryptHashEncrypterTest {
     @Test
     void plainShouldBeHashed() {

@@ -2,11 +2,13 @@ package com.airjnc.user.util.validator;
 
 import com.airjnc.common.util.BCryptHashEncrypter;
 import com.airjnc.user.exception.PasswordIsNotMatchException;
+import com.testutil.annotation.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@UnitTest
 class PasswordMatchValidatorTest {
     PasswordMatchValidator passwordMatchValidator;
 

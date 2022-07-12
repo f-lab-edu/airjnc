@@ -5,6 +5,7 @@ import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.exception.DuplicatedEmailException;
+import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.CreateDTOFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@UnitTest
 class EmailDuplicateValidatorTest {
     @Mock
     UserRepository userRepository;

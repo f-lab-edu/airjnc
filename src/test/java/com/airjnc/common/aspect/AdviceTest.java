@@ -2,6 +2,7 @@ package com.airjnc.common.aspect;
 
 import com.airjnc.common.exception.UnauthorizedException;
 import com.airjnc.user.service.StateService;
+import com.testutil.annotation.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
+@UnitTest
 class AdviceTest {
     @Mock
     StateService stateService;

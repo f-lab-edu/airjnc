@@ -1,6 +1,7 @@
 package com.airjnc.common.util;
 
 import com.airjnc.common.dto.ErrorResponse;
+import com.testutil.annotation.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -9,6 +10,7 @@ import org.springframework.validation.BindException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@UnitTest
 class ErrorResponseFactoryTest {
     ResourceBundleMessageSource messageSource;
 
