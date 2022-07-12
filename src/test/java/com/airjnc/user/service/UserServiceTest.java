@@ -5,9 +5,9 @@ import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.util.validator.EmailDuplicateValidator;
-import com.airjnc.util.fixture.CreateDTOFixture;
-import com.airjnc.util.fixture.UserDTOFixture;
-import com.airjnc.util.fixture.UserEntityFixture;
+import com.testutil.fixture.CreateDTOFixture;
+import com.testutil.fixture.UserDTOFixture;
+import com.testutil.fixture.UserEntityFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,15 +16,11 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import javax.servlet.http.HttpSession;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
-    @Mock
-    HttpSession httpSession;
     @Mock
     UserRepository userRepository;
     @Mock

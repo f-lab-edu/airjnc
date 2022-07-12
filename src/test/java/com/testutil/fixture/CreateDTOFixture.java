@@ -1,4 +1,4 @@
-package com.airjnc.util.fixture;
+package com.testutil.fixture;
 
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.dto.request.CreateDTO;

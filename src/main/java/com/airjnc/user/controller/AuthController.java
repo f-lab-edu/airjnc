@@ -1,9 +1,10 @@
 package com.airjnc.user.controller;
 
+import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.user.dto.request.LogInDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.AuthService;
-import com.airjnc.user.service.SessionService;
+import com.airjnc.user.service.StateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,18 +14,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
-    private final SessionService sessionService;
+    private final StateService stateService;
 
     @PostMapping("/logIn")
     public UserDTO logIn(@RequestBody @Validated LogInDTO logInDTO) {
         UserDTO userDTO = authService.logIn(logInDTO);
-        sessionService.create(userDTO.getId());
+        stateService.create(userDTO.getId());
         return userDTO;
     }
 
     @GetMapping("/logOut")
+    @CheckAuth
     public void logOut() {
-        authService.logOut();
-        sessionService.remove();
+        stateService.remove();
     }
 }

@@ -21,7 +21,4 @@ public class AuthService {
         passwordMatchValidator.validate(logInDTO.getPassword(), userEntity.getPassword());
         return modelMapper.map(userEntity, UserDTO.class);
     }
-
-    public void logOut() {
-    }
 }

@@ -9,32 +9,45 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpSession;
 
-import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.times;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class SessionServiceTest {
+class SessionStateServiceTest {
+
     @Mock
     HttpSession httpSession;
     @InjectMocks
-    SessionService sessionService;
+    SessionStateService sessionStateService;
 
 
     @Test
     void sessionShouldBeSaved() {
-        //when
+        //given
         Long userId = 1L;
-        //then
-        sessionService.create(userId);
+        //when
+        sessionStateService.create(userId);
         //then
         then(httpSession).should(times(1)).setAttribute(SessionKey.USER.name(), userId);
     }
 
     @Test
     void sessionShouldBeRemoved() {
-        //then
-        sessionService.remove();
+        //when
+        sessionStateService.remove();
         //then
         then(httpSession).should(times(1)).removeAttribute(SessionKey.USER.name());
+    }
+
+    @Test
+    void shouldReturnUserId() {
+        //given
+        Long userId = 1L;
+        given(httpSession.getAttribute(SessionKey.USER.name())).willReturn(userId);
+        //when
+        Long returnUserId = sessionStateService.getUserId();
+        //then
+        then(httpSession).should(times(1)).getAttribute(SessionKey.USER.name());
+        assertThat(returnUserId).isEqualTo(userId);
     }
 }

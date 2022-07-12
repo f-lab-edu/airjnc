@@ -4,7 +4,6 @@ import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.LogInDTO;
 import com.airjnc.user.dto.response.UserDTO;
-import com.airjnc.user.util.validator.EmailDuplicateValidator;
 import com.airjnc.user.util.validator.PasswordMatchValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +26,6 @@ class AuthServiceTest {
     @Mock
     UserRepository userRepository;
     @Mock
-    SessionService sessionService;
-    @Mock
-    EmailDuplicateValidator emailDuplicateValidator;
-    @Mock
     PasswordMatchValidator passwordMatchValidator;
     @InjectMocks
     AuthService authService;
@@ -50,10 +45,4 @@ class AuthServiceTest {
         assertThat(userDTO.getId()).isEqualTo(userEntity.getId());
     }
 
-    @Test
-    void userShouldBeLoggedOut() {
-        //when
-        authService.logOut();
-        //then
-    }
 }

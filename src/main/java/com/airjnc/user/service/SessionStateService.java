@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 
 @Service
 @RequiredArgsConstructor
-public class SessionService {
+public class SessionStateService implements StateService {
     private final HttpSession httpSession;
 
     public void create(Long userId) {
@@ -17,5 +17,9 @@ public class SessionService {
 
     public void remove() {
         httpSession.removeAttribute(SessionKey.USER.name());
+    }
+
+    public Long getUserId() {
+        return (Long) httpSession.getAttribute(SessionKey.USER.name());
     }
 }

@@ -1,6 +1,7 @@
 package com.airjnc.common.config;
 
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +13,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+    private final CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
+
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
@@ -28,6 +32,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new CurrentUserIdArgumentResolver());
+        resolvers.add(currentUserIdArgumentResolver);
     }
 }

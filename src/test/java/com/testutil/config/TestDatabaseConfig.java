@@ -1,8 +1,9 @@
-package com.airjnc.util.config;
+package com.testutil.config;
 
 import com.airjnc.common.config.MybatisConfig;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.util.fixture.UserEntityFixture;
+import com.testutil.fixture.UserEntityFixture;
+import org.mybatis.spring.boot.test.autoconfigure.AutoConfigureMybatis;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +14,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @TestConfiguration // 테스트용 설정 클래스
+@AutoConfigureMybatis // MyBatis slice 테스트 [ MyBatis 관련 빈들만 등록 ]
 @Import(MybatisConfig.class) // MyBatis 설정 가져오기
-public class DatabaseConfig {
+public class TestDatabaseConfig {
     @Value("${spring.datasource.url}")
     String url;
     @Value("${spring.datasource.username}")
@@ -48,5 +50,4 @@ public class DatabaseConfig {
             user.getDeletedAt()
         );
     }
-
 }

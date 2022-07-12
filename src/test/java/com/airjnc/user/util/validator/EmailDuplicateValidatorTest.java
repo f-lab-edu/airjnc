@@ -5,7 +5,7 @@ import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.exception.DuplicatedEmailException;
-import com.airjnc.util.fixture.CreateDTOFixture;
+import com.testutil.fixture.CreateDTOFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,6 @@ class EmailDuplicateValidatorTest {
     void beforeEach() {
         createDTO = CreateDTOFixture.getBuilder().build();
     }
-
 
     @Test
     void whenEmailOfSignUpDTOisEmptyThenExceptionIsNotThrown() {

@@ -1,17 +1,20 @@
 package com.airjnc.user.controller;
 
-import com.airjnc.common.util.constant.SessionKey;
+import com.airjnc.common.aspect.Advice;
+import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.response.UserDTO;
-import com.airjnc.user.service.SessionService;
+import com.airjnc.user.service.StateService;
 import com.airjnc.user.service.UserService;
-import com.airjnc.util.fixture.CreateDTOFixture;
-import com.airjnc.util.fixture.UserDTOFixture;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.testutil.annotation.AopTest;
+import com.testutil.fixture.CreateDTOFixture;
+import com.testutil.fixture.UserDTOFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -22,9 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @WebMvcTest(UserController.class)
+@AopTest
 class UserControllerTest {
+
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -32,7 +36,12 @@ class UserControllerTest {
     @MockBean
     UserService userService;
     @MockBean
-    SessionService sessionService;
+    StateService stateService;
+
+    @SpyBean
+    Advice advice;
+    @SpyBean
+    CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
 
     @Test
     void create() throws Exception {
@@ -50,22 +59,26 @@ class UserControllerTest {
             .andExpect(jsonPath("id").value(userDTO.getId()));
         //then
         then(userService).should(times(1)).create(any(CreateDTO.class));
-        then(sessionService).should(times(1)).create(userDTO.getId());
+        then(stateService).should(times(1)).create(userDTO.getId());
     }
 
     @Test
     void remove() throws Exception {
         //given
         Long userId = 1L;
+        given(stateService.getUserId()).willReturn(userId);
         //when
         mockMvc.perform(
                 delete("/users/me")
-                    .sessionAttr(SessionKey.USER.name(), userId)
                     .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
             .andExpect(status().isNoContent());
         //then
+        // advice, argumentResolver가 정상적으로 적용되었는 지 테스트
+        then(advice).should(times(1)).beforeCheckAuth();
+        then(currentUserIdArgumentResolver).should(times(1)).resolveArgument(any(), any(), any(), any());
         then(userService).should(times(1)).remove(userId);
-        then(sessionService).should(times(1)).remove();
+        then(stateService).should(times(1)).remove();
     }
 }
+
