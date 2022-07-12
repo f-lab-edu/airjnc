@@ -1,4 +1,4 @@
-package com.airjnc.common.exception;
+package com.airjnc.common.exception.exception;
 
 import com.airjnc.common.exception.code.ErrorCode;
 

@@ -1,8 +1,7 @@
 package com.airjnc.common.exception.controller;
 
-import com.airjnc.common.exception.InvalidFormException;
+import com.airjnc.common.exception.exception.InvalidFormException;
 import com.airjnc.common.exception.code.ErrorCode;
-import com.airjnc.common.dto.ErrorResponseBodyHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,11 +12,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     
     @ExceptionHandler(InvalidFormException.class)
-    public ResponseEntity<ErrorResponseBodyHandler> handleInvalidFormException(InvalidFormException ex) {
+    public ResponseEntity<ExceptionResponseBody> handleInvalidFormException(InvalidFormException ex) {
 
         ErrorCode errorCode = ex.getErrorCode();
         
-        ErrorResponseBodyHandler errorResponse = new ErrorResponseBodyHandler();
+        ExceptionResponseBody errorResponse = new ExceptionResponseBody();
         errorResponse.setMessage(errorCode.getMessage());
         errorResponse.setCustomFieldErrors(ex.getErrors().getFieldErrors());
 
@@ -31,6 +30,9 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 //
 //        return ResponseEntity.status(getHttpStatus(errorCode)).body(response);
 //    }
+
+
+    
 
     private HttpStatus getHttpStatus(ErrorCode errorCode) {
         return HttpStatus.resolve(errorCode.getStatus());

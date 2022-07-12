@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 
 import static org.apache.ibatis.session.AutoMappingUnknownColumnBehavior.FAILING;
 
-@org.springframework.context.annotation.Configuration
+@org.springframework.context.annotation.Configuration 
 @MapperScan(basePackages = {"com.airjnc.*.dao"})
 public class MybatisConfig {
 

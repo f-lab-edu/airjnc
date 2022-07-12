@@ -1,10 +1,12 @@
-package com.airjnc.common.dto;
+package com.airjnc.common.exception.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.validation.FieldError;
 
 import java.time.LocalDateTime;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class ErrorResponseBodyHandler {
+public class ExceptionResponseBody {
     
     private String message;
     

@@ -3,6 +3,7 @@ package com.airjnc.user.dto.request;
 
 import com.airjnc.user.domain.Gender;
 import lombok.*;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
