@@ -1,10 +1,10 @@
 package com.airjnc.user.service;
 
+import com.airjnc.common.util.ModelMapper;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.response.UserDTO;
-import com.airjnc.user.util.mapper.UserEntityMapper;
 import com.airjnc.user.util.validator.EmailDuplicateValidator;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.CreateDTOFixture;
@@ -27,7 +27,7 @@ class UserServiceTest {
     @Mock
     EmailDuplicateValidator emailDuplicateValidator;
     @Mock
-    UserEntityMapper userEntityMapper;
+    ModelMapper modelMapper;
     @InjectMocks
     UserService userService;
 
@@ -39,14 +39,14 @@ class UserServiceTest {
         UserDTO userDTO = UserDTOFixture.getBuilder().build();
         willDoNothing().given(createDTO).changePasswordToHash();
         given(userRepository.save(createDTO)).willReturn(userEntity);
-        given(userEntityMapper.toUserDTO(userEntity)).willReturn(userDTO);
+        given(modelMapper.userEntityToUserDTO(userEntity)).willReturn(userDTO);
         //when
         UserDTO result = userService.create(createDTO);
         //then
         then(emailDuplicateValidator).should(times(1)).validate(createDTO);
         then(createDTO).should(times(1)).changePasswordToHash();
         then(userRepository).should(times(1)).save(createDTO);
-        then(userEntityMapper).should(times(1)).toUserDTO(userEntity);
+        then(modelMapper).should(times(1)).userEntityToUserDTO(userEntity);
         assertThat(result.getId()).isEqualTo(userDTO.getId());
     }
 

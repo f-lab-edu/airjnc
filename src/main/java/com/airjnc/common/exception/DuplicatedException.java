@@ -1,16 +1,21 @@
 package com.airjnc.common.exception;
 
 
-import com.airjnc.common.util.constant.MessageCodes;
+import com.airjnc.common.util.constant.ErrorCode;
+import com.airjnc.common.util.factory.ErrorsFactory;
+import org.springframework.validation.Errors;
 
-public class DuplicatedException extends RuntimeException {
-    private static final String CODE = MessageCodes.DUPLICATED.getCode();
-
-    public DuplicatedException(String message) {
-        super(CODE + "." + message);
-    }
+public class DuplicatedException extends DefaultException {
 
     public DuplicatedException() {
-        super(CODE);
+        super(ErrorsFactory.create(ErrorCode.DUPLICATED));
+    }
+
+    public DuplicatedException(Errors errors) {
+        super(errors);
+    }
+
+    public DuplicatedException(Errors errors, Throwable cause) {
+        super(errors, cause);
     }
 }

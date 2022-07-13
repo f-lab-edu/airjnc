@@ -1,16 +1,20 @@
 package com.airjnc.common.exception;
 
 
-import com.airjnc.common.util.constant.MessageCodes;
+import com.airjnc.common.util.constant.ErrorCode;
+import com.airjnc.common.util.factory.ErrorsFactory;
+import org.springframework.validation.Errors;
 
-public class BadRequestException extends RuntimeException {
-    private static final String CODE = MessageCodes.BAD_REQUEST.getCode();
-
-    public BadRequestException(String message) {
-        super(CODE + "." + message);
+public class BadRequestException extends DefaultException {
+    public BadRequestException() {
+        super(ErrorsFactory.create(ErrorCode.BAD_REQUEST));
     }
 
-    public BadRequestException() {
-        super(CODE);
+    public BadRequestException(Errors errors) {
+        super(errors);
+    }
+
+    public BadRequestException(Errors errors, Throwable cause) {
+        super(errors, cause);
     }
 }

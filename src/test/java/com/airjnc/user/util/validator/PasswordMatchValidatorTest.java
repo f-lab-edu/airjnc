@@ -1,8 +1,10 @@
 package com.airjnc.user.util.validator;
 
 import com.airjnc.common.util.BCryptHashEncrypter;
+import com.airjnc.user.dto.PasswordMatchDTO;
 import com.airjnc.user.exception.PasswordIsNotMatchException;
 import com.testutil.annotation.UnitTest;
+import com.testutil.fixture.PasswordMatchDTOFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,21 +21,20 @@ class PasswordMatchValidatorTest {
     }
 
     @Test
-    void whenPasswordIsNotMatchThenThrowPasswordIsNotMatchException() {
+    void whenPasswordIsMatchThenWillDoNothing() {
         //given
-        String plain = "1234";
-        String hash = BCryptHashEncrypter.encrypt(plain);
+        PasswordMatchDTO passwordMatchDTO = PasswordMatchDTOFixture.getBuilder().build();
         //when
-        passwordMatchValidator.validate(plain, hash);
+        passwordMatchValidator.validate(passwordMatchDTO);
         //then
     }
 
     @Test
-    void whenPasswordIsMatchThenWillDoNothing() {
+    void whenPasswordIsNotMatchThenThrowPasswordIsNotMatchException() {
         //given
-        String plain = "123";
-        String hash = BCryptHashEncrypter.encrypt("12345");
+        PasswordMatchDTO passwordMatchDTO =
+            PasswordMatchDTOFixture.getBuilder().password("123").hash(BCryptHashEncrypter.encrypt("12345")).build();
         //when
-        assertThrows(PasswordIsNotMatchException.class, () -> passwordMatchValidator.validate(plain, hash));
+        assertThrows(PasswordIsNotMatchException.class, () -> passwordMatchValidator.validate(passwordMatchDTO));
     }
 }

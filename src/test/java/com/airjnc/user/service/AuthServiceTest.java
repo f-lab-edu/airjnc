@@ -1,10 +1,11 @@
 package com.airjnc.user.service;
 
+import com.airjnc.common.util.ModelMapper;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.PasswordMatchDTO;
 import com.airjnc.user.dto.request.LogInDTO;
 import com.airjnc.user.dto.response.UserDTO;
-import com.airjnc.user.util.mapper.UserEntityMapper;
 import com.airjnc.user.util.validator.PasswordMatchValidator;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.UserDTOFixture;
@@ -16,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
@@ -25,7 +27,7 @@ import static org.mockito.Mockito.times;
 @UnitTest
 class AuthServiceTest {
     @Mock
-    UserEntityMapper userEntityMapper;
+    ModelMapper modelMapper;
     @Mock
     UserRepository userRepository;
     @Mock
@@ -40,13 +42,13 @@ class AuthServiceTest {
         UserEntity userEntity = UserEntityFixture.getBuilder().build();
         UserDTO userDTO = UserDTOFixture.getBuilder().build();
         given(userRepository.findByEmail(logInDTO.getEmail())).willReturn(userEntity);
-        given(userEntityMapper.toUserDTO(userEntity)).willReturn(userDTO);
+        given(modelMapper.userEntityToUserDTO(userEntity)).willReturn(userDTO);
         //when
         UserDTO result = authService.logIn(logInDTO);
         //then
         then(userRepository).should(times(1)).findByEmail(logInDTO.getEmail());
-        then(passwordMatchValidator).should(times(1)).validate(logInDTO.getPassword(), userEntity.getPassword());
-        then(userEntityMapper).should(times(1)).toUserDTO(userEntity);
+        then(passwordMatchValidator).should(times(1)).validate(any(PasswordMatchDTO.class));
+        then(modelMapper).should(times(1)).userEntityToUserDTO(userEntity);
         assertThat(result).isSameAs(userDTO);
     }
 }

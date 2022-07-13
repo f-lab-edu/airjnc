@@ -2,6 +2,7 @@ package com.airjnc.user.dto.request;
 
 import com.airjnc.common.util.BCryptHashEncrypter;
 import com.airjnc.user.domain.Gender;
+import com.airjnc.user.util.Regex;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class CreateDTO {
     @Email
     private String email;
     @NotNull
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[@#!~$%^&-+=()])(?=\\S+$).{8,16}$")
+    @Pattern(regexp = Regex.Password.format)
     private String password;
     @NotNull
     private String name;

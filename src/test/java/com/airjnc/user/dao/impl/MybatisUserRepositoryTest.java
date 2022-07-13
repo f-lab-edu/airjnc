@@ -1,12 +1,12 @@
 package com.airjnc.user.dao.impl;
 
+import com.airjnc.common.util.ModelMapper;
 import com.airjnc.common.util.validator.CommonValidator;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.util.mapper.UserEntityMapper;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.fixture.UserEntityFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,11 +28,11 @@ class MybatisUserRepositoryTest {
     @Spy
     CommonValidator commonValidator;
     @Mock
-    UserEntityMapper userEntityMapper;
+    ModelMapper modelMapper;
 
     @BeforeEach
     void beforeEach() {
-        userRepository = new MybatisUserRepository(userMapper, commonValidator, userEntityMapper);
+        userRepository = new MybatisUserRepository(userMapper, commonValidator, modelMapper);
     }
 
     @Test
