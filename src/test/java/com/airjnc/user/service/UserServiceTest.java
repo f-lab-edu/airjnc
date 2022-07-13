@@ -4,6 +4,7 @@ import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.util.mapper.UserEntityMapper;
 import com.airjnc.user.util.validator.EmailDuplicateValidator;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.CreateDTOFixture;
@@ -13,9 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
@@ -27,8 +26,8 @@ class UserServiceTest {
     UserRepository userRepository;
     @Mock
     EmailDuplicateValidator emailDuplicateValidator;
-    @Spy
-    ModelMapper modelMapper;
+    @Mock
+    UserEntityMapper userEntityMapper;
     @InjectMocks
     UserService userService;
 
@@ -40,13 +39,14 @@ class UserServiceTest {
         UserDTO userDTO = UserDTOFixture.getBuilder().build();
         willDoNothing().given(createDTO).changePasswordToHash();
         given(userRepository.save(createDTO)).willReturn(userEntity);
+        given(userEntityMapper.toUserDTO(userEntity)).willReturn(userDTO);
         //when
         UserDTO result = userService.create(createDTO);
         //then
         then(emailDuplicateValidator).should(times(1)).validate(createDTO);
         then(createDTO).should(times(1)).changePasswordToHash();
         then(userRepository).should(times(1)).save(createDTO);
-        then(modelMapper).should(times(1)).map(userEntity, UserDTO.class);
+        then(userEntityMapper).should(times(1)).toUserDTO(userEntity);
         assertThat(result.getId()).isEqualTo(userDTO.getId());
     }
 

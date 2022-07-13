@@ -1,24 +1,26 @@
 package com.airjnc.user.domain;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter // ModelMapper의 `map`을 통하여 매핑시킬 경우, 필요하다.
-@NoArgsConstructor(access = AccessLevel.PRIVATE) // ModelMapper의 `map`을 통하여 매핑시킬 경우, 필요하다.
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserEntity {
 
     private Long id;
     private String email;
+    private String phoneNumber;
     private String password;
     private String name;
     private Gender gender;
-    private String phoneNumber;
     private String address;
-    private boolean isActive;
     private LocalDate birthDate;
+    private boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;

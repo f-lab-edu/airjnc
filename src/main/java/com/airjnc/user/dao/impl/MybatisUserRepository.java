@@ -6,20 +6,18 @@ import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.util.mapper.UserEntityMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
 public class MybatisUserRepository implements UserRepository {
     private final UserMapper userMapper;
-    private final ModelMapper modelMapper;
     private final CommonValidator commonValidator;
-
+    private final UserEntityMapper userEntityMapper;
 
     @Override
-
     public UserEntity findById(Long id) {
         return userMapper.findById(id).orElseThrow(NotFoundException::new);
     }
@@ -33,7 +31,7 @@ public class MybatisUserRepository implements UserRepository {
     public UserEntity save(CreateDTO createDTO) {
         int affect = userMapper.save(createDTO);
         commonValidator.validateEqual(affect, 1);
-        return modelMapper.map(createDTO, UserEntity.class);
+        return userEntityMapper.fromCreateDTO(createDTO);
     }
 
     @Override

@@ -6,12 +6,13 @@ import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.util.mapper.UserEntityMapper;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.fixture.UserEntityFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Spy;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +27,12 @@ class MybatisUserRepositoryTest {
     UserMapper userMapper;
     @Spy
     CommonValidator commonValidator;
+    @Mock
+    UserEntityMapper userEntityMapper;
 
     @BeforeEach
     void beforeEach() {
-        userRepository = new MybatisUserRepository(userMapper, new ModelMapper(), commonValidator);
+        userRepository = new MybatisUserRepository(userMapper, commonValidator, userEntityMapper);
     }
 
     @Test
@@ -57,17 +60,16 @@ class MybatisUserRepositoryTest {
     @Transactional
     void save() {
         //given
-        String email = "abc@google.com";
-        String password = "q1w2e3";
-        String name = "abcUser";
-        Gender gender = Gender.FEMALE;
-        CreateDTO createDTO = CreateDTO.builder().email(email).password(password).name(name).gender(gender).build();
+        CreateDTO createDTO = CreateDTO.builder()
+            .email("abc@google.com")
+            .password("q1w2e3")
+            .name("abcUser")
+            .gender(Gender.FEMALE)
+            .build();
         //when
-        UserEntity savedUser = userRepository.save(createDTO);
-        UserEntity findUser = userRepository.findById(savedUser.getId());
+        userRepository.save(createDTO);
         //then
-        assertThat(findUser.getId()).isEqualTo(savedUser.getId());
-        then(commonValidator).should(times(1)).validateEqual(anyInt(), anyInt());
+        then(commonValidator).should(times(1)).validateEqual(1, 1);
     }
 
     @Test

@@ -1,15 +1,17 @@
 package com.airjnc.user.dto.response;
 
 import com.airjnc.user.domain.Gender;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Getter
-@Setter // ModelMapper의 `map`을 통하여 매핑시킬 경우, 필요하다.
-@NoArgsConstructor(access = AccessLevel.PRIVATE) // ModelMapper의 `map`을 통하여 매핑시킬 경우, 필요하다.
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserDTO {
     @NotNull
     private Long id;

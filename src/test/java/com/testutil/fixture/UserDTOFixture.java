@@ -6,7 +6,7 @@ import com.airjnc.user.dto.response.UserDTO;
 import java.time.LocalDate;
 
 public class UserDTOFixture {
-    public static final Long ID = 1L;
+    public static final Long ID = 2L;
     public static final String EMAIL = "test@naver.com";
     public static final String NAME = "testUser";
     public static final Gender GENDER = Gender.MALE;

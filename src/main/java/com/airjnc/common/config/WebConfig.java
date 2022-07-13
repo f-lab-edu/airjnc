@@ -2,7 +2,6 @@ package com.airjnc.common.config;
 
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
     private final CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
-
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 
     @Bean
     public MessageSource messageSource() {
