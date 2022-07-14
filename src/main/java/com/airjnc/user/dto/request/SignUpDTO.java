@@ -1,7 +1,7 @@
 package com.airjnc.user.dto.request;
 
-
 import com.airjnc.user.domain.Gender;
+import com.airjnc.user.valid.DefaultValidation;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
@@ -13,21 +13,27 @@ import java.time.LocalDate;
 @EqualsAndHashCode(of = {"email"})
 public class SignUpDTO {
 
-    @NotBlank(message = "값을 입력해주세요")
-    @Email(message = "이메일 형식이 아닙니다.")
+    @NotBlank(message = "{Validation.NotNull}")
+    @Email(message = "{Validation.Email}")
+    @Email
     private String email;
 
-    @NotBlank(message = "값을 입력해주세요")
-    @Size(min = 8, max = 12, message = "비밀번호는 8~12자리를 입력해주세요")
+    @NotBlank(message = "{Validation.NotNull}")
+    @Size(min = 8, max = 12, message = "{Validation.Size}")
     private String password;
-    @NotBlank(message = "값을 입력해주세요")
+    
+    @NotBlank(message = "{Validation.NotNull}")
     private String name;
-    @NotNull(message = "값을 입력해주세요")
+
+    @NotNull(message = "{Validation.NotNull}")
     private Gender gender;
-    @NotBlank(message = "값을 입력해주세요")
+
+    @NotBlank(message = "{Validation.NotNull}")
     private String phoneNumber;
-    @NotBlank(message = "값을 입력해주세요")
+
+    @NotBlank(message = "{Validation.NotNull}")
     private String address;
+    
     @Past(message = "생일은 과거여야합니다")
     private LocalDate birthDate;
 
