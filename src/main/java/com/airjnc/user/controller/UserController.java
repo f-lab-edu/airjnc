@@ -1,8 +1,11 @@
 package com.airjnc.user.controller;
 
 import com.airjnc.user.dto.request.SignUpDTO;
+import com.airjnc.user.dto.response.FindPwdResponseDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.UserService;
+import com.airjnc.user.valid.group.SignUpValid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,21 +18,20 @@ import javax.validation.constraints.NotBlank;
 @RestController
 @RequestMapping("/user")
 @Validated
+@RequiredArgsConstructor
 public class UserController {
-
-    @Autowired
-    private UserService userService;
-
+    
+    private final UserService userService;
 
     @GetMapping("login/findpassword")
-    public ResponseEntity<UserDTO> findPasswordByEmail(@RequestParam("email")
-                                                       @NotBlank(message = "{Validation.NotNull}") @Email(message = "{Validation.Email}") String email) {
-        UserDTO pwdUserDTO = userService.findPasswordByEmail(email);
-        return ResponseEntity.ok().body(pwdUserDTO);
+    public ResponseEntity<FindPwdResponseDTO> findPasswordByEmail(@RequestParam("email")
+                                                                  @NotBlank(message = "{Validation.NotNull}") @Email(message = "{Validation.Email}") String email) {
+        FindPwdResponseDTO findPwdResponseDTO = userService.findPasswordByEmail(email);
+        return ResponseEntity.ok().body(findPwdResponseDTO);
     }
 
     @PostMapping("signup")
-    public ResponseEntity<UserDTO> userSignUp(@Validated @RequestBody SignUpDTO signUpDTO) {
+    public ResponseEntity<UserDTO> userSignUp(@Validated(SignUpValid.class) @RequestBody SignUpDTO signUpDTO) {
         UserDTO userDTO = userService.create(signUpDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }

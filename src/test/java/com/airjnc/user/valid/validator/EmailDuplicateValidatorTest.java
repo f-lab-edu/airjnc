@@ -1,35 +1,33 @@
-package com.airjnc.user.service;
+package com.airjnc.user.valid.validator;
 
 import com.airjnc.common.error.exception.DuplicateException;
 import com.airjnc.user.domain.User;
 import com.airjnc.user.dto.request.SignUpDTO;
-import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import util.UserFixture;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@ExtendWith(MockitoExtension.class)
+class EmailDuplicateValidatorTest {
 
-@SpringBootTest
-class UserServiceTest {
-
-    @MockBean
+    @Mock
     UserRepository userRepository;
 
-    @Autowired
-    UserServiceImpl userServiceImpl;
+    @InjectMocks
+    EmailDuplicateValidator emailDuplicateValidator;
 
     private User user;
-    private UserDTO userDTO;
     private SignUpDTO signUpDTO;
 
     @BeforeEach
@@ -38,23 +36,19 @@ class UserServiceTest {
         this.user = UserFixture.getUserBuilder()
             .build();
 
-        this.userDTO = UserFixture.getUserDTOBuilder()
-            .build();
-
         this.signUpDTO = UserFixture.getSignUpDTOBuilder()
             .build();
     }
 
     @Test
     @DisplayName("회원가입시 이메일 중복 체크")
-    public void whenDuplicateEmailExistsThenCustomException() throws Exception {
+    public void whenDuplicateEmailExistsThenCustomException() {
         //given
         BDDMockito.given(userRepository.selectUserByEmail(signUpDTO.getEmail()))
             .willReturn(Optional.of(user));
 
         // when, then
-        assertThatExceptionOfType(DuplicateException.class).isThrownBy(() -> userServiceImpl.create(signUpDTO));
+        assertThatExceptionOfType(DuplicateException.class).isThrownBy(() -> emailDuplicateValidator.validate(signUpDTO));
     }
-
 
 }

@@ -11,11 +11,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import util.UserFixture;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
-@ActiveProfiles("local")
 @Transactional
 class UserDaoTest {
 
@@ -45,14 +46,14 @@ class UserDaoTest {
     @DisplayName("Insert 후 이메일로 유저찾기")
     public void addAndGetByEmail() {
         userDAO.insertUser(user1);
-        assertThat(user1.getId()).isEqualTo(userDAO.selectUserByEmail(user1.getEmail()).getId());
+        assertThat(user1.getId()).isEqualTo(userDAO.selectUserByEmail(user1.getEmail()).get().getId());
     }
 
     @Test
     @DisplayName("Insert 후 ID로 유저찾기")
     public void addAndGetById() {
         userDAO.insertUser(user1);
-        assertThat(user1.getEmail()).isEqualTo(userDAO.selectUserById(user1.getId()).getEmail());
+        assertThat(user1.getEmail()).isEqualTo(userDAO.selectUserById(user1.getId()).get().getEmail());
 
 
     }
@@ -62,8 +63,8 @@ class UserDaoTest {
     public void getAutoIncrementKey() {
         userDAO.insertUser(user1);
         userDAO.insertUser(user2);
-        assertThat(user1.getId()).isEqualTo(userDAO.selectUserByEmail("test@naver.com").getId());
-        assertThat(user2.getId()).isEqualTo(userDAO.selectUserByEmail("test2@naver.com").getId());
+        assertThat(user1.getId()).isEqualTo(userDAO.selectUserByEmail("test@naver.com").get().getId());
+        assertThat(user2.getId()).isEqualTo(userDAO.selectUserByEmail("test2@naver.com").get().getId());
     }
 
     @Test
@@ -78,10 +79,10 @@ class UserDaoTest {
     @DisplayName("Insert 후 DB Default값 정상 설정 확인")
     public void checkDBDefault() {
         userDAO.insertUser(user1);
-        User dbUser = userDAO.selectUserByEmail("test@naver.com");
-        assertThat(dbUser.getCreatedAt()).isNotNull();
-        assertThat(dbUser.getUpdatedAt()).isNotNull();
-        assertThat(dbUser.isActive()).isEqualTo(true);
+        Optional<User> dbUser = userDAO.selectUserByEmail("test@naver.com");
+        assertThat(dbUser.get().getCreatedAt()).isNotNull();
+        assertThat(dbUser.get().getUpdatedAt()).isNotNull();
+        assertThat(dbUser.get().isActive()).isEqualTo(true);
     }
 
 

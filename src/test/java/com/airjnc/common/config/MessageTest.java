@@ -14,9 +14,9 @@ import java.util.Set;
 
 @SpringBootTest
 public class MessageTest {
-    
+
     @Test
-    public void chk_KR(){
+    public void chk_KR() {
         //given
         Locale.setDefault(Locale.KOREA);
         SignUpDTO invalidSignUpDTO = UserFixture.getSignUpDTOBuilder()
@@ -35,5 +35,5 @@ public class MessageTest {
         Set<ConstraintViolation<SignUpDTO>> validate = validator.validate(invalidSignUpDTO);
         validate.forEach(System.out::println);
     }
-    
+
 }

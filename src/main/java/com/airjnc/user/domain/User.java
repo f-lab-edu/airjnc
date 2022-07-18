@@ -1,5 +1,6 @@
 package com.airjnc.user.domain;
 
+import com.airjnc.common.util.BCryptHashEncoder;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -49,6 +50,10 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.birthDate = birthDate;
+    }
+
+    public void encodePassword(String password) {
+        this.password = BCryptHashEncoder.encode(password);
     }
 
 

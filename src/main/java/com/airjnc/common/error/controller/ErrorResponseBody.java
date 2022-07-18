@@ -2,7 +2,6 @@ package com.airjnc.common.error.controller;
 
 
 import com.airjnc.common.error.code.ErrorCode;
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
@@ -17,45 +16,42 @@ import java.util.stream.Collectors;
 
 @Getter
 public class ErrorResponseBody {
-    
-    private final String message;
-    private int status;
-    private final List<CustomFieldError> errors;
 
-    
+    private final String message;
+    private final List<CustomFieldError> errors;
+    private int status;
+
+
     private ErrorResponseBody(final MessageSource messageSource, final ErrorCode code, final List<CustomFieldError> errors) {
         this.message = getMessage(messageSource, code);
         this.status = code.getStatus();
         this.errors = errors;
     }
-    
-    private ErrorResponseBody(final MessageSource messageSource, final ErrorCode code){
+
+    private ErrorResponseBody(final MessageSource messageSource, final ErrorCode code) {
         this.message = getMessage(messageSource, code);
         this.status = code.getStatus();
         this.errors = new ArrayList<>();
     }
-    
-    public static ErrorResponseBody of(final MessageSource messageSource, final ErrorCode code, final BindingResult bindingResult){
+
+    public static ErrorResponseBody of(final MessageSource messageSource, final ErrorCode code, final BindingResult bindingResult) {
         return new ErrorResponseBody(messageSource, code, CustomFieldError.of(bindingResult));
     }
 
-    public static ErrorResponseBody of(final MessageSource messageSource, final ErrorCode code){
+    public static ErrorResponseBody of(final MessageSource messageSource, final ErrorCode code) {
         return new ErrorResponseBody(messageSource, code);
     }
-    
-    private static String getMessage(final MessageSource messageSource, final ErrorCode code){
+
+    private static String getMessage(final MessageSource messageSource, final ErrorCode code) {
         Locale locale = LocaleContextHolder.getLocale();
         try {
             return messageSource.getMessage(code.getMessage(), null, locale);
-        } catch (NoSuchMessageException e){
+        } catch (NoSuchMessageException e) {
             return null;
         }
     }
-    
-    
-    
-    
-    
+
+
     @Getter
     public static class CustomFieldError {
         private String field;
@@ -67,14 +63,14 @@ public class ErrorResponseBody {
             this.value = value;
             this.reason = reason;
         }
-        
+
         public static List<CustomFieldError> of(final String field, final String value, final String reason) {
             List<CustomFieldError> customFieldErrors = new ArrayList<>();
             customFieldErrors.add(new CustomFieldError(field, value, reason));
             return customFieldErrors;
         }
-        
-        public static List<CustomFieldError> of(final BindingResult bindingResult){
+
+        public static List<CustomFieldError> of(final BindingResult bindingResult) {
             final List<FieldError> fieldErrors = bindingResult.getFieldErrors();
             return fieldErrors.stream()
                 .map(error -> new CustomFieldError(
@@ -84,7 +80,6 @@ public class ErrorResponseBody {
                 .collect(Collectors.toList());
         }
     }
-    
-    
-    
+
+
 }

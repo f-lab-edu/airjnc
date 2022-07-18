@@ -24,7 +24,7 @@ public class UserDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
-    
+
     @Builder
     public UserDTO(Long id, String email, String password, String name, Gender gender, String phoneNumber, String address, boolean active, LocalDate birthDate, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.id = id;
@@ -39,6 +39,12 @@ public class UserDTO {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
+    }
+
+    @Builder
+    public static class FindPasswordDTO {
+        private Long id;
+        private String email;
     }
 }
 

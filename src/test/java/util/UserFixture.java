@@ -66,6 +66,6 @@ public class UserFixture {
             .birthDate(BIRTH_DATE)
             ;
     }
-    
+
 
 }

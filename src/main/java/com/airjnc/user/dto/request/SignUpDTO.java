@@ -1,9 +1,8 @@
 package com.airjnc.user.dto.request;
 
 import com.airjnc.user.domain.Gender;
-import com.airjnc.user.valid.DefaultValidation;
+import com.airjnc.user.valid.group.SignUpValid;
 import lombok.*;
-import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -13,28 +12,27 @@ import java.time.LocalDate;
 @EqualsAndHashCode(of = {"email"})
 public class SignUpDTO {
 
-    @NotBlank(message = "{Validation.NotNull}")
-    @Email(message = "{Validation.Email}")
-    @Email
+    @NotBlank(message = "{Validation.NotNull}", groups = SignUpValid.class)
+    @Email(message = "{Validation.Email}", groups = SignUpValid.class)
     private String email;
 
-    @NotBlank(message = "{Validation.NotNull}")
-    @Size(min = 8, max = 12, message = "{Validation.Size}")
+    @NotBlank(message = "{Validation.NotNull}", groups = SignUpValid.class)
+    @Size(min = 8, max = 12, message = "{Validation.Size}", groups = SignUpValid.class)
     private String password;
-    
-    @NotBlank(message = "{Validation.NotNull}")
+
+    @NotBlank(message = "{Validation.NotNull}", groups = SignUpValid.class)
     private String name;
 
-    @NotNull(message = "{Validation.NotNull}")
+    @NotNull(message = "{Validation.NotNull}", groups = SignUpValid.class)
     private Gender gender;
 
-    @NotBlank(message = "{Validation.NotNull}")
+    @NotBlank(message = "{Validation.NotNull}", groups = SignUpValid.class)
     private String phoneNumber;
 
-    @NotBlank(message = "{Validation.NotNull}")
+    @NotBlank(message = "{Validation.NotNull}", groups = SignUpValid.class)
     private String address;
-    
-    @Past(message = "생일은 과거여야합니다")
+
+    @Past(message = "{Validation.Past}", groups = SignUpValid.class)
     private LocalDate birthDate;
 
     @Builder
