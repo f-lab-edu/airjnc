@@ -6,7 +6,6 @@ import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.valid.group.SignUpValid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +19,7 @@ import javax.validation.constraints.NotBlank;
 @Validated
 @RequiredArgsConstructor
 public class UserController {
-    
+
     private final UserService userService;
 
     @GetMapping("login/findpassword")

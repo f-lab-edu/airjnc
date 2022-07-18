@@ -21,8 +21,9 @@ class AirjncApplicationTests {
     @Test
     void contextLoads() throws Exception {
         try (Connection conn = dataSource.getConnection()) {
-        };
-        
+        }
+        ;
+
     }
 
     @Test

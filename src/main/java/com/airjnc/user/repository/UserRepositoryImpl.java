@@ -3,7 +3,6 @@ package com.airjnc.user.repository;
 import com.airjnc.user.dao.UserDAO;
 import com.airjnc.user.domain.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -11,7 +10,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
-    
+
     private final UserDAO userDAO;
 
     @Override

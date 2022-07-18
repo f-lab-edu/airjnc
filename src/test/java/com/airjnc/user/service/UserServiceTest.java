@@ -4,14 +4,17 @@ import com.airjnc.common.error.exception.DuplicateException;
 import com.airjnc.user.domain.User;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.mapper.UserMapper;
 import com.airjnc.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import util.UserFixture;
 
 import java.util.Optional;
@@ -19,13 +22,16 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @MockBean
+    @Mock
     UserRepository userRepository;
 
-    @Autowired
+    @Spy
+    UserMapper userMapper;
+
+    @InjectMocks
     UserServiceImpl userServiceImpl;
 
     private User user;

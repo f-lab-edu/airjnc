@@ -9,6 +9,4 @@ public interface UserService {
     public FindPwdResponseDTO findPasswordByEmail(String email);
 
     public UserDTO create(SignUpDTO signUpDTO);
-
-    public void checkDuplicateEmail(String email);
 }
