@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum ErrorCode {
 
     INVALID_INPUT_VALUE(400, "ErrorCode.INVALID_INPUT_VALUE"),
-    DUPLICATE_VALUE(400, "ErrorCode.DUPLICATE_VALUE");
+    DUPLICATE_VALUE(400, "ErrorCode.DUPLICATE_VALUE"),
+    BUSINESS_EXCEPTION(400, "ErrorCode.BUSINESS_EXCEPTION");
 
     private final int status;
     private final String message;

@@ -1,6 +1,8 @@
 package com.airjnc.common.error.controller;
 
 import com.airjnc.common.error.code.ErrorCode;
+import com.airjnc.common.error.exception.BusinessException;
+import com.airjnc.common.error.exception.DuplicateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -36,5 +38,20 @@ public class GlobalExceptionHandler {
         final ErrorResponseBody errorResponseBody = ErrorResponseBody.of(messageSource, ErrorCode.INVALID_INPUT_VALUE);
         return ResponseEntity.status(resolveHttpStatus(ErrorCode.INVALID_INPUT_VALUE)).body(errorResponseBody);
     }
+
+    @ExceptionHandler(BusinessException.class)
+    protected ResponseEntity<ErrorResponseBody> handleBusinessException(BusinessException e) {
+        log.error(e.getMessage());
+        final ErrorResponseBody errorResponseBody = ErrorResponseBody.of(messageSource, ErrorCode.BUSINESS_EXCEPTION);
+        return ResponseEntity.status(resolveHttpStatus(ErrorCode.BUSINESS_EXCEPTION)).body(errorResponseBody);
+    }
+
+    @ExceptionHandler(DuplicateException.class)
+    protected ResponseEntity<ErrorResponseBody> handleDuplicateException(DuplicateException e) {
+        log.error(e.getMessage());
+        final ErrorResponseBody errorResponseBody = ErrorResponseBody.of(messageSource, ErrorCode.DUPLICATE_VALUE);
+        return ResponseEntity.status(resolveHttpStatus(ErrorCode.DUPLICATE_VALUE)).body(errorResponseBody);
+    }
+
 
 }

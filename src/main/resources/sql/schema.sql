@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `airjnc`.`user`
 (
     `id`           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `email`        VARCHAR(50)     NOT NULL,
-    `password`     VARCHAR(50)     NOT NULL,
+    `password`     VARCHAR(200)     NOT NULL,
     `name`         VARCHAR(50)     NOT NULL,
     `gender`       VARCHAR(10),
     `phone_number` VARCHAR(20),
