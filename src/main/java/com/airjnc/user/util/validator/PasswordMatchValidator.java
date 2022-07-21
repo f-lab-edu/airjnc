@@ -11,23 +11,23 @@ import org.springframework.validation.Errors;
 @Component
 public class PasswordMatchValidator implements DefaultValidator {
 
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return PasswordMatchDTO.class.isAssignableFrom(clazz);
-    }
+  @Override
+  public boolean supports(Class<?> clazz) {
+    return PasswordMatchDTO.class.isAssignableFrom(clazz);
+  }
 
-    @Override
-    public void validate(Object target, Errors errors) {
-        PasswordMatchDTO dto = (PasswordMatchDTO) target;
-        boolean isMatch = BCryptHashEncrypter.isMatch(dto.getPassword(), dto.getHash());
-        if (!isMatch) {
+  @Override
+  public void validate(Object target, Errors errors) {
+    PasswordMatchDTO dto = (PasswordMatchDTO) target;
+    boolean isMatch = BCryptHashEncrypter.isMatch(dto.getPassword(), dto.getHash());
+    if (!isMatch) {
         /*
         1. BadRequest.PasswordMatchDTO.password
         2. BadRequest.password
         3. BadRequest
          */
-            errors.rejectValue("password", ErrorCode.BAD_REQUEST.getCode());
-            throw new PasswordIsNotMatchException(errors);
-        }
+      errors.rejectValue("password", ErrorCode.BAD_REQUEST.name());
+      throw new PasswordIsNotMatchException(errors);
     }
+  }
 }

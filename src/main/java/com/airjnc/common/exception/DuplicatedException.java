@@ -7,15 +7,15 @@ import org.springframework.validation.Errors;
 
 public class DuplicatedException extends DefaultException {
 
-    public DuplicatedException() {
-        super(ErrorsFactory.create(ErrorCode.DUPLICATED));
-    }
+  public DuplicatedException() {
+    super(ErrorsFactory.create(ErrorCode.DUPLICATED));
+  }
 
-    public DuplicatedException(Errors errors) {
-        super(errors);
-    }
+  public DuplicatedException(Errors errors) {
+    super(errors);
+  }
 
-    public DuplicatedException(Errors errors, Throwable cause) {
-        super(errors, cause);
-    }
+  public DuplicatedException(Errors errors, Throwable cause) {
+    super(errors, cause);
+  }
 }

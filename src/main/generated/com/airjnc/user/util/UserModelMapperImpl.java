@@ -1,4 +1,4 @@
-package com.airjnc.common.util;
+package com.airjnc.user.util;
 
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-13T23:46:35+0900",
+    date = "2022-07-21T19:48:34+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 11.0.10 (AdoptOpenJDK)"
 )
 @Component
-public class ModelMapperImpl implements ModelMapper {
+public class UserModelMapperImpl implements UserModelMapper {
 
     @Override
     public UserDTO userEntityToUserDTO(UserEntity userEntity) {

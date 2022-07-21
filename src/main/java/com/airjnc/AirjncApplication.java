@@ -8,8 +8,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableAspectJAutoProxy
 public class AirjncApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(AirjncApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(AirjncApplication.class, args);
+  }
 
 }

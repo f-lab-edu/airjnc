@@ -8,11 +8,12 @@ import org.springframework.validation.Errors;
 
 @Component
 public class CommonValidator {
-    public void validateEqual(int actual, int expected) {
-        if (actual != expected) {
-            Errors errors = ErrorsFactory.create("validateEqual");
-            errors.reject(ErrorCode.BAD_REQUEST.getCode(), new Object[]{actual, expected}, null);
-            throw new BadRequestException(errors);
-        }
+
+  public void validateEqual(int actual, int expected) {
+    if (actual != expected) {
+      Errors errors = ErrorsFactory.create("validateEqual");
+      errors.reject(ErrorCode.BAD_REQUEST.name(), new Object[]{actual, expected}, null);
+      throw new BadRequestException(errors);
     }
+  }
 }

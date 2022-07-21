@@ -1,42 +1,45 @@
 package com.airjnc.user.dao.impl;
 
 import com.airjnc.common.exception.NotFoundException;
-import com.airjnc.common.util.ModelMapper;
 import com.airjnc.common.util.validator.CommonValidator;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.util.UserModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
 public class MybatisUserRepository implements UserRepository {
-    private final UserMapper userMapper;
-    private final CommonValidator commonValidator;
-    private final ModelMapper modelMapper;
 
-    @Override
-    public UserEntity findById(Long id) {
-        return userMapper.findById(id).orElseThrow(NotFoundException::new);
-    }
+  private final UserMapper userMapper;
 
-    @Override
-    public UserEntity findByEmail(String email) {
-        return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
-    }
+  private final CommonValidator commonValidator;
 
-    @Override
-    public UserEntity save(CreateDTO createDTO) {
-        int affect = userMapper.save(createDTO);
-        commonValidator.validateEqual(affect, 1);
-        return modelMapper.createDTOToUserEntity(createDTO);
-    }
+  private final UserModelMapper userModelMapper;
 
-    @Override
-    public void remove(Long id) {
-        int affect = userMapper.remove(id);
-        commonValidator.validateEqual(affect, 1);
-    }
+  @Override
+  public UserEntity findById(Long id) {
+    return userMapper.findById(id).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public UserEntity findByEmail(String email) {
+    return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public UserEntity save(CreateDTO createDTO) {
+    int affect = userMapper.save(createDTO);
+    commonValidator.validateEqual(affect, 1);
+    return userModelMapper.createDTOToUserEntity(createDTO);
+  }
+
+  @Override
+  public void remove(Long id) {
+    int affect = userMapper.remove(id);
+    commonValidator.validateEqual(affect, 1);
+  }
 }

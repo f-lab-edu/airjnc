@@ -4,11 +4,12 @@ import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
 
 public interface UserRepository {
-    UserEntity findById(Long id);
 
-    UserEntity findByEmail(String email);
+  UserEntity findById(Long id);
 
-    UserEntity save(CreateDTO createDTO);
+  UserEntity findByEmail(String email);
 
-    void remove(Long id);
+  UserEntity save(CreateDTO createDTO);
+
+  void remove(Long id);
 }

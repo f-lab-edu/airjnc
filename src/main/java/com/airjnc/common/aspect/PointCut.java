@@ -5,7 +5,8 @@ import org.aspectj.lang.annotation.Pointcut;
 
 @Aspect
 public class PointCut {
-    @Pointcut("@annotation(com.airjnc.common.annotation.CheckAuth)")
-    public void checkAuth() {
-    }
+
+  @Pointcut("@annotation(com.airjnc.common.annotation.CheckAuth)")
+  public void checkAuth() {
+  }
 }

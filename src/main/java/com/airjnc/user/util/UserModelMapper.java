@@ -1,4 +1,4 @@
-package com.airjnc.common.util;
+package com.airjnc.user.util;
 
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
@@ -11,8 +11,9 @@ import org.mapstruct.MappingConstants;
     componentModel = MappingConstants.ComponentModel.SPRING,
     injectionStrategy = InjectionStrategy.CONSTRUCTOR
 )
-public interface ModelMapper {
-    UserDTO userEntityToUserDTO(UserEntity userEntity);
+public interface UserModelMapper {
 
-    UserEntity createDTOToUserEntity(CreateDTO createDTO);
+  UserDTO userEntityToUserDTO(UserEntity userEntity);
+
+  UserEntity createDTOToUserEntity(CreateDTO createDTO);
 }

@@ -6,4 +6,5 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @TestConfiguration
 @EnableAspectJAutoProxy
 public class TestAopConfig {
+
 }
