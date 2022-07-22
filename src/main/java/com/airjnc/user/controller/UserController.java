@@ -1,5 +1,6 @@
 package com.airjnc.user.controller;
 
+import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.FindPwdResponseDTO;
 import com.airjnc.user.dto.response.UserDTO;
@@ -33,6 +34,12 @@ public class UserController {
     public ResponseEntity<UserDTO> userSignUp(@Validated(SignUpValid.class) @RequestBody SignUpDTO signUpDTO) {
         UserDTO userDTO = userService.create(signUpDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<Object> userLogIn(@RequestBody LogInRequestDTO logInRequestDTO) {
+        userService.logIn(logInRequestDTO);
+        return ResponseEntity.ok().body(null);
     }
 
 }

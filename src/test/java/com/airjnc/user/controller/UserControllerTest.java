@@ -1,8 +1,10 @@
 package com.airjnc.user.controller;
 
+import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.FindPwdResponseDTO;
 import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.exception.UserLoginNotMatchException;
 import com.airjnc.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -37,6 +39,7 @@ class UserControllerTest {
     private UserDTO userDTO;
     private SignUpDTO signUpDTO;
     private SignUpDTO invalidSignUpDTO;
+    private LogInRequestDTO logInRequestDTO;
 
     @BeforeEach
     public void setUp() {
@@ -55,6 +58,9 @@ class UserControllerTest {
             .phoneNumber(null)
             .address(null)
             .birthDate(null)
+            .build();
+
+        this.logInRequestDTO = UserFixture.getLogInRequestDTOBuilder()
             .build();
     }
 
@@ -132,6 +138,32 @@ class UserControllerTest {
         mvc.perform(post("/user/signup").locale(Locale.KOREA).contentType(MediaType.APPLICATION_JSON).content(nameInvalidSignUpJson))
             .andDo(print())
             .andExpect(jsonPath("$.errors[0].reason").value("값을 입력해 주세요"));
+    }
+
+    @Test
+    @DisplayName("Login 성공")
+    public void successLogin() throws Exception {
+        //given
+        String logInUserJson = new ObjectMapper().writeValueAsString(logInRequestDTO);
+        BDDMockito.willDoNothing().given(userService).logIn(logInRequestDTO);
+
+        //when, then
+        mvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(logInUserJson))
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Login 실패")
+    public void failLogin() throws Exception {
+        //given
+        String logInUserJson = new ObjectMapper().writeValueAsString(logInRequestDTO);
+        BDDMockito.willThrow(new UserLoginNotMatchException()).given(userService).logIn(logInRequestDTO);
+
+        //when, then
+        mvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(logInUserJson))
+            .andDo(print())
+            .andExpect(status().is4xxClientError());
     }
 
 
