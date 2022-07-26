@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.anyInt;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
-import com.airjnc.common.util.validator.CommonValidator;
+import com.airjnc.common.service.CommonInternalCheckService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.Gender;
@@ -30,14 +30,15 @@ class MybatisUserRepositoryTest {
   UserMapper userMapper;
 
   @Spy
-  CommonValidator commonValidator;
+  CommonInternalCheckService commonInternalCheckService;
 
   @Mock
   UserModelMapper userModelMapper;
 
   @BeforeEach
   void beforeEach() {
-    userRepository = new MybatisUserRepository(userMapper, commonValidator, userModelMapper);
+    userRepository = new MybatisUserRepository(userMapper, commonInternalCheckService,
+        userModelMapper);
   }
 
   @Test
@@ -74,7 +75,7 @@ class MybatisUserRepositoryTest {
     //when
     userRepository.save(createDTO);
     //then
-    then(commonValidator).should(times(1)).validateEqual(1, 1);
+    then(commonInternalCheckService).should(times(1)).shouldBeMatch(1, 1);
   }
 
   @Test
@@ -85,7 +86,7 @@ class MybatisUserRepositoryTest {
     //when
     userRepository.remove(userEntity.getId());
     //then
-    then(commonValidator).should(times(1)).validateEqual(anyInt(), anyInt());
+    then(commonInternalCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 }
 

@@ -19,10 +19,10 @@ public final class ErrorsFactory {
         globalError
             1. "errorCode.getCode()"."objectName"
             2. "errorCode.getCode()"
-        Ex) "objectName -> RootException.class.getSimpleName(), errorCode -> ErrorCode.DEFAULT"
+        Ex) `errorCode -> ErrorCode.DEFAULT, objectName -> RootException.class.getSimpleName()`
             1. Default.RootException
             2. Default
-        Ex) "objectName -> "", errorCode -> ErrorCode.DEFAULT"
+        Ex) `errorCode -> ErrorCode.DEFAULT, objectName -> ""`
             1. Default
          */
     Errors errors = new BeanPropertyBindingResult(null, "");

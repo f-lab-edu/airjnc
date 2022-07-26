@@ -11,7 +11,6 @@ import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.util.UserModelMapper;
-import com.airjnc.user.util.validator.EmailDuplicateValidator;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.CreateDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
@@ -30,7 +29,7 @@ class UserServiceTest {
   UserRepository userRepository;
 
   @Mock
-  EmailDuplicateValidator emailDuplicateValidator;
+  UserCheckService userCheckService;
 
   @Mock
   UserModelMapper userModelMapper;
@@ -50,7 +49,7 @@ class UserServiceTest {
     //when
     UserDTO result = userService.create(createDTO);
     //then
-    then(emailDuplicateValidator).should(times(1)).validate(createDTO);
+    then(userCheckService).should(times(1)).emailShouldNotBeDuplicated(createDTO.getEmail());
     then(createDTO).should(times(1)).changePasswordToHash();
     then(userRepository).should(times(1)).save(createDTO);
     then(userModelMapper).should(times(1)).userEntityToUserDTO(userEntity);

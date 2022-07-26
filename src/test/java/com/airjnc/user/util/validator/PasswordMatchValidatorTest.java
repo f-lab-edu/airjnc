@@ -2,41 +2,42 @@ package com.airjnc.user.util.validator;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.airjnc.common.util.BCryptHashEncrypter;
-import com.airjnc.user.dto.PasswordMatchDTO;
+import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.exception.PasswordIsNotMatchException;
+import com.airjnc.user.service.UserCheckService;
 import com.testutil.annotation.UnitTest;
-import com.testutil.fixture.PasswordMatchDTOFixture;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @UnitTest
+@ExtendWith(MockitoExtension.class)
 class PasswordMatchValidatorTest {
 
-  PasswordMatchValidator passwordMatchValidator;
+  @InjectMocks
+  UserCheckService userCheckService;
 
-
-  @BeforeEach
-  void beforeEach() {
-    passwordMatchValidator = new PasswordMatchValidator();
-  }
+  @Mock
+  UserRepository userRepository;
 
   @Test
   void whenPasswordIsMatchThenWillDoNothing() {
     //given
-    PasswordMatchDTO passwordMatchDTO = PasswordMatchDTOFixture.getBuilder().build();
+    String plain = "plain";
+    String hash = BCryptHashEncrypter.encrypt(plain);
     //when
-    passwordMatchValidator.validate(passwordMatchDTO);
-    //then
+    userCheckService.passwordShouldBeMatch(plain, hash);
   }
 
   @Test
   void whenPasswordIsNotMatchThenThrowPasswordIsNotMatchException() {
     //given
-    PasswordMatchDTO passwordMatchDTO =
-        PasswordMatchDTOFixture.getBuilder().password("123")
-            .hash(BCryptHashEncrypter.encrypt("12345")).build();
+    String plain = "plain";
+    String hash = BCryptHashEncrypter.encrypt("other");
     //when
     assertThrows(PasswordIsNotMatchException.class,
-        () -> passwordMatchValidator.validate(passwordMatchDTO));
+        () -> userCheckService.passwordShouldBeMatch(plain, hash));
   }
 }

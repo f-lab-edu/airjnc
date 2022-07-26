@@ -1,7 +1,7 @@
 package com.airjnc.user.dao.impl;
 
 import com.airjnc.common.exception.NotFoundException;
-import com.airjnc.common.util.validator.CommonValidator;
+import com.airjnc.common.service.CommonInternalCheckService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.UserEntity;
@@ -16,7 +16,7 @@ public class MybatisUserRepository implements UserRepository {
 
   private final UserMapper userMapper;
 
-  private final CommonValidator commonValidator;
+  private final CommonInternalCheckService commonInternalCheckService;
 
   private final UserModelMapper userModelMapper;
 
@@ -33,13 +33,13 @@ public class MybatisUserRepository implements UserRepository {
   @Override
   public UserEntity save(CreateDTO createDTO) {
     int affect = userMapper.save(createDTO);
-    commonValidator.validateEqual(affect, 1);
+    commonInternalCheckService.shouldBeMatch(affect, 1);
     return userModelMapper.createDTOToUserEntity(createDTO);
   }
 
   @Override
   public void remove(Long id) {
     int affect = userMapper.remove(id);
-    commonValidator.validateEqual(affect, 1);
+    commonInternalCheckService.shouldBeMatch(affect, 1);
   }
 }

@@ -1,9 +1,9 @@
 package com.airjnc.common.util.constant;
 
 public enum ErrorCode {
-  DEFAULT,
+  INTERNAL,
   BAD_REQUEST,
   DUPLICATED,
   NOT_FOUND,
-  UNAUTHORIZED
+  UNAUTHORIZED,
 }

@@ -2,16 +2,12 @@ package com.airjnc.common.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import com.airjnc.common.dto.ErrorResponse;
-import com.airjnc.common.exception.BadRequestException;
 import com.airjnc.common.exception.DefaultException;
-import com.airjnc.common.util.constant.ErrorCode;
+import com.airjnc.common.service.CommonInternalCheckService;
 import com.airjnc.common.util.factory.ErrorResponseFactory;
 import com.airjnc.common.util.factory.ErrorsFactory;
-import com.airjnc.common.util.validator.CommonValidator;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.exception.DuplicatedEmailException;
+import com.airjnc.user.exception.EmailIsDuplicatedException;
 import com.testutil.annotation.UnitTest;
-import com.testutil.fixture.CreateDTOFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -61,26 +57,28 @@ class ErrorResponseFactoryTest {
   @Test
   void codesTest() {
     //given
-    CreateDTO createDTO = CreateDTOFixture.getBuilder().build();
-    Errors errors = ErrorsFactory.create(createDTO);
-    errors.rejectValue("email", ErrorCode.DUPLICATED.name());
-    errors.reject(ErrorCode.DUPLICATED.name());
-    DuplicatedEmailException ex = new DuplicatedEmailException(errors);
+    Target target = new Target();
+    Errors errors = ErrorsFactory.create(target);
+    errors.rejectValue("field", "errorCode");
+//    errors.reject(ErrorCode.DUPLICATED.name());
+    EmailIsDuplicatedException ex = new EmailIsDuplicatedException(errors);
     //when
     ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
     //then
     /*
-     * ErrorCode -> ErrorCode.DUPLICATED -> "Duplicated"
-     * field -> "email"
-     * objectName -> CreateDTO.class.getSimpleName() -> "createDTO"
+     * objectName = "Target"
+     * field -> "field"
+     * errorCode -> "errorCode"
+     *
      * FieldError [errorCode.objectName.field]
-     *   1. Duplicated.CreateDTO.email
-     *   2. Duplicated.email
-     *   3. Duplicated.java.lang.String
-     *   4. Duplicated
+     *   1. errorCode.Target.field
+     *   2. errorCode.field
+     *   3. errorCode.java.lang.String
+     *   4. errorCode
+     *
      * GlobalError [errorCode.objectName]
-     *   1. Duplicated.CreateDTO
-     *   2. Duplicated
+     *   1. errorCode.Target
+     *   2. errorCode
      */
   }
 
@@ -88,14 +86,14 @@ class ErrorResponseFactoryTest {
   @Test
   void argumentsTest() {
     //given
-    CommonValidator commonValidator = new CommonValidator();
+    CommonInternalCheckService commonInternalCheckService = new CommonInternalCheckService();
     ErrorResponse errorResponse = null;
     int actual = 1;
     int expected = 2;
     //when
     try {
-      commonValidator.validateEqual(actual, expected);
-    } catch (BadRequestException ex) {
+      commonInternalCheckService.shouldBeMatch(actual, expected);
+    } catch (DefaultException ex) {
       errorResponse = ErrorResponseFactory.create(ex, messageSource);
     }
     assertThat(errorResponse.getGlobal()).isNotNull();
@@ -103,12 +101,19 @@ class ErrorResponseFactoryTest {
         .isEqualTo(String.format("actual: %d, but expected: %d", actual, expected));
   }
 
+
   private static class Target {
 
     private String test;
 
+    private String field;
+
     public String getTest() {
       return test;
+    }
+
+    public String getField() {
+      return field;
     }
   }
 }

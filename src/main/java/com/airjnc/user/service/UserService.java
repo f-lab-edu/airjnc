@@ -5,7 +5,6 @@ import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.util.UserModelMapper;
-import com.airjnc.user.util.validator.EmailDuplicateValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +16,10 @@ public class UserService {
 
   private final UserRepository userRepository;
 
-  private final EmailDuplicateValidator emailDuplicateValidator;
+  private final UserCheckService userCheckService;
 
   public UserDTO create(CreateDTO createDTO) {
-    emailDuplicateValidator.validate(createDTO);
+    userCheckService.emailShouldNotBeDuplicated(createDTO.getEmail());
     createDTO.changePasswordToHash();
     UserEntity userEntity = userRepository.save(createDTO);
     return userModelMapper.userEntityToUserDTO(userEntity);
