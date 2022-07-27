@@ -10,6 +10,7 @@ import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.request.FindEmailDTO;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.fixture.UserEntityFixture;
@@ -60,6 +61,20 @@ class MybatisUserRepositoryTest {
     //then
     assertThat(findUser.getId()).isSameAs(user.getId());
     assertThat(findUser.getEmail()).isEqualTo(user.getEmail());
+  }
+
+  @Test
+  void getEmail() {
+    //given
+    UserEntity user = UserEntityFixture.getBuilder().build();
+    FindEmailDTO findEmailDTO = FindEmailDTO.builder()
+        .name(user.getName())
+        .birthDate(user.getBirthDate().toString())
+        .build();
+    //when
+    String email = userRepository.getEmail(findEmailDTO);
+    //then
+    assertThat(email).isEqualTo(user.getEmail());
   }
 
   @Test

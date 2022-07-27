@@ -9,10 +9,12 @@ import static org.mockito.BDDMockito.willDoNothing;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.request.FindEmailDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.CreateDTOFixture;
+import com.testutil.fixture.FindEmailDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
 import com.testutil.fixture.UserEntityFixture;
 import org.junit.jupiter.api.Test;
@@ -38,7 +40,7 @@ class UserServiceTest {
   UserService userService;
 
   @Test()
-  void userShouldBeCreated() {
+  void create() {
     //given
     CreateDTO createDTO = spy(CreateDTOFixture.getBuilder().build());
     UserEntity userEntity = UserEntityFixture.getBuilder().build();
@@ -57,13 +59,23 @@ class UserServiceTest {
   }
 
   @Test
-  void userShouldBeRemoved() {
+  void remove() {
     //given
     UserEntity userEntity = UserEntityFixture.getBuilder().build();
     //when
     userService.remove(userEntity.getId());
     //then
     then(userRepository).should(times(1)).remove(userEntity.getId());
+  }
+
+  @Test
+  void findEmail() {
+    //given
+    FindEmailDTO findEmailDTO = FindEmailDTOFixture.getBuilder().build();
+    //when
+    userService.findEmail(findEmailDTO);
+    //then
+    then(userRepository).should(times(1)).getEmail(findEmailDTO);
   }
 }
 
