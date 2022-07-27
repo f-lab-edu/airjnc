@@ -16,7 +16,7 @@
     SELECT email
     FROM user
     WHERE name = #{name}
-      AND birthdate = ${birthDate};
+      AND birthdate = #{birthDate};
   </select>
   <select id="findById" resultType="UserEntity">
     SELECT *

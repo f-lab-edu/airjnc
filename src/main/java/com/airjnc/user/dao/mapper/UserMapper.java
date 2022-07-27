@@ -9,13 +9,13 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
 
-  Optional<UserEntity> findById(Long id);
-
-  Optional<UserEntity> findByEmail(String email);
-
-  Optional<String> getEmail(FindEmailDTO findEmailDTO);
+  int remove(Long id);
 
   int save(CreateDTO createDTO);
 
-  int remove(Long id);
+  Optional<String> getEmail(FindEmailDTO findEmailDTO);
+
+  Optional<UserEntity> findById(Long id);
+
+  Optional<UserEntity> findByEmail(String email);
 }
