@@ -6,14 +6,13 @@ import com.airjnc.user.dto.request.FindEmailDTO;
 
 public interface UserRepository {
 
-  UserEntity findById(Long id);
-
-  UserEntity findByEmail(String email);
-
-  String getEmail(FindEmailDTO findEmailDTO);
+  void remove(Long id);
 
   UserEntity save(CreateDTO createDTO);
 
+  String getEmail(FindEmailDTO findEmailDTO);
 
-  void remove(Long id);
+  UserEntity findByEmail(String email);
+
+  UserEntity findById(Long id);
 }

@@ -8,19 +8,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.airjnc.common.aspect.Advice;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.request.FindEmailDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.AopTest;
 import com.testutil.fixture.CreateDTOFixture;
+import com.testutil.fixture.FindEmailDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
-import java.time.LocalDate;
+import com.testutil.fixture.UserEntityFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -53,12 +56,19 @@ class UserControllerTest {
 
   @Test
   void findEmail() throws Exception {
-    LocalDate now = LocalDate.now();
+    //given
+    FindEmailDTO findEmailDTO = FindEmailDTOFixture.getBuilder().build();
+    given(userService.findEmail(any(FindEmailDTO.class))).willReturn(UserEntityFixture.EMAIL);
+    //when
     mockMvc.perform(
-        get("/users/findEmail")
-            .param("email", "hanjn2842@naver.com")
-            .param("birthDate", "2022-01-02")
-    ).andDo(print());
+            get("/users/findEmail")
+                .param("name", findEmailDTO.getName())
+                .param("birthDate", findEmailDTO.getBirthDate())
+        ).andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().string(UserEntityFixture.EMAIL));
+    //then
+    then(userService).should(times(1)).findEmail(any(FindEmailDTO.class));
   }
 
   @Test
