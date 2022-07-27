@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.AopTest;
 import com.testutil.fixture.CreateDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -48,6 +50,16 @@ class UserControllerTest {
 
   @SpyBean
   CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
+
+  @Test
+  void findEmail() throws Exception {
+    LocalDate now = LocalDate.now();
+    mockMvc.perform(
+        get("/users/findEmail")
+            .param("email", "hanjn2842@naver.com")
+            .param("birthDate", "2022-01-02")
+    ).andDo(print());
+  }
 
   @Test
   void create() throws Exception {
@@ -88,4 +100,3 @@ class UserControllerTest {
     then(userStateService).should(times(1)).remove();
   }
 }
-

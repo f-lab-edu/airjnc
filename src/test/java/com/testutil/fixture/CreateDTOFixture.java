@@ -13,11 +13,14 @@ public class CreateDTOFixture {
 
   public static final Gender GENDER = Gender.MALE;
 
+  public static final String birthDate = "2020-01-01";
+
   public static CreateDTO.CreateDTOBuilder getBuilder() {
     return CreateDTO.builder()
         .email(EMAIL)
         .password(PASSWORD)
         .name(NAME)
-        .gender(GENDER);
+        .gender(GENDER)
+        .birthDate(birthDate);
   }
 }
