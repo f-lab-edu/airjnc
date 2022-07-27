@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,7 +45,7 @@ public class ExceptionAdvice {
   }
 
   // 400 - Bean Validation, BAD REQUEST
-  @ExceptionHandler({MethodArgumentNotValidException.class, BadRequestException.class})
+  @ExceptionHandler({BindException.class, BadRequestException.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ErrorResponse handleBadRequestException(Exception ex) {
     return ErrorResponseFactory.create(ex, messageSource);

@@ -2,6 +2,7 @@ package com.airjnc.user.dao;
 
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.request.FindEmailDTO;
 
 public interface UserRepository {
 
@@ -9,7 +10,10 @@ public interface UserRepository {
 
   UserEntity findByEmail(String email);
 
+  String getEmail(FindEmailDTO findEmailDTO);
+
   UserEntity save(CreateDTO createDTO);
+
 
   void remove(Long id);
 }

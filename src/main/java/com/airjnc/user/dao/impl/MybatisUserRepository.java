@@ -6,6 +6,7 @@ import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.request.FindEmailDTO;
 import com.airjnc.user.util.UserModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -28,6 +29,11 @@ public class MybatisUserRepository implements UserRepository {
   @Override
   public UserEntity findByEmail(String email) {
     return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public String getEmail(FindEmailDTO findEmailDTO) {
+    return userMapper.getEmail(findEmailDTO);
   }
 
   @Override
