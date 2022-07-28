@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/airjnc?serverTimezone=UTC&characterEncoding=UTF-8
+    username: test
+    password: q1w2e3
+  messages:
+    basename: errors
+logging:
+  level:
+    org:
+      springframework:
+        jdbc: debug
+cloud:
+  naver:
+    credentials:
+      accessKey: zwIICC8SxBZwOZZDxOth
+      secretKey: DitvlIZzh6sjVH8AVKB8YKUmGcMtBGdP1JwA8TmJ
+    mailer:
+      resetPasswordTemplateSid: 6833
