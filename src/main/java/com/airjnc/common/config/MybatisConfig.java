@@ -25,7 +25,8 @@ public class MybatisConfig {
     factoryBean.setDataSource(dataSource);
     factoryBean.setTypeAliasesPackage("com.airjnc.*.domain"); // 매핑되는 자바 객체 경로 설정
     factoryBean.setMapperLocations(
-        context.getResources("classpath:mybatis/mapper/*.xml")); // mapper 파일 경로 설정
+        context.getResources("classpath:mybatis/mapper/*.xml")
+    ); // mapper 파일 경로 설정
     return factoryBean.getObject();
   }
 

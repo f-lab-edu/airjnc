@@ -36,7 +36,7 @@ public class TestDatabaseConfig {
 
   private void clear(DriverManagerDataSource dataSource) {
     JdbcTemplate template = new JdbcTemplate(dataSource);
-    template.update("delete from `user` where `id` = " + UserEntityFixture.ID);
+    template.update("delete from `user` where `id` = 1");
   }
 
   private void initData(DriverManagerDataSource dataSource) {
