@@ -38,3 +38,9 @@ out/
 
 ### mac ###
 .DS_Store
+
+### env ###
+application-local.yml
+
+### local DB Storage ###
+db-storage
