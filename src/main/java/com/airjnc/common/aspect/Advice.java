@@ -18,8 +18,9 @@ public class Advice {
   @Before("com.airjnc.common.aspect.PointCut.checkAuth()")
   public void beforeCheckAuth() {
     Long userId = userStateService.getUserId();
-    if (userId == null) {
-      throw new UnauthorizedException();
+    if (userId != null) {
+      return;
     }
+    throw new UnauthorizedException();
   }
 }
