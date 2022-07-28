@@ -16,7 +16,7 @@ import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.CreateDTOFixture;
 import com.testutil.fixture.FindEmailDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
-import com.testutil.fixture.UserEntityFixture;
+import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,7 +43,7 @@ class UserServiceTest {
   void create() {
     //given
     CreateDTO createDTO = spy(CreateDTOFixture.getBuilder().build());
-    UserEntity userEntity = UserEntityFixture.getBuilder().build();
+    UserEntity userEntity = TestUser.getBuilder().build();
     UserDTO userDTO = UserDTOFixture.getBuilder().build();
     willDoNothing().given(createDTO).changePasswordToHash();
     given(userRepository.save(createDTO)).willReturn(userEntity);
@@ -61,7 +61,7 @@ class UserServiceTest {
   @Test
   void remove() {
     //given
-    UserEntity userEntity = UserEntityFixture.getBuilder().build();
+    UserEntity userEntity = TestUser.getBuilder().build();
     //when
     userService.remove(userEntity.getId());
     //then

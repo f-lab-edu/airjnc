@@ -23,7 +23,7 @@ import com.testutil.annotation.AopTest;
 import com.testutil.fixture.CreateDTOFixture;
 import com.testutil.fixture.FindEmailDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
-import com.testutil.fixture.UserEntityFixture;
+import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -58,7 +58,7 @@ class UserControllerTest {
   void findEmail() throws Exception {
     //given
     FindEmailDTO findEmailDTO = FindEmailDTOFixture.getBuilder().build();
-    given(userService.findEmail(any(FindEmailDTO.class))).willReturn(UserEntityFixture.EMAIL);
+    given(userService.findEmail(any(FindEmailDTO.class))).willReturn(TestUser.EMAIL);
     //when
     mockMvc.perform(
             get("/users/findEmail")
@@ -66,7 +66,7 @@ class UserControllerTest {
                 .param("birthDate", findEmailDTO.getBirthDate())
         ).andDo(print())
         .andExpect(status().isOk())
-        .andExpect(content().string(UserEntityFixture.EMAIL));
+        .andExpect(content().string(TestUser.EMAIL));
     //then
     then(userService).should(times(1)).findEmail(any(FindEmailDTO.class));
   }

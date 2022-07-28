@@ -7,7 +7,7 @@ import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.CreateDTOFixture;
-import com.testutil.fixture.UserEntityFixture;
+import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -26,7 +26,7 @@ class UserEntityMapperTest {
   @Test
   void toUserDTO() {
     //given
-    UserEntity userEntity = UserEntityFixture.getBuilder().build();
+    UserEntity userEntity = TestUser.getBuilder().build();
     //when
     UserDTO result = userModelMapper.userEntityToUserDTO(userEntity);
     //then
