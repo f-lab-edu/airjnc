@@ -12,7 +12,7 @@ import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.LogInDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
-import com.testutil.fixture.UserEntityFixture;
+import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,7 +39,7 @@ class AuthServiceTest {
   void userShouldBeLoggedIn() {
     //given
     LogInDTO logInDTO = LogInDTOFixture.getBuilder().build();
-    UserEntity userEntity = UserEntityFixture.getBuilder().build();
+    UserEntity userEntity = TestUser.getBuilder().build();
     UserDTO userDTO = UserDTOFixture.getBuilder().build();
     given(userRepository.findByEmail(logInDTO.getEmail())).willReturn(userEntity);
     given(userModelMapper.userEntityToUserDTO(userEntity)).willReturn(userDTO);

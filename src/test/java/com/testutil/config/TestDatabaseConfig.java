@@ -2,7 +2,7 @@ package com.testutil.config;
 
 import com.airjnc.common.config.MybatisConfig;
 import com.airjnc.user.domain.UserEntity;
-import com.testutil.fixture.UserEntityFixture;
+import com.testutil.testdata.TestUser;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -42,7 +42,7 @@ public class TestDatabaseConfig {
     String sql =
         "insert into `user` (id, email, password, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at, deleted_at) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    UserEntity user = UserEntityFixture.getBuilder().build();
+    UserEntity user = TestUser.getBuilder().build();
     template.update(
         sql,
         user.getId(),
