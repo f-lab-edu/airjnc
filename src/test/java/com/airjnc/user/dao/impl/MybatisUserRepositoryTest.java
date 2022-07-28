@@ -15,9 +15,9 @@ import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.request.FindEmailDTO;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.MybatisTest;
-import com.testutil.fixture.UserEntityFixture;
 import com.testutil.fixture.UpdatePasswordByEmailDTOFixture;
 import org.junit.jupiter.api.Assertions;
+import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -49,36 +49,36 @@ class MybatisUserRepositoryTest {
   @Test
   void findById() {
     //given
-    UserEntity user = UserEntityFixture.getBuilder().build();
+    UserEntity testUser = TestUser.getBuilder().build();
     //when
-    UserEntity findUser = userRepository.findById(user.getId());
+    UserEntity findUser = userRepository.findById(testUser.getId());
     //then
-    assertThat(findUser.getId()).isSameAs(user.getId());
+    assertThat(findUser.getId()).isSameAs(testUser.getId());
   }
 
   @Test
   void findByEmail() {
     //given
-    UserEntity user = UserEntityFixture.getBuilder().build();
+    UserEntity testUser = TestUser.getBuilder().build();
     //when
-    UserEntity findUser = userRepository.findByEmail(user.getEmail());
+    UserEntity findUser = userRepository.findByEmail(testUser.getEmail());
     //then
-    assertThat(findUser.getId()).isSameAs(user.getId());
-    assertThat(findUser.getEmail()).isEqualTo(user.getEmail());
+    assertThat(findUser.getId()).isSameAs(testUser.getId());
+    assertThat(findUser.getEmail()).isEqualTo(testUser.getEmail());
   }
 
   @Test
   void getEmail() {
     //given
-    UserEntity user = UserEntityFixture.getBuilder().build();
+    UserEntity testUser = TestUser.getBuilder().build();
     FindEmailDTO findEmailDTO = FindEmailDTO.builder()
-        .name(user.getName())
-        .birthDate(user.getBirthDate().toString())
+        .name(testUser.getName())
+        .birthDate(testUser.getBirthDate().toString())
         .build();
     //when
     String email = userRepository.getEmail(findEmailDTO);
     //then
-    assertThat(email).isEqualTo(user.getEmail());
+    assertThat(email).isEqualTo(testUser.getEmail());
   }
 
   @Test
@@ -103,13 +103,13 @@ class MybatisUserRepositoryTest {
   @Transactional
   void remove() {
     //given
-    UserEntity user = UserEntityFixture.getBuilder().build();
+    UserEntity testUser = TestUser.getBuilder().build();
     //when
-    userRepository.remove(user.getId());
+    userRepository.remove(testUser.getId());
     //then
     Assertions.assertThrows(
         NotFoundException.class,
-        () -> userRepository.findByEmail(user.getEmail())
+        () -> userRepository.findByEmail(testUser.getEmail())
     );
     then(commonInternalCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }

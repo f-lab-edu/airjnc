@@ -1,11 +1,11 @@
-package com.testutil.fixture;
+package com.testutil.testdata;
 
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class UserEntityFixture {
+public class TestUser {
 
   public static final Long ID = 1L;
 

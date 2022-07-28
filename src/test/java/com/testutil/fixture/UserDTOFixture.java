@@ -1,17 +1,18 @@
 package com.testutil.fixture;
 
 import com.airjnc.user.dto.response.UserDTO;
+import com.testutil.testdata.TestUser;
 
 public class UserDTOFixture {
 
   public static UserDTO.UserDTOBuilder getBuilder() {
     return UserDTO.builder()
-        .id(UserEntityFixture.ID)
-        .email(UserEntityFixture.EMAIL)
-        .name(UserEntityFixture.NAME)
-        .gender(UserEntityFixture.GENDER)
-        .phoneNumber(UserEntityFixture.PHONE_NUMBER)
-        .address(UserEntityFixture.ADDRESS)
-        .birthDate(UserEntityFixture.BIRTH_DATE);
+        .id(TestUser.ID)
+        .email(TestUser.EMAIL)
+        .name(TestUser.NAME)
+        .gender(TestUser.GENDER)
+        .phoneNumber(TestUser.PHONE_NUMBER)
+        .address(TestUser.ADDRESS)
+        .birthDate(TestUser.BIRTH_DATE);
   }
 }
