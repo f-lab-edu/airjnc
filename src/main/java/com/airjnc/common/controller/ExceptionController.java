@@ -1,4 +1,4 @@
-package com.airjnc.common.advice;
+package com.airjnc.common.controller;
 
 import com.airjnc.common.dto.ErrorResponse;
 import com.airjnc.common.exception.BadRequestException;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class ExceptionAdvice {
+public class ExceptionController {
 
   private final MessageSource messageSource;
 

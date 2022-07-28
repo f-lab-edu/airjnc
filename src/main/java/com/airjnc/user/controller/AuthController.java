@@ -23,7 +23,7 @@ public class AuthController {
   private final UserStateService userStateService;
 
   @PostMapping("/logIn")
-  public UserDTO logIn(@RequestBody @Validated LogInDTO logInDTO) {
+  public UserDTO logIn(@Validated @RequestBody LogInDTO logInDTO) {
     UserDTO userDTO = authService.logIn(logInDTO);
     userStateService.create(userDTO.getId());
     return userDTO;
