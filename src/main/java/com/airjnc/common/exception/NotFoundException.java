@@ -1,16 +1,21 @@
 package com.airjnc.common.exception;
 
 
-import com.airjnc.common.util.constant.MessageCodes;
+import com.airjnc.common.util.constant.ErrorCode;
+import com.airjnc.common.util.factory.ErrorsFactory;
+import org.springframework.validation.Errors;
 
-public class NotFoundException extends RuntimeException {
-    private static final String CODE = MessageCodes.NOT_FOUND.getCode();
+public class NotFoundException extends DefaultException {
 
-    public NotFoundException(String message) {
-        super(CODE + "." + message);
-    }
+  public NotFoundException() {
+    super(ErrorsFactory.create(ErrorCode.NOT_FOUND));
+  }
 
-    public NotFoundException() {
-        super(CODE);
-    }
+  public NotFoundException(Errors errors) {
+    super(errors);
+  }
+
+  public NotFoundException(Errors errors, Throwable cause) {
+    super(errors, cause);
+  }
 }

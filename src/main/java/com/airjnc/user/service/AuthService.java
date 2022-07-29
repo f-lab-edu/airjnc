@@ -1,10 +1,26 @@
 package com.airjnc.user.service;
 
+import com.airjnc.user.dao.UserRepository;
+import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.request.LogInDTO;
+import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.util.UserModelMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-import com.airjnc.common.util.constant.SessionKey;
+@Service
+@RequiredArgsConstructor
+public class AuthService {
 
-public interface AuthService {
-    void logIn(SessionKey key, Long userId);
+  private final UserRepository userRepository;
 
-    void logOut(SessionKey key);
+  private final UserModelMapper userModelMapper;
+
+  private final UserCheckService userCheckService;
+
+  public UserDTO logIn(LogInDTO logInDTO) {
+    UserEntity userEntity = userRepository.findByEmail(logInDTO.getEmail());
+    userCheckService.passwordShouldBeMatch(logInDTO.getPassword(), userEntity.getPassword());
+    return userModelMapper.userEntityToUserDTO(userEntity);
+  }
 }

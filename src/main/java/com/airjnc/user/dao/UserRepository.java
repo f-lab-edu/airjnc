@@ -1,16 +1,15 @@
 package com.airjnc.user.dao;
 
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.SignUpDTO;
-
-import java.util.Optional;
+import com.airjnc.user.dto.request.CreateDTO;
 
 public interface UserRepository {
-    Optional<UserEntity> findById(Long id);
 
-    Optional<UserEntity> findByEmail(String email);
+  UserEntity findById(Long id);
 
-    UserEntity save(SignUpDTO signUpDTO);
+  UserEntity findByEmail(String email);
 
-    void remove(Long id);
+  UserEntity save(CreateDTO createDTO);
+
+  void remove(Long id);
 }
