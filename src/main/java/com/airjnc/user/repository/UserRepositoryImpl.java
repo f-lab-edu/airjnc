@@ -1,21 +1,33 @@
 package com.airjnc.user.repository;
 
 import com.airjnc.user.dao.UserDAO;
-import com.airjnc.user.dto.UserDTO;
-import com.airjnc.user.entity.UserEntity;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.airjnc.user.domain.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public class UserRepositoryImpl implements UserRepository{
+@RequiredArgsConstructor
+public class UserRepositoryImpl implements UserRepository {
 
-    @Autowired
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
 
     @Override
-    public UserEntity findUserById(Long id) {
-        return userDAO.findUserById(id);
+    public Optional<User> selectUserById(Long id) {
+        return userDAO.selectUserById(id);
     }
+
+    @Override
+    public Optional<User> selectUserByEmail(String email) {
+        return userDAO.selectUserByEmail(email);
+    }
+
+    @Override
+    public User insertUser(User user) {
+        userDAO.insertUser(user);
+        return user;
+    }
+
+
 }

@@ -42,3 +42,4 @@ out/
 ### application.properties ###
 application.properties
 application-local.properties
+application-prd.properties
