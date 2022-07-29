@@ -36,7 +36,7 @@ public class MybatisUserRepository implements UserRepository {
 
   @Override
   public String getEmail(FindEmailDTO findEmailDTO) {
-    return userMapper.getEmail(findEmailDTO);
+    return userMapper.getEmail(findEmailDTO).orElseThrow(NotFoundException::new);
   }
 
   @Override

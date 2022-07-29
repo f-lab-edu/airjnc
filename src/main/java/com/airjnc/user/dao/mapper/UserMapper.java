@@ -13,7 +13,7 @@ public interface UserMapper {
 
   int save(CreateDTO createDTO);
 
-  String getEmail(FindEmailDTO findEmailDTO);
+  Optional<String> getEmail(FindEmailDTO findEmailDTO);
 
   Optional<UserEntity> findById(Long id);
 
