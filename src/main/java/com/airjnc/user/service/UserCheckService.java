@@ -29,7 +29,7 @@ public class UserCheckService {
         2. UserCheckService
          */
     throw new EmailIsDuplicatedException(
-        ErrorsFactory.createAndReject("emailIsDuplicated", this.getClass().getSimpleName()));
+        ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "emailIsDuplicated"));
   }
 
   public void passwordShouldBeMatch(String plain, String hash) {
@@ -42,7 +42,7 @@ public class UserCheckService {
         2. UserCheckService
          */
     throw new PasswordIsNotMatchException(
-        ErrorsFactory.createAndReject("passwordIsNotMatch", this.getClass().getSimpleName())
+        ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "passwordIsNotMatch")
     );
   }
 }

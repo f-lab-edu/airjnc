@@ -5,9 +5,9 @@ import static org.mockito.BDDMockito.anyInt;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import com.airjnc.common.exception.NotFoundException;
-import com.airjnc.common.service.CommonInternalCheckService;
 import com.airjnc.user.dto.request.UserCreateDTO;
 import com.airjnc.user.dto.request.UserFindEmailDTO;
+import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dto.UserSaveDTO;
 import com.airjnc.user.dto.UserUpdatePwdByEmailDTO;
@@ -36,14 +36,14 @@ class MybatisUserRepositoryTest {
   UserMapper userMapper;
 
   @Spy
-  CommonInternalCheckService commonInternalCheckService;
+  CommonCheckService commonCheckService;
 
   @Mock
   UserModelMapper userModelMapper;
 
   @BeforeEach
   void beforeEach() {
-    userRepository = new MybatisUserRepository(userMapper, commonInternalCheckService,
+    userRepository = new MybatisUserRepository(userMapper, commonCheckService,
         userModelMapper);
   }
 
@@ -98,7 +98,7 @@ class MybatisUserRepositoryTest {
     //then
     UserEntity byEmail = userRepository.findByEmail(userSaveDTO.getEmail());
     assertThat(byEmail.getName()).isEqualTo(userSaveDTO.getName());
-    then(commonInternalCheckService).should(times(1)).shouldBeMatch(1, 1);
+    then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
   }
 
   @Test
@@ -113,7 +113,7 @@ class MybatisUserRepositoryTest {
         NotFoundException.class,
         () -> userRepository.findByEmail(testUser.getEmail())
     );
-    then(commonInternalCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
+    then(commonCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 
   @Test
@@ -126,7 +126,7 @@ class MybatisUserRepositoryTest {
     //then
     UserEntity byEmail = userRepository.findByEmail(userUpdatePwdByEmailDTO.getEmail());
     assertThat(byEmail.getPassword()).isEqualTo(userUpdatePwdByEmailDTO.getPassword());
-    then(commonInternalCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
+    then(commonCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 }
 

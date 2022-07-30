@@ -11,6 +11,6 @@ public class NotFoundException extends DefaultException {
   }
 
   public NotFoundException(String objectName, Object[] errorArgs) {
-    super(ErrorsFactory.createAndReject(objectName, ErrorCode.NOT_FOUND.name(), errorArgs));
+    super(ErrorsFactory.createAndReject(ErrorCode.NOT_FOUND.name(), objectName, errorArgs));
   }
 }

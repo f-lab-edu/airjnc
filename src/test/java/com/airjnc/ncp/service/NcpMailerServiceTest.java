@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import com.airjnc.common.service.CommonInternalCheckService;
+import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.ncp.properties.NcpMailerProperties;
 import com.airjnc.ncp.dto.NcpMailerReq;
 import com.airjnc.ncp.dto.NcpMailerRes;
@@ -35,7 +35,7 @@ class NcpMailerServiceTest {
   NcpMailerProperties ncpMailerProperties;
 
   @Mock
-  CommonInternalCheckService commonInternalCheckService;
+  CommonCheckService commonCheckService;
 
   @InjectMocks
   NcpMailerService ncpMailerService;
@@ -61,6 +61,6 @@ class NcpMailerServiceTest {
         .createEntity(eq(NcpMailerUrl.CREATE_MAIL_REQULEST), any(NcpMailerReq.class));
     then(restTemplate).should(times(1))
         .postForObject(NcpMailerUrl.CREATE_MAIL_REQULEST, entity, NcpMailerRes.class);
-    then(commonInternalCheckService).should(times(1)).shouldBeMatch(res.getCount(), 1);
+    then(commonCheckService).should(times(1)).shouldBeMatch(res.getCount(), 1);
   }
 }

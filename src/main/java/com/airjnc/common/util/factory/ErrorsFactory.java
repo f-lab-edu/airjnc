@@ -17,7 +17,10 @@ public final class ErrorsFactory {
     return create(null, objectName);
   }
 
-  public static Errors createAndReject(Object target, String objectName, String errorCode, Object[] errorArgs) {
+  /**
+   * [create global Error] create message code -> `errorCode`.`objectName`
+   */
+  public static Errors createAndReject(Object target, String errorCode, String objectName, Object[] errorArgs) {
     /*
      * messageCode 생성 순위
         1. errorCode.objectName
@@ -30,15 +33,24 @@ public final class ErrorsFactory {
     return errors;
   }
 
+  /**
+   * [create global Error] create message code -> `errorCode`.`objectName`
+   */
   public static Errors createAndReject(String errorCode) {
-    return createAndReject(null, "", errorCode, null);
+    return createAndReject(null, errorCode, "", null);
   }
 
-  public static Errors createAndReject(String objectName, String errorCode) {
-    return createAndReject(null, objectName, errorCode, null);
+  /**
+   * [create global Error] create message code -> `errorCode`.`objectName`
+   */
+  public static Errors createAndReject(String errorCode, String objectName) {
+    return createAndReject(null, errorCode, objectName, null);
   }
 
-  public static Errors createAndReject(String objectName, String errorCode, Object[] errorArgs) {
-    return createAndReject(null, objectName, errorCode, errorArgs);
+  /**
+   * [create global Error] create message code -> `errorCode`.`objectName`
+   */
+  public static Errors createAndReject(String errorCode, String objectName, Object[] errorArgs) {
+    return createAndReject(null, errorCode, objectName, errorArgs);
   }
 }

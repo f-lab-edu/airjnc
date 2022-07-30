@@ -1,6 +1,6 @@
 package com.airjnc.ncp.service;
 
-import com.airjnc.common.service.CommonInternalCheckService;
+import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.ncp.annotation.NcpMailRestTemplate;
 import com.airjnc.ncp.properties.NcpMailerProperties;
 import com.airjnc.ncp.dto.NcpMailerReq;
@@ -28,7 +28,7 @@ public class NcpMailerService {
 
   private final NcpMailerProperties ncpMailerProperties;
 
-  private final CommonInternalCheckService commonInternalCheckService;
+  private final CommonCheckService commonCheckService;
 
   public void send(NcpMailerSendDTO ncpMailerSendDTO) {
     Recipient recipient = Recipient.builder()
@@ -53,6 +53,6 @@ public class NcpMailerService {
         entity,
         NcpMailerRes.class
     );
-    commonInternalCheckService.shouldBeMatch(Objects.requireNonNull(res).getCount(), 1);
+    commonCheckService.shouldBeMatch(Objects.requireNonNull(res).getCount(), 1);
   }
 }

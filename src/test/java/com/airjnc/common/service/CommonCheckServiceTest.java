@@ -5,25 +5,25 @@ import com.airjnc.common.exception.DefaultException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class CommonInternalCheckServiceTest {
+class CommonCheckServiceTest {
 
-  CommonInternalCheckService commonInternalCheckService;
+  CommonCheckService commonCheckService;
 
   @BeforeEach
   void beforeEach() {
-    commonInternalCheckService = new CommonInternalCheckService();
+    commonCheckService = new CommonCheckService();
   }
 
   @Test
   void whenValuesOfActualAndExpectedAreDifferentThenThrowException() {
     assertThrows(
         DefaultException.class,
-        () -> commonInternalCheckService.shouldBeMatch(1, 2)
+        () -> commonCheckService.shouldBeMatch(1, 2)
     );
   }
 
   @Test
   void whenValuesOfActualAndExpectedEqualThenWillDoNothing() {
-    commonInternalCheckService.shouldBeMatch(1, 1);
+    commonCheckService.shouldBeMatch(1, 1);
   }
 }

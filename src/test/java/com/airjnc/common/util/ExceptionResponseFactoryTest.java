@@ -3,7 +3,7 @@ package com.airjnc.common.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import com.airjnc.common.dto.response.ExceptionResponse;
 import com.airjnc.common.exception.DefaultException;
-import com.airjnc.common.service.CommonInternalCheckService;
+import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.util.factory.ErrorResponseFactory;
 import com.airjnc.common.util.factory.ErrorsFactory;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
@@ -70,19 +70,19 @@ class ExceptionResponseFactoryTest {
   @Test
   void argumentsTest() {
     //given
-    CommonInternalCheckService commonInternalCheckService = new CommonInternalCheckService();
+    CommonCheckService commonCheckService = new CommonCheckService();
     ExceptionResponse exceptionResponse = null;
     int actual = 1;
     int expected = 2;
     //when
     try {
-      commonInternalCheckService.shouldBeMatch(actual, expected);
+      commonCheckService.shouldBeMatch(actual, expected);
     } catch (DefaultException ex) {
       exceptionResponse = ErrorResponseFactory.create(ex, messageSource);
     }
     assertThat(exceptionResponse.getGlobal()).isNotNull();
     assertThat(exceptionResponse.getGlobal().get(0))
-        .isEqualTo(String.format("actual: %d, but expected: %d", actual, expected));
+        .isEqualTo(String.format("%d != %d", actual, expected));
   }
 
 
