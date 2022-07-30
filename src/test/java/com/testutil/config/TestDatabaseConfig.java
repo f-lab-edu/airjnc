@@ -24,6 +24,11 @@ public class TestDatabaseConfig {
   @Value("${spring.datasource.password}")
   String password;
 
+  private void clear(DriverManagerDataSource dataSource) {
+    JdbcTemplate template = new JdbcTemplate(dataSource);
+    template.update("delete from `user` where `id` = 1");
+  }
+
   @Bean
   DataSource dataSource() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource(url, username, password);
@@ -32,16 +37,11 @@ public class TestDatabaseConfig {
     return dataSource;
   }
 
-  private void clear(DriverManagerDataSource dataSource) {
-    JdbcTemplate template = new JdbcTemplate(dataSource);
-    template.update("delete from `user` where `id` = 1");
-  }
-
   private void initData(DriverManagerDataSource dataSource) {
     JdbcTemplate template = new JdbcTemplate(dataSource);
     String sql =
-        "insert into `user` (id, email, password, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at, deleted_at) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "insert into `user` (id, email, password, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     UserEntity user = TestUser.getBuilder().build();
     template.update(
         sql,
@@ -55,8 +55,7 @@ public class TestDatabaseConfig {
         user.isActive(),
         user.getBirthDate(),
         user.getCreatedAt(),
-        user.getUpdatedAt(),
-        user.getDeletedAt()
+        user.getUpdatedAt()
     );
   }
 }

@@ -2,12 +2,13 @@ package com.airjnc.user.controller;
 
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.annotation.CurrentUserId;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.request.FindEmailDTO;
-import com.airjnc.user.dto.request.ResetPasswordCodeViaEmailDTO;
-import com.airjnc.user.dto.request.ResetPasswordCodeViaPhoneDTO;
-import com.airjnc.user.dto.request.ResetPasswordDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaEmailReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaPhoneReq;
+import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.response.UserInquiryEmailResp;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
 import lombok.RequiredArgsConstructor;
@@ -32,41 +33,42 @@ public class UserController {
 
   private final UserStateService userStateService;
 
-  @GetMapping("/findEmail")
-  public String findEmail(@Validated @ModelAttribute FindEmailDTO findEmailDTO) {
-    return userService.findEmail(findEmailDTO);
-  }
-
-  @GetMapping(value = "/resetPassword", params = "via=email")
-  public void resetPasswordCodeViaEmail(
-      @Validated @ModelAttribute ResetPasswordCodeViaEmailDTO resetPasswordCodeViaEmailDTO) {
-    userService.resetPasswordViaEmail(resetPasswordCodeViaEmailDTO);
-  }
-
-  @GetMapping(value = "/resetPassword", params = "via=phone")
-  public void resetPasswordCodeViaPhone(
-      @Validated @ModelAttribute ResetPasswordCodeViaPhoneDTO resetPasswordCodeViaPhoneDTO) {
-    userService.resetPasswordViaPhone(resetPasswordCodeViaPhoneDTO);
-  }
-
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public UserDTO create(@Validated @RequestBody CreateDTO createDTO) {
-    UserDTO userDTO = userService.create(createDTO);
-    userStateService.create(userDTO.getId());
-    return userDTO;
+  public UserResp create(@Validated @RequestBody UserCreateReq userCreateReq) {
+    UserResp userResp = userService.create(userCreateReq);
+    userStateService.create(userResp.getId());
+    return userResp;
   }
 
-  @PutMapping("/resetPassword")
-  public void resetPassword(@Validated @RequestBody ResetPasswordDTO resetPasswordDTO) {
-    userService.resetPassword(resetPasswordDTO);
+  @GetMapping("/inquiryEmail")
+  public UserInquiryEmailResp findEmail(@Validated @ModelAttribute UserInquiryEmailReq userInquiryEmailReq) {
+    return userService.inquiryEmail(userInquiryEmailReq);
   }
 
   @DeleteMapping("/me")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @CheckAuth
-  public void remove(@CurrentUserId Long currentUserId) {
-    userService.remove(currentUserId);
-    userStateService.remove();
+  public void delete(@CurrentUserId Long currentUserId) {
+    userService.delete(currentUserId);
+    userStateService.delete();
+  }
+
+  @PutMapping("/resetPassword")
+  public void resetPassword(@Validated @RequestBody UserResetPwdReq userResetPwdReq) {
+    userService.resetPassword(userResetPwdReq);
+  }
+
+  @GetMapping(value = "/resetPassword", params = "email")
+  public void getResetPwdCodeViaEmail(
+      @Validated @ModelAttribute UserGetResetPwdCodeViaEmailReq userGetResetPwdCodeViaEmailReq) {
+    userService.getResetPwdCodeViaEmail(userGetResetPwdCodeViaEmailReq);
+  }
+
+  // Naver에서 발신번호 등록이 계속해서 안되고 있어서, 일단 보류함
+//  @GetMapping(value = "/resetPassword", params = "phone")
+  public void getResetPwdCodeViaPhone(
+      @Validated @ModelAttribute UserGetResetPwdCodeViaPhoneReq userGetResetPwdCodeViaPhoneReq) {
+    userService.getResetPwdCodeViaPhone(userGetResetPwdCodeViaPhoneReq);
   }
 }
