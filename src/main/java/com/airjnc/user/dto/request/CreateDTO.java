@@ -29,7 +29,7 @@ public class CreateDTO {
   private Gender gender;
 
   @NotNull
-  @Pattern(regexp = UserRegex.password)
+  @Pattern(regexp = UserRegex.PASSWORD)
   private String password;
 
   @NotNull

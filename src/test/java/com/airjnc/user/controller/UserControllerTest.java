@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -15,6 +16,9 @@ import com.airjnc.common.aspect.Advice;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.request.FindEmailDTO;
+import com.airjnc.user.dto.request.ResetPasswordCodeViaEmailDTO;
+import com.airjnc.user.dto.request.ResetPasswordCodeViaPhoneDTO;
+import com.airjnc.user.dto.request.ResetPasswordDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
@@ -72,6 +76,36 @@ class UserControllerTest {
   }
 
   @Test
+  void resetPasswordCodeViaEmail() throws Exception {
+    //given
+    String email = TestUser.EMAIL;
+    //when
+    mockMvc.perform(
+            get("/users/resetPassword")
+                .param("via", "email")
+                .param("email", email)
+        ).andDo(print())
+        .andExpect(status().isOk());
+    //then
+    then(userService).should(times(1)).resetPasswordViaEmail(any(ResetPasswordCodeViaEmailDTO.class));
+  }
+
+  @Test
+  void resetPasswordCodeViaPhone() throws Exception {
+    //given
+    String phoneNumber = TestUser.PHONE_NUMBER;
+    //when
+    mockMvc.perform(
+            get("/users/resetPassword")
+                .param("via", "phone")
+                .param("phoneNumber", phoneNumber)
+        ).andDo(print())
+        .andExpect(status().isOk());
+    //then
+    then(userService).should(times(1)).resetPasswordViaPhone(any(ResetPasswordCodeViaPhoneDTO.class));
+  }
+
+  @Test
   void create() throws Exception {
     //given
     CreateDTO createDTO = CreateDTOFixture.getBuilder().build();
@@ -88,6 +122,25 @@ class UserControllerTest {
     //then
     then(userService).should(times(1)).create(any(CreateDTO.class));
     then(userStateService).should(times(1)).create(userDTO.getId());
+  }
+
+  @Test
+  void resetPassword() throws Exception {
+    //given
+    ResetPasswordDTO resetPasswordDTO = ResetPasswordDTO.builder()
+        .code("123456")
+        .password("q1w2e3r4t5!")
+        .passwordConfirm("q1w2e3r4t5!")
+        .build();
+    //when
+    mockMvc.perform(
+            put("/users/resetPassword")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(resetPasswordDTO))
+        ).andDo(print())
+        .andExpect(status().isOk());
+    //then
+    then(userService).should(times(1)).resetPassword(any(ResetPasswordDTO.class));
   }
 
   @Test

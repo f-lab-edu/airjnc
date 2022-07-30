@@ -15,18 +15,33 @@
   <select id="getEmail" resultType="String">
     SELECT email
     FROM user
-    WHERE name = #{name}
+    WHERE deleted_at IS NULL
+      AND name = #{name}
       AND birthdate = #{birthDate};
   </select>
   <select id="findById" resultType="UserEntity">
     SELECT *
     FROM user
-    WHERE id = #{id}
+    WHERE deleted_at IS NULL
+      AND id = #{id}
       AND deleted_at IS NULL;
   </select>
   <select id="findByEmail" resultType="UserEntity">
     SELECT *
     FROM user
-    WHERE email = #{email};
+    WHERE deleted_at IS NULL
+      AND email = #{email};
   </select>
+  <select id="findByPhoneNumber" resultType="UserEntity">
+    SELECT *
+    FROM user
+    WHERE deleted_at IS NULL
+      AND phone_number = #{phoneNumber};
+  </select>
+  <update id="updatePasswordByEmail">
+    UPDATE user
+    SET password = #{password}
+    WHERE deleted_at IS NULL
+      AND email = #{email};
+  </update>
 </mapper>

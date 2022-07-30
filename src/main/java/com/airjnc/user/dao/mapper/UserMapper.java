@@ -1,6 +1,7 @@
 package com.airjnc.user.dao.mapper;
 
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UpdatePasswordByEmailDTO;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.request.FindEmailDTO;
 import java.util.Optional;
@@ -18,4 +19,8 @@ public interface UserMapper {
   Optional<UserEntity> findById(Long id);
 
   Optional<UserEntity> findByEmail(String email);
+
+  Optional<UserEntity> findByPhoneNumber(String phoneNumber);
+
+  int updatePasswordByEmail(UpdatePasswordByEmailDTO updatePasswordByEmailDTO);
 }

@@ -1,6 +1,7 @@
 package com.airjnc.user.dao;
 
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UpdatePasswordByEmailDTO;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.request.FindEmailDTO;
 
@@ -12,7 +13,11 @@ public interface UserRepository {
 
   String getEmail(FindEmailDTO findEmailDTO);
 
+  UserEntity findById(Long id);
+
   UserEntity findByEmail(String email);
 
-  UserEntity findById(Long id);
+  UserEntity findByPhoneNumber(String phoneNumber);
+
+  void updatePasswordByEmail(UpdatePasswordByEmailDTO updatePasswordByEmailDTO);
 }
