@@ -2,12 +2,12 @@ package com.airjnc.ncp.service;
 
 import com.airjnc.common.service.CommonInternalCheckService;
 import com.airjnc.ncp.annotation.NcpMailRestTemplate;
-import com.airjnc.ncp.dto.NcpMailerRequest;
-import com.airjnc.ncp.dto.NcpMailerRequest.Recipient;
-import com.airjnc.ncp.dto.NcpMailerRequest.Recipient.Type;
-import com.airjnc.ncp.dto.NcpMailerResponse;
-import com.airjnc.ncp.dto.NcpMailerSendDTO;
 import com.airjnc.ncp.properties.NcpMailerProperties;
+import com.airjnc.ncp.dto.NcpMailerReq;
+import com.airjnc.ncp.dto.NcpMailerReq.Recipient;
+import com.airjnc.ncp.dto.NcpMailerReq.Recipient.Type;
+import com.airjnc.ncp.dto.NcpMailerRes;
+import com.airjnc.ncp.dto.NcpMailerSendDTO;
 import com.airjnc.ncp.util.NcpMailerUrl;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +39,7 @@ public class NcpMailerService {
             Map.entry("code", ncpMailerSendDTO.getCode())
         ))
         .build();
-    NcpMailerRequest body = NcpMailerRequest.builder()
+    NcpMailerReq body = NcpMailerReq.builder()
         .templateSid(ncpMailerProperties.getResetPasswordTemplateSid())
         .recipients(List.of(recipient))
         .build();
@@ -48,10 +48,10 @@ public class NcpMailerService {
         body
     );
 
-    NcpMailerResponse res = restTemplate.postForObject(
+    NcpMailerRes res = restTemplate.postForObject(
         NcpMailerUrl.CREATE_MAIL_REQULEST,
         entity,
-        NcpMailerResponse.class
+        NcpMailerRes.class
     );
     commonInternalCheckService.shouldBeMatch(Objects.requireNonNull(res).getCount(), 1);
   }

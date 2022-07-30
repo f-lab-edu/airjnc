@@ -6,13 +6,14 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import com.airjnc.common.exception.NotFoundException;
 import com.airjnc.common.service.CommonInternalCheckService;
+import com.airjnc.user.dto.request.UserCreateDTO;
+import com.airjnc.user.dto.request.UserFindEmailDTO;
 import com.airjnc.user.dao.UserRepository;
+import com.airjnc.user.dto.UserSaveDTO;
+import com.airjnc.user.dto.UserUpdatePwdByEmailDTO;
 import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.UpdatePasswordByEmailDTO;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.request.FindEmailDTO;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.fixture.UpdatePasswordByEmailDTOFixture;
@@ -71,12 +72,12 @@ class MybatisUserRepositoryTest {
   void getEmail() {
     //given
     UserEntity testUser = TestUser.getBuilder().build();
-    FindEmailDTO findEmailDTO = FindEmailDTO.builder()
+    UserFindEmailDTO userFindEmailDTO = UserFindEmailDTO.builder()
         .name(testUser.getName())
         .birthDate(testUser.getBirthDate().toString())
         .build();
     //when
-    String email = userRepository.getEmail(findEmailDTO);
+    String email = userRepository.getEmail(userFindEmailDTO);
     //then
     assertThat(email).isEqualTo(testUser.getEmail());
   }
@@ -85,17 +86,18 @@ class MybatisUserRepositoryTest {
   @Transactional
   void save() {
     //given
-    CreateDTO createDTO = CreateDTO.builder()
+    UserSaveDTO userSaveDTO = UserCreateDTO.builder()
         .email("abc@google.com")
         .password("q1w2e3")
         .name("abcUser")
         .gender(Gender.FEMALE)
-        .build();
+        .build()
+        .toSaveDTO("hash");
     //when
-    userRepository.save(createDTO);
+    userRepository.save(userSaveDTO);
     //then
-    UserEntity byEmail = userRepository.findByEmail(createDTO.getEmail());
-    assertThat(byEmail.getName()).isEqualTo(createDTO.getName());
+    UserEntity byEmail = userRepository.findByEmail(userSaveDTO.getEmail());
+    assertThat(byEmail.getName()).isEqualTo(userSaveDTO.getName());
     then(commonInternalCheckService).should(times(1)).shouldBeMatch(1, 1);
   }
 
@@ -118,12 +120,12 @@ class MybatisUserRepositoryTest {
   @Transactional
   void updatePasswordByEmail() {
     //given
-    UpdatePasswordByEmailDTO updatePasswordByEmailDTO = UpdatePasswordByEmailDTOFixture.getBuilder().build();
+    UserUpdatePwdByEmailDTO userUpdatePwdByEmailDTO = UpdatePasswordByEmailDTOFixture.getBuilder().build();
     //when
-    userRepository.updatePasswordByEmail(updatePasswordByEmailDTO);
+    userRepository.updatePasswordByEmail(userUpdatePwdByEmailDTO);
     //then
-    UserEntity byEmail = userRepository.findByEmail(updatePasswordByEmailDTO.getEmail());
-    assertThat(byEmail.getPassword()).isEqualTo(updatePasswordByEmailDTO.getPassword());
+    UserEntity byEmail = userRepository.findByEmail(userUpdatePwdByEmailDTO.getEmail());
+    assertThat(byEmail.getPassword()).isEqualTo(userUpdatePwdByEmailDTO.getPassword());
     then(commonInternalCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 }

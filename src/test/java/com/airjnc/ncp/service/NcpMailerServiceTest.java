@@ -6,10 +6,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import com.airjnc.common.service.CommonInternalCheckService;
-import com.airjnc.ncp.dto.NcpMailerRequest;
-import com.airjnc.ncp.dto.NcpMailerResponse;
-import com.airjnc.ncp.dto.NcpMailerSendDTO;
 import com.airjnc.ncp.properties.NcpMailerProperties;
+import com.airjnc.ncp.dto.NcpMailerReq;
+import com.airjnc.ncp.dto.NcpMailerRes;
+import com.airjnc.ncp.dto.NcpMailerSendDTO;
 import com.airjnc.ncp.util.NcpMailerUrl;
 import com.testutil.annotation.UnitTest;
 import com.testutil.testdata.TestUser;
@@ -48,19 +48,19 @@ class NcpMailerServiceTest {
     String code = "123456";
 
     HttpEntity<String> entity = new HttpEntity<>("body");
-    given(ncpCommonService.createEntity(eq(NcpMailerUrl.CREATE_MAIL_REQULEST), any(NcpMailerRequest.class))).willReturn(
+    given(ncpCommonService.createEntity(eq(NcpMailerUrl.CREATE_MAIL_REQULEST), any(NcpMailerReq.class))).willReturn(
         entity);
 
-    NcpMailerResponse res = NcpMailerResponse.builder().requestId("requestId").count(1).build();
-    given(restTemplate.postForObject(NcpMailerUrl.CREATE_MAIL_REQULEST, entity, NcpMailerResponse.class)).willReturn(
+    NcpMailerRes res = NcpMailerRes.builder().requestId("requestId").count(1).build();
+    given(restTemplate.postForObject(NcpMailerUrl.CREATE_MAIL_REQULEST, entity, NcpMailerRes.class)).willReturn(
         res);
     //when
     ncpMailerService.send(NcpMailerSendDTO.builder().email(email).name(name).code(code).build());
     //then
     then(ncpCommonService).should(times(1))
-        .createEntity(eq(NcpMailerUrl.CREATE_MAIL_REQULEST), any(NcpMailerRequest.class));
+        .createEntity(eq(NcpMailerUrl.CREATE_MAIL_REQULEST), any(NcpMailerReq.class));
     then(restTemplate).should(times(1))
-        .postForObject(NcpMailerUrl.CREATE_MAIL_REQULEST, entity, NcpMailerResponse.class);
+        .postForObject(NcpMailerUrl.CREATE_MAIL_REQULEST, entity, NcpMailerRes.class);
     then(commonInternalCheckService).should(times(1)).shouldBeMatch(res.getCount(), 1);
   }
 }

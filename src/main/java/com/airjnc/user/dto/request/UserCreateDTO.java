@@ -1,7 +1,7 @@
 package com.airjnc.user.dto.request;
 
-import com.airjnc.common.util.BCryptHashEncrypter;
 import com.airjnc.common.util.CommonRegex;
+import com.airjnc.user.dto.UserSaveDTO;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.util.UserRegex;
 import javax.validation.constraints.Email;
@@ -15,9 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CreateDTO {
-
-  private Long id;
+public class UserCreateDTO {
 
   @NotBlank
   @Email
@@ -38,8 +36,7 @@ public class CreateDTO {
   private String birthDate;
 
   @Builder
-  public CreateDTO(Long id, String email, String password, String name, Gender gender, String birthDate) {
-    this.id = id;
+  public UserCreateDTO(String email, String password, String name, Gender gender, String birthDate) {
     this.email = email;
     this.password = password;
     this.name = name;
@@ -47,7 +44,13 @@ public class CreateDTO {
     this.birthDate = birthDate;
   }
 
-  public void changePasswordToHash() {
-    password = BCryptHashEncrypter.encrypt(this.password);
+  public UserSaveDTO toSaveDTO(String hash) {
+    return UserSaveDTO.builder()
+        .email(email)
+        .name(name)
+        .gender(gender)
+        .password(hash)
+        .birthDate(birthDate)
+        .build();
   }
 }

@@ -1,6 +1,6 @@
 package com.airjnc.common.util.factory;
 
-import com.airjnc.common.dto.ErrorResponse;
+import com.airjnc.common.dto.response.ExceptionResponse;
 import com.airjnc.common.exception.DefaultException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,13 +18,13 @@ import org.springframework.validation.ObjectError;
 
 public final class ErrorResponseFactory {
 
-  public static ErrorResponse create(Exception ex) {
+  public static ExceptionResponse create(Exception ex) {
     List<String> global = new ArrayList<>();
     global.add(ex.getMessage());
-    return new ErrorResponse(ex, global, null);
+    return new ExceptionResponse(ex, global, null);
   }
 
-  public static ErrorResponse create(Exception ex, MessageSource messageSource) {
+  public static ExceptionResponse create(Exception ex, MessageSource messageSource) {
     List<String> global = new ArrayList<>();
     Map<String, String> field = new HashMap<>();
     List<ObjectError> allErrors = getAllErrors(ex);
@@ -41,7 +41,7 @@ public final class ErrorResponseFactory {
         global.add(message);
       }
     }
-    return new ErrorResponse(ex, global, field);
+    return new ExceptionResponse(ex, global, field);
   }
 
   private static List<ObjectError> getAllErrors(Exception ex) {

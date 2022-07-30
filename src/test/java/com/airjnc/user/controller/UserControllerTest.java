@@ -14,11 +14,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.airjnc.common.aspect.Advice;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.request.FindEmailDTO;
-import com.airjnc.user.dto.request.ResetPasswordCodeViaEmailDTO;
-import com.airjnc.user.dto.request.ResetPasswordCodeViaPhoneDTO;
-import com.airjnc.user.dto.request.ResetPasswordDTO;
+import com.airjnc.user.dto.request.UserCreateDTO;
+import com.airjnc.user.dto.request.UserFindEmailDTO;
+import com.airjnc.user.dto.request.UserResetPwdCodeViaEmailDTO;
+import com.airjnc.user.dto.request.UserResetPwdCodeViaPhoneDTO;
+import com.airjnc.user.dto.request.UserResetPwdDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
@@ -61,18 +61,18 @@ class UserControllerTest {
   @Test
   void findEmail() throws Exception {
     //given
-    FindEmailDTO findEmailDTO = FindEmailDTOFixture.getBuilder().build();
-    given(userService.findEmail(any(FindEmailDTO.class))).willReturn(TestUser.EMAIL);
+    UserFindEmailDTO userFindEmailDTO = FindEmailDTOFixture.getBuilder().build();
+    given(userService.findEmail(any(UserFindEmailDTO.class))).willReturn(TestUser.EMAIL);
     //when
     mockMvc.perform(
             get("/users/findEmail")
-                .param("name", findEmailDTO.getName())
-                .param("birthDate", findEmailDTO.getBirthDate())
+                .param("name", userFindEmailDTO.getName())
+                .param("birthDate", userFindEmailDTO.getBirthDate())
         ).andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().string(TestUser.EMAIL));
     //then
-    then(userService).should(times(1)).findEmail(any(FindEmailDTO.class));
+    then(userService).should(times(1)).findEmail(any(UserFindEmailDTO.class));
   }
 
   @Test
@@ -87,7 +87,7 @@ class UserControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should(times(1)).resetPasswordViaEmail(any(ResetPasswordCodeViaEmailDTO.class));
+    then(userService).should(times(1)).resetPasswordViaEmail(any(UserResetPwdCodeViaEmailDTO.class));
   }
 
   @Test
@@ -102,32 +102,32 @@ class UserControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should(times(1)).resetPasswordViaPhone(any(ResetPasswordCodeViaPhoneDTO.class));
+    then(userService).should(times(1)).resetPasswordViaPhone(any(UserResetPwdCodeViaPhoneDTO.class));
   }
 
   @Test
   void create() throws Exception {
     //given
-    CreateDTO createDTO = CreateDTOFixture.getBuilder().build();
+    UserCreateDTO userCreateDTO = CreateDTOFixture.getBuilder().build();
     UserDTO userDTO = UserDTOFixture.getBuilder().build();
-    given(userService.create(any(CreateDTO.class))).willReturn(userDTO);
+    given(userService.create(any(UserCreateDTO.class))).willReturn(userDTO);
     //when
     mockMvc.perform(
             post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createDTO))
+                .content(objectMapper.writeValueAsString(userCreateDTO))
         ).andDo(print())
         .andExpect(status().isCreated())
         .andExpect(jsonPath("id").value(userDTO.getId()));
     //then
-    then(userService).should(times(1)).create(any(CreateDTO.class));
+    then(userService).should(times(1)).create(any(UserCreateDTO.class));
     then(userStateService).should(times(1)).create(userDTO.getId());
   }
 
   @Test
   void resetPassword() throws Exception {
     //given
-    ResetPasswordDTO resetPasswordDTO = ResetPasswordDTO.builder()
+    UserResetPwdDTO userResetPwdDTO = UserResetPwdDTO.builder()
         .code("123456")
         .password("q1w2e3r4t5!")
         .passwordConfirm("q1w2e3r4t5!")
@@ -136,11 +136,11 @@ class UserControllerTest {
     mockMvc.perform(
             put("/users/resetPassword")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(resetPasswordDTO))
+                .content(objectMapper.writeValueAsString(userResetPwdDTO))
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should(times(1)).resetPassword(any(ResetPasswordDTO.class));
+    then(userService).should(times(1)).resetPassword(any(UserResetPwdDTO.class));
   }
 
   @Test

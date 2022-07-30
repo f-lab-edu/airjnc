@@ -1,7 +1,7 @@
 package com.testutil.fixture;
 
+import com.airjnc.user.dto.request.UserCreateDTO;
 import com.airjnc.user.domain.Gender;
-import com.airjnc.user.dto.request.CreateDTO;
 
 public class CreateDTOFixture {
 
@@ -15,8 +15,8 @@ public class CreateDTOFixture {
 
   public static final String birthDate = "2021-02-02";
 
-  public static CreateDTO.CreateDTOBuilder getBuilder() {
-    return CreateDTO.builder()
+  public static UserCreateDTO.UserCreateDTOBuilder getBuilder() {
+    return UserCreateDTO.builder()
         .email(EMAIL)
         .password(PASSWORD)
         .name(NAME)

@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
+import com.airjnc.user.dto.request.AuthLogInDTO;
+import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.LogInDTO;
-import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.LogInDTOFixture;
@@ -38,17 +38,17 @@ class AuthServiceTest {
   @Test
   void userShouldBeLoggedIn() {
     //given
-    LogInDTO logInDTO = LogInDTOFixture.getBuilder().build();
+    AuthLogInDTO authLogInDTO = LogInDTOFixture.getBuilder().build();
     UserEntity userEntity = TestUser.getBuilder().build();
     UserDTO userDTO = UserDTOFixture.getBuilder().build();
-    given(userRepository.findByEmail(logInDTO.getEmail())).willReturn(userEntity);
+    given(userRepository.findByEmail(authLogInDTO.getEmail())).willReturn(userEntity);
     given(userModelMapper.userEntityToUserDTO(userEntity)).willReturn(userDTO);
     //when
-    UserDTO result = authService.logIn(logInDTO);
+    UserDTO result = authService.logIn(authLogInDTO);
     //then
-    then(userRepository).should(times(1)).findByEmail(logInDTO.getEmail());
+    then(userRepository).should(times(1)).findByEmail(authLogInDTO.getEmail());
     then(userCheckService).should(times(1))
-        .passwordShouldBeMatch(logInDTO.getPassword(), userEntity.getPassword());
+        .passwordShouldBeMatch(authLogInDTO.getPassword(), userEntity.getPassword());
     then(userModelMapper).should(times(1)).userEntityToUserDTO(userEntity);
     assertThat(result).isSameAs(userDTO);
   }

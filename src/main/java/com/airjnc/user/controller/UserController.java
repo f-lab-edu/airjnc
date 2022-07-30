@@ -2,11 +2,11 @@ package com.airjnc.user.controller;
 
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.annotation.CurrentUserId;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.request.FindEmailDTO;
-import com.airjnc.user.dto.request.ResetPasswordCodeViaEmailDTO;
-import com.airjnc.user.dto.request.ResetPasswordCodeViaPhoneDTO;
-import com.airjnc.user.dto.request.ResetPasswordDTO;
+import com.airjnc.user.dto.request.UserCreateDTO;
+import com.airjnc.user.dto.request.UserFindEmailDTO;
+import com.airjnc.user.dto.request.UserResetPwdCodeViaEmailDTO;
+import com.airjnc.user.dto.request.UserResetPwdCodeViaPhoneDTO;
+import com.airjnc.user.dto.request.UserResetPwdDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
@@ -33,33 +33,33 @@ public class UserController {
   private final UserStateService userStateService;
 
   @GetMapping("/findEmail")
-  public String findEmail(@Validated @ModelAttribute FindEmailDTO findEmailDTO) {
-    return userService.findEmail(findEmailDTO);
+  public String findEmail(@Validated @ModelAttribute UserFindEmailDTO userFindEmailDTO) {
+    return userService.findEmail(userFindEmailDTO);
   }
 
   @GetMapping(value = "/resetPassword", params = "via=email")
   public void resetPasswordCodeViaEmail(
-      @Validated @ModelAttribute ResetPasswordCodeViaEmailDTO resetPasswordCodeViaEmailDTO) {
-    userService.resetPasswordViaEmail(resetPasswordCodeViaEmailDTO);
+      @Validated @ModelAttribute UserResetPwdCodeViaEmailDTO userResetPwdCodeViaEmailDTO) {
+    userService.resetPasswordViaEmail(userResetPwdCodeViaEmailDTO);
   }
 
   @GetMapping(value = "/resetPassword", params = "via=phone")
   public void resetPasswordCodeViaPhone(
-      @Validated @ModelAttribute ResetPasswordCodeViaPhoneDTO resetPasswordCodeViaPhoneDTO) {
-    userService.resetPasswordViaPhone(resetPasswordCodeViaPhoneDTO);
+      @Validated @ModelAttribute UserResetPwdCodeViaPhoneDTO userResetPwdCodeViaPhoneDTO) {
+    userService.resetPasswordViaPhone(userResetPwdCodeViaPhoneDTO);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public UserDTO create(@Validated @RequestBody CreateDTO createDTO) {
-    UserDTO userDTO = userService.create(createDTO);
+  public UserDTO create(@Validated @RequestBody UserCreateDTO userCreateDTO) {
+    UserDTO userDTO = userService.create(userCreateDTO);
     userStateService.create(userDTO.getId());
     return userDTO;
   }
 
   @PutMapping("/resetPassword")
-  public void resetPassword(@Validated @RequestBody ResetPasswordDTO resetPasswordDTO) {
-    userService.resetPassword(resetPasswordDTO);
+  public void resetPassword(@Validated @RequestBody UserResetPwdDTO userResetPwdDTO) {
+    userService.resetPassword(userResetPwdDTO);
   }
 
   @DeleteMapping("/me")

@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class FindEmailDTO {
+public class UserFindEmailDTO {
 
   @NotBlank
   private final String name;
@@ -17,7 +17,7 @@ public class FindEmailDTO {
   private final String birthDate;
 
   @Builder
-  public FindEmailDTO(String name, String birthDate) {
+  public UserFindEmailDTO(String name, String birthDate) {
     this.name = name;
     this.birthDate = birthDate;
   }

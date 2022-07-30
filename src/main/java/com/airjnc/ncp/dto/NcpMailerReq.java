@@ -8,7 +8,7 @@ import lombok.Getter;
 // ncp mail request 스펙 링크 [요청 파라미터 참고]
 // https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-createmailrequest
 @Getter
-public class NcpMailerRequest {
+public class NcpMailerReq {
 
   private final int templateSid;
 
@@ -19,7 +19,7 @@ public class NcpMailerRequest {
   private final boolean advertising;
 
   @Builder
-  public NcpMailerRequest(int templateSid, List<Recipient> recipients) {
+  public NcpMailerReq(int templateSid, List<Recipient> recipients) {
     this.templateSid = templateSid;
     this.recipients = recipients;
     this.individual = true;

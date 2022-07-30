@@ -2,12 +2,12 @@ package com.airjnc.user.dao.impl;
 
 import com.airjnc.common.exception.NotFoundException;
 import com.airjnc.common.service.CommonInternalCheckService;
+import com.airjnc.user.dto.request.UserFindEmailDTO;
 import com.airjnc.user.dao.UserRepository;
+import com.airjnc.user.dto.UserSaveDTO;
+import com.airjnc.user.dto.UserUpdatePwdByEmailDTO;
 import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.UpdatePasswordByEmailDTO;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.request.FindEmailDTO;
 import com.airjnc.user.util.UserModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -29,15 +29,15 @@ public class MybatisUserRepository implements UserRepository {
   }
 
   @Override
-  public UserEntity save(CreateDTO createDTO) {
-    int affect = userMapper.save(createDTO);
+  public UserEntity save(UserSaveDTO userSaveDTO) {
+    int affect = userMapper.save(userSaveDTO);
     commonInternalCheckService.shouldBeMatch(affect, 1);
-    return userModelMapper.createDTOToUserEntity(createDTO);
+    return userModelMapper.saveDTOToUserEntity(userSaveDTO);
   }
 
   @Override
-  public String getEmail(FindEmailDTO findEmailDTO) {
-    return userMapper.getEmail(findEmailDTO).orElseThrow(NotFoundException::new);
+  public String getEmail(UserFindEmailDTO userFindEmailDTO) {
+    return userMapper.getEmail(userFindEmailDTO).orElseThrow(NotFoundException::new);
   }
 
   @Override
@@ -56,8 +56,8 @@ public class MybatisUserRepository implements UserRepository {
   }
 
   @Override
-  public void updatePasswordByEmail(UpdatePasswordByEmailDTO updatePasswordByEmailDTO) {
-    int affect = userMapper.updatePasswordByEmail(updatePasswordByEmailDTO);
+  public void updatePasswordByEmail(UserUpdatePwdByEmailDTO userUpdatePwdByEmailDTO) {
+    int affect = userMapper.updatePasswordByEmail(userUpdatePwdByEmailDTO);
     commonInternalCheckService.shouldBeMatch(affect, 1);
   }
 }

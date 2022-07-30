@@ -1,4 +1,4 @@
-package com.airjnc.common.util.validator;
+package com.airjnc.common.util.beanvalidator;
 
 import com.airjnc.common.annotation.TwoFieldMatch;
 import java.lang.reflect.InvocationTargetException;

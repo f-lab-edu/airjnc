@@ -1,7 +1,7 @@
 package com.airjnc.user.service;
 
 import com.airjnc.common.exception.NotFoundException;
-import com.airjnc.common.util.BCryptHashEncrypter;
+import com.airjnc.common.service.HashService;
 import com.airjnc.common.util.factory.ErrorsFactory;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 public class UserCheckService {
 
   private final UserRepository userRepository;
+
+  private final HashService hashService;
 
 
   public void emailShouldNotBeDuplicated(String email) {
@@ -31,7 +33,7 @@ public class UserCheckService {
   }
 
   public void passwordShouldBeMatch(String plain, String hash) {
-    boolean isMatch = BCryptHashEncrypter.isMatch(plain, hash);
+    boolean isMatch = hashService.isMatch(plain, hash);
     if (isMatch) {
       return;
     }

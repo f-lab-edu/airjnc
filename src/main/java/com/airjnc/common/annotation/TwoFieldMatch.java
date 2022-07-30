@@ -1,6 +1,6 @@
 package com.airjnc.common.annotation;
 
-import com.airjnc.common.util.validator.TwoFieldMatchValidator;
+import com.airjnc.common.util.beanvalidator.TwoFieldMatchValidator;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

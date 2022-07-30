@@ -1,7 +1,7 @@
 package com.airjnc.common.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import com.airjnc.common.dto.ErrorResponse;
+import com.airjnc.common.dto.response.ExceptionResponse;
 import com.airjnc.common.exception.DefaultException;
 import com.airjnc.common.service.CommonInternalCheckService;
 import com.airjnc.common.util.factory.ErrorResponseFactory;
@@ -14,7 +14,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.Errors;
 
 @UnitTest
-class ErrorResponseFactoryTest {
+class ExceptionResponseFactoryTest {
 
   ResourceBundleMessageSource messageSource;
 
@@ -30,11 +30,11 @@ class ErrorResponseFactoryTest {
     //given
     DefaultException ex = new DefaultException();
     //when
-    ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
+    ExceptionResponse exceptionResponse = ErrorResponseFactory.create(ex, messageSource);
     //then
-    assertThat(errorResponse.getGlobal().size()).isSameAs(1);
-    assertThat(errorResponse.getGlobal().get(0)).isEqualTo("Error");
-    assertThat(errorResponse.getField().size()).isSameAs(0);
+    assertThat(exceptionResponse.getGlobal().size()).isSameAs(1);
+    assertThat(exceptionResponse.getGlobal().get(0)).isEqualTo("Error");
+    assertThat(exceptionResponse.getField().size()).isSameAs(0);
   }
 
   // 어떤 Code들이 나오는지 학습 테스트
@@ -47,7 +47,7 @@ class ErrorResponseFactoryTest {
 //    errors.reject(ErrorCode.DUPLICATED.name());
     EmailIsDuplicatedException ex = new EmailIsDuplicatedException(errors);
     //when
-    ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
+    ExceptionResponse exceptionResponse = ErrorResponseFactory.create(ex, messageSource);
     //then
     /*
      * objectName = "Target"
@@ -71,17 +71,17 @@ class ErrorResponseFactoryTest {
   void argumentsTest() {
     //given
     CommonInternalCheckService commonInternalCheckService = new CommonInternalCheckService();
-    ErrorResponse errorResponse = null;
+    ExceptionResponse exceptionResponse = null;
     int actual = 1;
     int expected = 2;
     //when
     try {
       commonInternalCheckService.shouldBeMatch(actual, expected);
     } catch (DefaultException ex) {
-      errorResponse = ErrorResponseFactory.create(ex, messageSource);
+      exceptionResponse = ErrorResponseFactory.create(ex, messageSource);
     }
-    assertThat(errorResponse.getGlobal()).isNotNull();
-    assertThat(errorResponse.getGlobal().get(0))
+    assertThat(exceptionResponse.getGlobal()).isNotNull();
+    assertThat(exceptionResponse.getGlobal().get(0))
         .isEqualTo(String.format("actual: %d, but expected: %d", actual, expected));
   }
 

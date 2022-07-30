@@ -1,9 +1,9 @@
 package com.airjnc.user.dao.mapper;
 
+import com.airjnc.user.dto.request.UserFindEmailDTO;
+import com.airjnc.user.dto.UserSaveDTO;
+import com.airjnc.user.dto.UserUpdatePwdByEmailDTO;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.UpdatePasswordByEmailDTO;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.request.FindEmailDTO;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,9 +12,9 @@ public interface UserMapper {
 
   int remove(Long id);
 
-  int save(CreateDTO createDTO);
+  int save(UserSaveDTO userSaveDTO);
 
-  Optional<String> getEmail(FindEmailDTO findEmailDTO);
+  Optional<String> getEmail(UserFindEmailDTO userFindEmailDTO);
 
   Optional<UserEntity> findById(Long id);
 
@@ -22,5 +22,5 @@ public interface UserMapper {
 
   Optional<UserEntity> findByPhoneNumber(String phoneNumber);
 
-  int updatePasswordByEmail(UpdatePasswordByEmailDTO updatePasswordByEmailDTO);
+  int updatePasswordByEmail(UserUpdatePwdByEmailDTO userUpdatePwdByEmailDTO);
 }

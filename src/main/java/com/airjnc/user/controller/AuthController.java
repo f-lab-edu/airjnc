@@ -1,7 +1,7 @@
 package com.airjnc.user.controller;
 
 import com.airjnc.common.annotation.CheckAuth;
-import com.airjnc.user.dto.request.LogInDTO;
+import com.airjnc.user.dto.request.AuthLogInDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.AuthService;
 import com.airjnc.user.service.UserStateService;
@@ -23,8 +23,8 @@ public class AuthController {
   private final UserStateService userStateService;
 
   @PostMapping("/logIn")
-  public UserDTO logIn(@Validated @RequestBody LogInDTO logInDTO) {
-    UserDTO userDTO = authService.logIn(logInDTO);
+  public UserDTO logIn(@Validated @RequestBody AuthLogInDTO authLogInDTO) {
+    UserDTO userDTO = authService.logIn(authLogInDTO);
     userStateService.create(userDTO.getId());
     return userDTO;
   }

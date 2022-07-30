@@ -1,7 +1,7 @@
 package com.airjnc.user.util;
 
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.UserSaveDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import java.time.LocalDate;
 import javax.annotation.processing.Generated;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-30T06:27:33+0900",
+    date = "2022-07-31T15:01:47+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 11.0.10 (AdoptOpenJDK)"
 )
 @Component
@@ -35,20 +35,20 @@ public class UserModelMapperImpl implements UserModelMapper {
     }
 
     @Override
-    public UserEntity createDTOToUserEntity(CreateDTO createDTO) {
-        if ( createDTO == null ) {
+    public UserEntity saveDTOToUserEntity(UserSaveDTO userSaveDTO) {
+        if ( userSaveDTO == null ) {
             return null;
         }
 
         UserEntity.UserEntityBuilder userEntity = UserEntity.builder();
 
-        userEntity.id( createDTO.getId() );
-        userEntity.email( createDTO.getEmail() );
-        userEntity.password( createDTO.getPassword() );
-        userEntity.name( createDTO.getName() );
-        userEntity.gender( createDTO.getGender() );
-        if ( createDTO.getBirthDate() != null ) {
-            userEntity.birthDate( LocalDate.parse( createDTO.getBirthDate() ) );
+        userEntity.id( userSaveDTO.getId() );
+        userEntity.email( userSaveDTO.getEmail() );
+        userEntity.password( userSaveDTO.getPassword() );
+        userEntity.name( userSaveDTO.getName() );
+        userEntity.gender( userSaveDTO.getGender() );
+        if ( userSaveDTO.getBirthDate() != null ) {
+            userEntity.birthDate( LocalDate.parse( userSaveDTO.getBirthDate() ) );
         }
 
         return userEntity.build();

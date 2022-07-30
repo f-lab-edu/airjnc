@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.airjnc.common.aspect.Advice;
-import com.airjnc.user.dto.request.LogInDTO;
+import com.airjnc.user.dto.request.AuthLogInDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.AuthService;
 import com.airjnc.user.service.UserStateService;
@@ -48,19 +48,19 @@ class AuthControllerTest {
   @Test
   void logIn() throws Exception {
     //given
-    LogInDTO logInDTO = LogInDTOFixture.getBuilder().build();
+    AuthLogInDTO authLogInDTO = LogInDTOFixture.getBuilder().build();
     UserDTO userDTO = UserDTOFixture.getBuilder().build();
-    given(authService.logIn(any(LogInDTO.class))).willReturn(userDTO);
+    given(authService.logIn(any(AuthLogInDTO.class))).willReturn(userDTO);
     //when
     mockMvc.perform(
             post("/auth/logIn")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(logInDTO))
+                .content(objectMapper.writeValueAsString(authLogInDTO))
         ).andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("id").value(userDTO.getId()));
     //then
-    then(authService).should(times(1)).logIn(any(LogInDTO.class));
+    then(authService).should(times(1)).logIn(any(AuthLogInDTO.class));
     then(userStateService).should(times(1)).create(userDTO.getId());
   }
 

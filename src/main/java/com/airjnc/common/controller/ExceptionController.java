@@ -1,6 +1,6 @@
 package com.airjnc.common.controller;
 
-import com.airjnc.common.dto.ErrorResponse;
+import com.airjnc.common.dto.response.ExceptionResponse;
 import com.airjnc.common.exception.BadRequestException;
 import com.airjnc.common.exception.DefaultException;
 import com.airjnc.common.exception.DuplicatedException;
@@ -29,7 +29,7 @@ public class ExceptionController {
   // 내가 직접 만든 DefaultException이 아니라, "Exception(or)RuntimeException"이 던져진 에러들
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ErrorResponse handleException(Exception ex) {
+  public ExceptionResponse handleException(Exception ex) {
     log.error("[INTERNAL_SERVER_ERROR]", ex);
     return ErrorResponseFactory.create(ex);
   }
@@ -39,7 +39,7 @@ public class ExceptionController {
   // DefaultException으로 던진 에러들
   @ExceptionHandler(DefaultException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ErrorResponse handleDefaultException(DefaultException ex) {
+  public ExceptionResponse handleDefaultException(DefaultException ex) {
     log.error("[INTERNAL_SERVER_ERROR]", ex);
     return ErrorResponseFactory.create(ex, messageSource);
   }
@@ -47,28 +47,28 @@ public class ExceptionController {
   // 400 - Bean Validation, BAD REQUEST
   @ExceptionHandler({BindException.class, BadRequestException.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ErrorResponse handleBadRequestException(Exception ex) {
+  public ExceptionResponse handleBadRequestException(Exception ex) {
     return ErrorResponseFactory.create(ex, messageSource);
   }
 
   // 401 - UNAUTHORIZED
   @ExceptionHandler(UnauthorizedException.class)
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  public ErrorResponse handleUnauthorizedException(UnauthorizedException ex) {
+  public ExceptionResponse handleUnauthorizedException(UnauthorizedException ex) {
     return ErrorResponseFactory.create(ex, messageSource);
   }
 
   // 404 - NOT FOUND
   @ExceptionHandler(NotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public ErrorResponse handleNotFoundException(NotFoundException ex) {
+  public ExceptionResponse handleNotFoundException(NotFoundException ex) {
     return ErrorResponseFactory.create(ex, messageSource);
   }
 
   // 409 - CONFLICT
   @ExceptionHandler(DuplicatedException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorResponse handleDuplicatedEmailException(DuplicatedException ex) {
+  public ExceptionResponse handleDuplicatedEmailException(DuplicatedException ex) {
     return ErrorResponseFactory.create(ex, messageSource);
   }
 }
