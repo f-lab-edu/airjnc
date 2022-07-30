@@ -5,7 +5,6 @@ import com.testutil.testdata.TestUser;
 
 public class LogInDTOFixture {
 
-
   public static LogInDTO.LogInDTOBuilder getBuilder() {
     return LogInDTO.builder().email(TestUser.EMAIL).password(TestUser.PASSWORD);
   }

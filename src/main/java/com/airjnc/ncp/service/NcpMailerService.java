@@ -2,11 +2,11 @@ package com.airjnc.ncp.service;
 
 import com.airjnc.common.service.CommonInternalCheckService;
 import com.airjnc.ncp.annotation.NcpMailRestTemplate;
-import com.airjnc.ncp.dto.MailSendDTO;
 import com.airjnc.ncp.dto.NcpMailerRequest;
 import com.airjnc.ncp.dto.NcpMailerRequest.Recipient;
 import com.airjnc.ncp.dto.NcpMailerRequest.Recipient.Type;
 import com.airjnc.ncp.dto.NcpMailerResponse;
+import com.airjnc.ncp.dto.NcpMailerSendDTO;
 import com.airjnc.ncp.properties.NcpMailerProperties;
 import com.airjnc.ncp.util.NcpMailerUrl;
 import java.util.List;
@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class MailService {
+public class NcpMailerService {
 
   @NcpMailRestTemplate
   private final RestTemplate restTemplate;
@@ -30,14 +30,13 @@ public class MailService {
 
   private final CommonInternalCheckService commonInternalCheckService;
 
-  public void send(MailSendDTO mailSendDTO) {
-
+  public void send(NcpMailerSendDTO ncpMailerSendDTO) {
     Recipient recipient = Recipient.builder()
-        .address(mailSendDTO.getEmail())
+        .address(ncpMailerSendDTO.getEmail())
         .type(Type.R)
         .parameters(Map.ofEntries(
-            Map.entry("name", mailSendDTO.getName()),
-            Map.entry("code", mailSendDTO.getCode())
+            Map.entry("name", ncpMailerSendDTO.getName()),
+            Map.entry("code", ncpMailerSendDTO.getCode())
         ))
         .build();
     NcpMailerRequest body = NcpMailerRequest.builder()

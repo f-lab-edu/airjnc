@@ -12,6 +12,7 @@ public class FindEmailDTO {
   @NotNull
   private final String name;
 
+  @NotNull
   @Pattern(regexp = CommonRegex.localDate)
   private final String birthDate;
 

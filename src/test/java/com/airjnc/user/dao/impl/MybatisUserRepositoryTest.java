@@ -4,16 +4,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.anyInt;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
+import com.airjnc.common.exception.NotFoundException;
 import com.airjnc.common.service.CommonInternalCheckService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UpdatePasswordByEmailDTO;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.request.FindEmailDTO;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.MybatisTest;
+import com.testutil.fixture.UpdatePasswordByEmailDTOFixture;
 import com.testutil.testdata.TestUser;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -45,36 +49,36 @@ class MybatisUserRepositoryTest {
   @Test
   void findById() {
     //given
-    UserEntity user = TestUser.getBuilder().build();
+    UserEntity testUser = TestUser.getBuilder().build();
     //when
-    UserEntity findUser = userRepository.findById(user.getId());
+    UserEntity findUser = userRepository.findById(testUser.getId());
     //then
-    assertThat(findUser.getId()).isSameAs(user.getId());
+    assertThat(findUser.getId()).isSameAs(testUser.getId());
   }
 
   @Test
   void findByEmail() {
     //given
-    UserEntity user = TestUser.getBuilder().build();
+    UserEntity testUser = TestUser.getBuilder().build();
     //when
-    UserEntity findUser = userRepository.findByEmail(user.getEmail());
+    UserEntity findUser = userRepository.findByEmail(testUser.getEmail());
     //then
-    assertThat(findUser.getId()).isSameAs(user.getId());
-    assertThat(findUser.getEmail()).isEqualTo(user.getEmail());
+    assertThat(findUser.getId()).isSameAs(testUser.getId());
+    assertThat(findUser.getEmail()).isEqualTo(testUser.getEmail());
   }
 
   @Test
   void getEmail() {
     //given
-    UserEntity user = TestUser.getBuilder().build();
+    UserEntity testUser = TestUser.getBuilder().build();
     FindEmailDTO findEmailDTO = FindEmailDTO.builder()
-        .name(user.getName())
-        .birthDate(user.getBirthDate().toString())
+        .name(testUser.getName())
+        .birthDate(testUser.getBirthDate().toString())
         .build();
     //when
     String email = userRepository.getEmail(findEmailDTO);
     //then
-    assertThat(email).isEqualTo(user.getEmail());
+    assertThat(email).isEqualTo(testUser.getEmail());
   }
 
   @Test
@@ -90,6 +94,8 @@ class MybatisUserRepositoryTest {
     //when
     userRepository.save(createDTO);
     //then
+    UserEntity byEmail = userRepository.findByEmail(createDTO.getEmail());
+    assertThat(byEmail.getName()).isEqualTo(createDTO.getName());
     then(commonInternalCheckService).should(times(1)).shouldBeMatch(1, 1);
   }
 
@@ -97,10 +103,27 @@ class MybatisUserRepositoryTest {
   @Transactional
   void remove() {
     //given
-    UserEntity userEntity = TestUser.getBuilder().build();
+    UserEntity testUser = TestUser.getBuilder().build();
     //when
-    userRepository.remove(userEntity.getId());
+    userRepository.remove(testUser.getId());
     //then
+    Assertions.assertThrows(
+        NotFoundException.class,
+        () -> userRepository.findByEmail(testUser.getEmail())
+    );
+    then(commonInternalCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
+  }
+
+  @Test
+  @Transactional
+  void updatePasswordByEmail() {
+    //given
+    UpdatePasswordByEmailDTO updatePasswordByEmailDTO = UpdatePasswordByEmailDTOFixture.getBuilder().build();
+    //when
+    userRepository.updatePasswordByEmail(updatePasswordByEmailDTO);
+    //then
+    UserEntity byEmail = userRepository.findByEmail(updatePasswordByEmailDTO.getEmail());
+    assertThat(byEmail.getPassword()).isEqualTo(updatePasswordByEmailDTO.getPassword());
     then(commonInternalCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 }

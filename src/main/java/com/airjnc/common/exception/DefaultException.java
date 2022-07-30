@@ -9,7 +9,7 @@ public class DefaultException extends RuntimeException {
   private final Errors errors;
 
   public DefaultException() {
-    this.errors = ErrorsFactory.create(ErrorCode.INTERNAL);
+    this.errors = ErrorsFactory.createAndReject(ErrorCode.INTERNAL.name());
   }
 
   public DefaultException(Errors errors) {

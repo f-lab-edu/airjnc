@@ -17,7 +17,7 @@ public class TestUser {
 
   public static final Gender GENDER = Gender.MALE;
 
-  public static final String PHONE_NUMBER = "010-1111-2222";
+  public static final String PHONE_NUMBER = "01011112222";
 
   public static final String ADDRESS = "서울 강남구";
 

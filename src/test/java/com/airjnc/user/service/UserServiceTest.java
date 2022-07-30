@@ -1,15 +1,26 @@
 package com.airjnc.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.spy;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.willDoNothing;
+import com.airjnc.common.properties.SessionTtlProperties;
+import com.airjnc.common.service.CommonUtilService;
+import com.airjnc.common.service.RedisService;
+import com.airjnc.ncp.dto.NcpMailerSendDTO;
+import com.airjnc.ncp.service.NcpMailerService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UpdatePasswordByEmailDTO;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.request.FindEmailDTO;
+import com.airjnc.user.dto.request.ResetPasswordCodeViaEmailDTO;
+import com.airjnc.user.dto.request.ResetPasswordCodeViaPhoneDTO;
+import com.airjnc.user.dto.request.ResetPasswordDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
@@ -17,6 +28,7 @@ import com.testutil.fixture.CreateDTOFixture;
 import com.testutil.fixture.FindEmailDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
 import com.testutil.testdata.TestUser;
+import java.time.Duration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,6 +47,18 @@ class UserServiceTest {
 
   @Mock
   UserModelMapper userModelMapper;
+
+  @Mock
+  CommonUtilService commonUtilService;
+
+  @Mock
+  RedisService redisService;
+
+  @Mock
+  NcpMailerService ncpMailerService;
+
+  @Mock
+  SessionTtlProperties sessionTtlProperties;
 
   @InjectMocks
   UserService userService;
@@ -76,6 +100,58 @@ class UserServiceTest {
     userService.findEmail(findEmailDTO);
     //then
     then(userRepository).should(times(1)).getEmail(findEmailDTO);
+  }
+
+  @Test
+  void resetPasswordViaEmail() {
+    //given
+    ResetPasswordCodeViaEmailDTO resetPasswordCodeViaEmailDTO = new ResetPasswordCodeViaEmailDTO(TestUser.EMAIL);
+    UserEntity user = TestUser.getBuilder().build();
+    given(userRepository.findByEmail(resetPasswordCodeViaEmailDTO.getEmail())).willReturn(user);
+    String code = "123456";
+    given(commonUtilService.generateCode()).willReturn(code);
+    given(sessionTtlProperties.getResetPasswordCode()).willReturn(Duration.ofMinutes(1L));
+    //when
+    userService.resetPasswordViaEmail(resetPasswordCodeViaEmailDTO);
+    //then
+    then(userRepository).should(times(1)).findByEmail(resetPasswordCodeViaEmailDTO.getEmail());
+    then(commonUtilService).should(times(1)).generateCode();
+    then(redisService).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
+    then(ncpMailerService).should(times(1)).send(any(NcpMailerSendDTO.class));
+  }
+
+  @Test
+  void resetPasswordViaPhone() {
+    //given
+    ResetPasswordCodeViaPhoneDTO resetPasswordCodeViaPhoneDTO = new ResetPasswordCodeViaPhoneDTO(TestUser.PHONE_NUMBER);
+    UserEntity user = TestUser.getBuilder().build();
+    given(userRepository.findByPhoneNumber(resetPasswordCodeViaPhoneDTO.getPhoneNumber())).willReturn(user);
+    String code = "123456";
+    given(commonUtilService.generateCode()).willReturn(code);
+    given(sessionTtlProperties.getResetPasswordCode()).willReturn(Duration.ofMinutes(1L));
+    //when
+    userService.resetPasswordViaPhone(resetPasswordCodeViaPhoneDTO);
+    //then
+    then(userRepository).should(times(1)).findByPhoneNumber(resetPasswordCodeViaPhoneDTO.getPhoneNumber());
+    then(commonUtilService).should(times(1)).generateCode();
+    then(redisService).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
+    ;
+  }
+
+  @Test
+  void resetPassword() {
+    //given
+    ResetPasswordDTO resetPasswordDTO = ResetPasswordDTO.builder()
+        .password("123456")
+        .passwordConfirm("123456")
+        .code("code")
+        .build();
+    //when
+    userService.resetPassword(resetPasswordDTO);
+    //then
+    then(redisService).should(times(1)).get(resetPasswordDTO.getCode());
+    then(redisService).should(times(1)).remove(resetPasswordDTO.getCode());
+    then(userRepository).should(times(1)).updatePasswordByEmail(any(UpdatePasswordByEmailDTO.class));
   }
 }
 

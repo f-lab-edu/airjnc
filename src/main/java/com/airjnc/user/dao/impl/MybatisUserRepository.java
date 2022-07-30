@@ -5,6 +5,7 @@ import com.airjnc.common.service.CommonInternalCheckService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UpdatePasswordByEmailDTO;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.request.FindEmailDTO;
 import com.airjnc.user.util.UserModelMapper;
@@ -47,5 +48,16 @@ public class MybatisUserRepository implements UserRepository {
   @Override
   public UserEntity findByEmail(String email) {
     return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public UserEntity findByPhoneNumber(String phoneNumber) {
+    return userMapper.findByPhoneNumber(phoneNumber).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public void updatePasswordByEmail(UpdatePasswordByEmailDTO updatePasswordByEmailDTO) {
+    int affect = userMapper.updatePasswordByEmail(updatePasswordByEmailDTO);
+    commonInternalCheckService.shouldBeMatch(affect, 1);
   }
 }

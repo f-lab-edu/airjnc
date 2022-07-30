@@ -4,7 +4,6 @@ import com.airjnc.common.config.MybatisConfig;
 import com.airjnc.user.domain.UserEntity;
 import com.testutil.testdata.TestUser;
 import javax.sql.DataSource;
-import org.mybatis.spring.boot.test.autoconfigure.AutoConfigureMybatis;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +12,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @TestConfiguration // 테스트용 설정 클래스
-@AutoConfigureMybatis // MyBatis slice 테스트 [ MyBatis 관련 빈들만 등록 ]
 @Import(MybatisConfig.class) // MyBatis 설정 가져오기
 public class TestDatabaseConfig {
 
