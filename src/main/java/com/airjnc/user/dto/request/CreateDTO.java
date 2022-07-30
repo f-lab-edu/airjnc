@@ -5,6 +5,7 @@ import com.airjnc.common.util.CommonRegex;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.util.UserRegex;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.AccessLevel;
@@ -18,27 +19,26 @@ public class CreateDTO {
 
   private Long id;
 
-  @NotNull
+  @NotBlank
   @Email
   private String email;
 
-  @NotNull
+  @NotBlank
   private String name;
 
   @NotNull
   private Gender gender;
 
-  @NotNull
+  @NotBlank
   @Pattern(regexp = UserRegex.PASSWORD)
   private String password;
 
-  @NotNull
+  @NotBlank
   @Pattern(regexp = CommonRegex.localDate)
   private String birthDate;
 
   @Builder
-  public CreateDTO(Long id, String email, String password, String name, Gender gender,
-      String birthDate) {
+  public CreateDTO(Long id, String email, String password, String name, Gender gender, String birthDate) {
     this.id = id;
     this.email = email;
     this.password = password;

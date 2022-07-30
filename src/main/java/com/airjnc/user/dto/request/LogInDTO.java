@@ -2,7 +2,7 @@ package com.airjnc.user.dto.request;
 
 import com.airjnc.user.util.UserRegex;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LogInDTO {
 
-  @NotNull
   @Email
+  @NotBlank
   private String email;
 
-  @NotNull
+  @NotBlank
   @Pattern(regexp = UserRegex.PASSWORD)
   private String password;
 

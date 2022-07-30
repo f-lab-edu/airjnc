@@ -2,7 +2,7 @@ package com.airjnc.user.dto.request;
 
 import com.airjnc.common.annotation.TwoFieldMatch;
 import com.airjnc.user.util.UserRegex;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -15,15 +15,15 @@ import lombok.NoArgsConstructor;
 @TwoFieldMatch(first = "password", second = "passwordConfirm")
 public class ResetPasswordDTO {
 
-  @NotNull
+  @NotBlank
   @Size(min = 6, max = 6)
   private String code;
 
-  @NotNull
+  @NotBlank
   @Pattern(regexp = UserRegex.PASSWORD)
   private String password;
 
-  @NotNull
+  @NotBlank
   private String passwordConfirm;
 
   @Builder
