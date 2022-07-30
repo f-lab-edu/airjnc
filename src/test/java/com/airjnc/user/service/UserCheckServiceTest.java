@@ -41,15 +41,6 @@ class UserCheckServiceTest {
   class EmailShouldNotBeDuplicated {
 
     @Test
-    void whenEmailNotFoundThenSuccess() {
-      //given
-      String email = TestUser.EMAIL;
-      given(userRepository.findByEmail(email)).willThrow(NotFoundException.class);
-      //when
-      userCheckService.emailShouldNotBeDuplicated(email);
-    }
-
-    @Test
     void whenEmailFoundAndDuplicatedThenThrow() {
       //given
       String email = TestUser.EMAIL;
@@ -60,6 +51,15 @@ class UserCheckServiceTest {
         //then
         assertObjectNameOfGlobalError(e, "emailIsDuplicated");
       }
+    }
+
+    @Test
+    void whenEmailNotFoundThenSuccess() {
+      //given
+      String email = TestUser.EMAIL;
+      given(userRepository.findByEmail(email)).willThrow(NotFoundException.class);
+      //when
+      userCheckService.emailShouldNotBeDuplicated(email);
     }
   }
 

@@ -13,7 +13,7 @@ import org.mapstruct.MappingConstants;
 )
 public interface UserModelMapper {
 
-  UserDTO userEntityToUserDTO(UserEntity userEntity);
-
   UserEntity saveDTOToUserEntity(UserSaveDTO userSaveDTO);
+
+  UserDTO userEntityToUserDTO(UserEntity userEntity);
 }

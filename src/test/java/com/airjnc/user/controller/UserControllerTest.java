@@ -59,6 +59,25 @@ class UserControllerTest {
   CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
 
   @Test
+  void create() throws Exception {
+    //given
+    UserCreateDTO userCreateDTO = CreateDTOFixture.getBuilder().build();
+    UserDTO userDTO = UserDTOFixture.getBuilder().build();
+    given(userService.create(any(UserCreateDTO.class))).willReturn(userDTO);
+    //when
+    mockMvc.perform(
+            post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userCreateDTO))
+        ).andDo(print())
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("id").value(userDTO.getId()));
+    //then
+    then(userService).should(times(1)).create(any(UserCreateDTO.class));
+    then(userStateService).should(times(1)).create(userDTO.getId());
+  }
+
+  @Test
   void findEmail() throws Exception {
     //given
     UserFindEmailDTO userFindEmailDTO = FindEmailDTOFixture.getBuilder().build();
@@ -73,6 +92,45 @@ class UserControllerTest {
         .andExpect(content().string(TestUser.EMAIL));
     //then
     then(userService).should(times(1)).findEmail(any(UserFindEmailDTO.class));
+  }
+
+  @Test
+  void remove() throws Exception {
+    //given
+    Long userId = 1L;
+    given(userStateService.getUserId()).willReturn(userId);
+    //when
+    mockMvc.perform(
+            delete("/users/me")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andDo(print())
+        .andExpect(status().isNoContent());
+    //then
+    // advice, argumentResolver가 정상적으로 적용되었는 지 테스트
+    then(advice).should(times(1)).beforeCheckAuth();
+    then(currentUserIdArgumentResolver).should(times(1))
+        .resolveArgument(any(), any(), any(), any());
+    then(userService).should(times(1)).remove(userId);
+    then(userStateService).should(times(1)).remove();
+  }
+
+  @Test
+  void resetPassword() throws Exception {
+    //given
+    UserResetPwdDTO userResetPwdDTO = UserResetPwdDTO.builder()
+        .code("123456")
+        .password("q1w2e3r4t5!")
+        .passwordConfirm("q1w2e3r4t5!")
+        .build();
+    //when
+    mockMvc.perform(
+            put("/users/resetPassword")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userResetPwdDTO))
+        ).andDo(print())
+        .andExpect(status().isOk());
+    //then
+    then(userService).should(times(1)).resetPassword(any(UserResetPwdDTO.class));
   }
 
   @Test
@@ -103,63 +161,5 @@ class UserControllerTest {
         .andExpect(status().isOk());
     //then
     then(userService).should(times(1)).resetPasswordViaPhone(any(UserResetPwdCodeViaPhoneDTO.class));
-  }
-
-  @Test
-  void create() throws Exception {
-    //given
-    UserCreateDTO userCreateDTO = CreateDTOFixture.getBuilder().build();
-    UserDTO userDTO = UserDTOFixture.getBuilder().build();
-    given(userService.create(any(UserCreateDTO.class))).willReturn(userDTO);
-    //when
-    mockMvc.perform(
-            post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userCreateDTO))
-        ).andDo(print())
-        .andExpect(status().isCreated())
-        .andExpect(jsonPath("id").value(userDTO.getId()));
-    //then
-    then(userService).should(times(1)).create(any(UserCreateDTO.class));
-    then(userStateService).should(times(1)).create(userDTO.getId());
-  }
-
-  @Test
-  void resetPassword() throws Exception {
-    //given
-    UserResetPwdDTO userResetPwdDTO = UserResetPwdDTO.builder()
-        .code("123456")
-        .password("q1w2e3r4t5!")
-        .passwordConfirm("q1w2e3r4t5!")
-        .build();
-    //when
-    mockMvc.perform(
-            put("/users/resetPassword")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userResetPwdDTO))
-        ).andDo(print())
-        .andExpect(status().isOk());
-    //then
-    then(userService).should(times(1)).resetPassword(any(UserResetPwdDTO.class));
-  }
-
-  @Test
-  void remove() throws Exception {
-    //given
-    Long userId = 1L;
-    given(userStateService.getUserId()).willReturn(userId);
-    //when
-    mockMvc.perform(
-            delete("/users/me")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andDo(print())
-        .andExpect(status().isNoContent());
-    //then
-    // advice, argumentResolver가 정상적으로 적용되었는 지 테스트
-    then(advice).should(times(1)).beforeCheckAuth();
-    then(currentUserIdArgumentResolver).should(times(1))
-        .resolveArgument(any(), any(), any(), any());
-    then(userService).should(times(1)).remove(userId);
-    then(userStateService).should(times(1)).remove();
   }
 }

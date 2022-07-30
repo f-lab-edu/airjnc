@@ -23,6 +23,26 @@ public class MybatisUserRepository implements UserRepository {
   private final UserModelMapper userModelMapper;
 
   @Override
+  public UserEntity findByEmail(String email) {
+    return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public UserEntity findById(Long id) {
+    return userMapper.findById(id).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public UserEntity findByPhoneNumber(String phoneNumber) {
+    return userMapper.findByPhoneNumber(phoneNumber).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public String getEmail(UserFindEmailDTO userFindEmailDTO) {
+    return userMapper.getEmail(userFindEmailDTO).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
   public void remove(Long id) {
     int affect = userMapper.remove(id);
     commonCheckService.shouldBeMatch(affect, 1);
@@ -33,26 +53,6 @@ public class MybatisUserRepository implements UserRepository {
     int affect = userMapper.save(userSaveDTO);
     commonCheckService.shouldBeMatch(affect, 1);
     return userModelMapper.saveDTOToUserEntity(userSaveDTO);
-  }
-
-  @Override
-  public String getEmail(UserFindEmailDTO userFindEmailDTO) {
-    return userMapper.getEmail(userFindEmailDTO).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public UserEntity findById(Long id) {
-    return userMapper.findById(id).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public UserEntity findByEmail(String email) {
-    return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public UserEntity findByPhoneNumber(String phoneNumber) {
-    return userMapper.findByPhoneNumber(phoneNumber).orElseThrow(NotFoundException::new);
   }
 
   @Override

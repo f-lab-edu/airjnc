@@ -24,14 +24,11 @@ public class ExceptionController {
 
   private final MessageSource messageSource;
 
-  // 500 - Server Error
-  // 짐작하지 못 했던 에러들
-  // 내가 직접 만든 DefaultException이 아니라, "Exception(or)RuntimeException"이 던져진 에러들
-  @ExceptionHandler(Exception.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ExceptionResponse handleException(Exception ex) {
-    log.error("[INTERNAL_SERVER_ERROR]", ex);
-    return ErrorResponseFactory.create(ex);
+  // 400 - Bean Validation, BAD REQUEST
+  @ExceptionHandler({BindException.class, BadRequestException.class})
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ExceptionResponse handleBadRequestException(Exception ex) {
+    return ErrorResponseFactory.create(ex, messageSource);
   }
 
   // 500 - Server Error
@@ -44,18 +41,21 @@ public class ExceptionController {
     return ErrorResponseFactory.create(ex, messageSource);
   }
 
-  // 400 - Bean Validation, BAD REQUEST
-  @ExceptionHandler({BindException.class, BadRequestException.class})
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ExceptionResponse handleBadRequestException(Exception ex) {
+  // 409 - CONFLICT
+  @ExceptionHandler(DuplicatedException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
+  public ExceptionResponse handleDuplicatedEmailException(DuplicatedException ex) {
     return ErrorResponseFactory.create(ex, messageSource);
   }
 
-  // 401 - UNAUTHORIZED
-  @ExceptionHandler(UnauthorizedException.class)
-  @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  public ExceptionResponse handleUnauthorizedException(UnauthorizedException ex) {
-    return ErrorResponseFactory.create(ex, messageSource);
+  // 500 - Server Error
+  // 짐작하지 못 했던 에러들
+  // 내가 직접 만든 DefaultException이 아니라, "Exception(or)RuntimeException"이 던져진 에러들
+  @ExceptionHandler(Exception.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ExceptionResponse handleException(Exception ex) {
+    log.error("[INTERNAL_SERVER_ERROR]", ex);
+    return ErrorResponseFactory.create(ex);
   }
 
   // 404 - NOT FOUND
@@ -65,10 +65,10 @@ public class ExceptionController {
     return ErrorResponseFactory.create(ex, messageSource);
   }
 
-  // 409 - CONFLICT
-  @ExceptionHandler(DuplicatedException.class)
-  @ResponseStatus(HttpStatus.CONFLICT)
-  public ExceptionResponse handleDuplicatedEmailException(DuplicatedException ex) {
+  // 401 - UNAUTHORIZED
+  @ExceptionHandler(UnauthorizedException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public ExceptionResponse handleUnauthorizedException(UnauthorizedException ex) {
     return ErrorResponseFactory.create(ex, messageSource);
   }
 }

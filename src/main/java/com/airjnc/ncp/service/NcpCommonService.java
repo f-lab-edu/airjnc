@@ -23,24 +23,14 @@ public class NcpCommonService {
 
   private final ObjectMapper objectMapper;
 
-  private String getSignature(String time, String url) {
+  public HttpEntity<String> createEntity(String url, Object body) {
     try {
-      String method = "POST";
-      String space = " ";
-      String newLine = "\n";
-      String accessKey = ncpCredentialsProperties.getAccessKey();
-      String secretKey = ncpCredentialsProperties.getSecretKey();
+      String jsonBody = objectMapper.writeValueAsString(body);
 
-      String stringToSign = method + space + url + newLine + time + newLine + accessKey;
+      HttpHeaders headers = createHeaders(url);
 
-      SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes(UTF_8), "HmacSHA256");
-
-      Mac mac = Mac.getInstance("HmacSHA256");
-      mac.init(signingKey);
-      byte[] rawHmac = mac.doFinal(stringToSign.getBytes(UTF_8));
-
-      return Base64.getEncoder().encodeToString(rawHmac);
-    } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+      return new HttpEntity<>(jsonBody, headers);
+    } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
   }
@@ -59,14 +49,24 @@ public class NcpCommonService {
     return headers;
   }
 
-  public HttpEntity<String> createEntity(String url, Object body) {
+  private String getSignature(String time, String url) {
     try {
-      String jsonBody = objectMapper.writeValueAsString(body);
+      String method = "POST";
+      String space = " ";
+      String newLine = "\n";
+      String accessKey = ncpCredentialsProperties.getAccessKey();
+      String secretKey = ncpCredentialsProperties.getSecretKey();
 
-      HttpHeaders headers = createHeaders(url);
+      String stringToSign = method + space + url + newLine + time + newLine + accessKey;
 
-      return new HttpEntity<>(jsonBody, headers);
-    } catch (JsonProcessingException e) {
+      SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes(UTF_8), "HmacSHA256");
+
+      Mac mac = Mac.getInstance("HmacSHA256");
+      mac.init(signingKey);
+      byte[] rawHmac = mac.doFinal(stringToSign.getBytes(UTF_8));
+
+      return Base64.getEncoder().encodeToString(rawHmac);
+    } catch (NoSuchAlgorithmException | InvalidKeyException e) {
       throw new RuntimeException(e);
     }
   }

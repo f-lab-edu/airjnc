@@ -48,16 +48,6 @@ class MybatisUserRepositoryTest {
   }
 
   @Test
-  void findById() {
-    //given
-    UserEntity testUser = TestUser.getBuilder().build();
-    //when
-    UserEntity findUser = userRepository.findById(testUser.getId());
-    //then
-    assertThat(findUser.getId()).isSameAs(testUser.getId());
-  }
-
-  @Test
   void findByEmail() {
     //given
     UserEntity testUser = TestUser.getBuilder().build();
@@ -66,6 +56,16 @@ class MybatisUserRepositoryTest {
     //then
     assertThat(findUser.getId()).isSameAs(testUser.getId());
     assertThat(findUser.getEmail()).isEqualTo(testUser.getEmail());
+  }
+
+  @Test
+  void findById() {
+    //given
+    UserEntity testUser = TestUser.getBuilder().build();
+    //when
+    UserEntity findUser = userRepository.findById(testUser.getId());
+    //then
+    assertThat(findUser.getId()).isSameAs(testUser.getId());
   }
 
   @Test
@@ -80,6 +80,21 @@ class MybatisUserRepositoryTest {
     String email = userRepository.getEmail(userFindEmailDTO);
     //then
     assertThat(email).isEqualTo(testUser.getEmail());
+  }
+
+  @Test
+  @Transactional
+  void remove() {
+    //given
+    UserEntity testUser = TestUser.getBuilder().build();
+    //when
+    userRepository.remove(testUser.getId());
+    //then
+    Assertions.assertThrows(
+        NotFoundException.class,
+        () -> userRepository.findByEmail(testUser.getEmail())
+    );
+    then(commonCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 
   @Test
@@ -99,21 +114,6 @@ class MybatisUserRepositoryTest {
     UserEntity byEmail = userRepository.findByEmail(userSaveDTO.getEmail());
     assertThat(byEmail.getName()).isEqualTo(userSaveDTO.getName());
     then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
-  }
-
-  @Test
-  @Transactional
-  void remove() {
-    //given
-    UserEntity testUser = TestUser.getBuilder().build();
-    //when
-    userRepository.remove(testUser.getId());
-    //then
-    Assertions.assertThrows(
-        NotFoundException.class,
-        () -> userRepository.findByEmail(testUser.getEmail())
-    );
-    then(commonCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 
   @Test

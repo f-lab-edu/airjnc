@@ -7,17 +7,17 @@ import com.airjnc.user.domain.UserEntity;
 
 public interface UserRepository {
 
-  void remove(Long id);
-
-  UserEntity save(UserSaveDTO userSaveDTO);
-
-  String getEmail(UserFindEmailDTO userFindEmailDTO);
+  UserEntity findByEmail(String email);
 
   UserEntity findById(Long id);
 
-  UserEntity findByEmail(String email);
-
   UserEntity findByPhoneNumber(String phoneNumber);
+
+  String getEmail(UserFindEmailDTO userFindEmailDTO);
+
+  void remove(Long id);
+
+  UserEntity save(UserSaveDTO userSaveDTO);
 
   void updatePasswordByEmail(UserUpdatePwdByEmailDTO userUpdatePwdByEmailDTO);
 }

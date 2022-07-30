@@ -33,18 +33,19 @@ class NcpCommonServiceTest {
   @InjectMocks
   NcpCommonService ncpCommonService;
 
+  void assertHeaders(HttpHeaders headers) {
+    // ncp api 요청시, 공용 Headers 값 검증
+    assertThat(headers.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
+    assertThat(headers.get("x-ncp-apigw-timestamp").get(0)).asString();
+    assertThat(headers.get("x-ncp-iam-access-key").get(0)).isEqualTo(
+        ncpCredentialsProperties.getAccessKey());
+    assertThat(headers.get("x-ncp-apigw-signature-v2").get(0)).asString();
+  }
+
   @BeforeEach
   void beforeEach() {
     given(ncpCredentialsProperties.getAccessKey()).willReturn("accessKey");
     given(ncpCredentialsProperties.getSecretKey()).willReturn("secretKey");
-  }
-
-  @Test
-  void createHeaders() {
-    //when
-    HttpHeaders headers = ncpCommonService.createHeaders(url);
-    //then
-    assertHeaders(headers);
   }
 
   @Test
@@ -61,12 +62,11 @@ class NcpCommonServiceTest {
     assertThat(entity.getBody()).isEqualTo(jsonBody);
   }
 
-  void assertHeaders(HttpHeaders headers) {
-    // ncp api 요청시, 공용 Headers 값 검증
-    assertThat(headers.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
-    assertThat(headers.get("x-ncp-apigw-timestamp").get(0)).asString();
-    assertThat(headers.get("x-ncp-iam-access-key").get(0)).isEqualTo(
-        ncpCredentialsProperties.getAccessKey());
-    assertThat(headers.get("x-ncp-apigw-signature-v2").get(0)).asString();
+  @Test
+  void createHeaders() {
+    //when
+    HttpHeaders headers = ncpCommonService.createHeaders(url);
+    //then
+    assertHeaders(headers);
   }
 }

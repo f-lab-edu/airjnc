@@ -15,13 +15,13 @@ import javax.validation.Payload;
 @Constraint(validatedBy = TwoFieldMatchValidator.class)
 public @interface TwoFieldMatch {
 
-  String message() default "{TwoFieldMatch}";
+  String first();
 
   Class<?>[] groups() default {};
 
-  Class<? extends Payload>[] payload() default {};
+  String message() default "{TwoFieldMatch}";
 
-  String first();
+  Class<? extends Payload>[] payload() default {};
 
   String second();
 

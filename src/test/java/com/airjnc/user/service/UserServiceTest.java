@@ -92,6 +92,16 @@ class UserServiceTest {
   }
 
   @Test
+  void findEmail() {
+    //given
+    UserFindEmailDTO userFindEmailDTO = FindEmailDTOFixture.getBuilder().build();
+    //when
+    userService.findEmail(userFindEmailDTO);
+    //then
+    then(userRepository).should(times(1)).getEmail(userFindEmailDTO);
+  }
+
+  @Test
   void remove() {
     //given
     UserEntity userEntity = TestUser.getBuilder().build();
@@ -102,13 +112,20 @@ class UserServiceTest {
   }
 
   @Test
-  void findEmail() {
+  void resetPassword() {
     //given
-    UserFindEmailDTO userFindEmailDTO = FindEmailDTOFixture.getBuilder().build();
+    UserResetPwdDTO userResetPwdDTO = UserResetPwdDTO.builder()
+        .password("123456")
+        .passwordConfirm("123456")
+        .code("code")
+        .build();
     //when
-    userService.findEmail(userFindEmailDTO);
+    userService.resetPassword(userResetPwdDTO);
     //then
-    then(userRepository).should(times(1)).getEmail(userFindEmailDTO);
+    then(redisService).should(times(1)).get(userResetPwdDTO.getCode());
+    then(redisService).should(times(1)).remove(userResetPwdDTO.getCode());
+    then(hashService).should(times(1)).encrypt(userResetPwdDTO.getPassword());
+    then(userRepository).should(times(1)).updatePasswordByEmail(any(UserUpdatePwdByEmailDTO.class));
   }
 
   @Test
@@ -144,24 +161,6 @@ class UserServiceTest {
     then(userRepository).should(times(1)).findByPhoneNumber(userResetPwdCodeViaPhoneDTO.getPhoneNumber());
     then(commonUtilService).should(times(1)).generateCode();
     then(redisService).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
-    ;
-  }
-
-  @Test
-  void resetPassword() {
-    //given
-    UserResetPwdDTO userResetPwdDTO = UserResetPwdDTO.builder()
-        .password("123456")
-        .passwordConfirm("123456")
-        .code("code")
-        .build();
-    //when
-    userService.resetPassword(userResetPwdDTO);
-    //then
-    then(redisService).should(times(1)).get(userResetPwdDTO.getCode());
-    then(redisService).should(times(1)).remove(userResetPwdDTO.getCode());
-    then(hashService).should(times(1)).encrypt(userResetPwdDTO.getPassword());
-    then(userRepository).should(times(1)).updatePasswordByEmail(any(UserUpdatePwdByEmailDTO.class));
   }
 }
 

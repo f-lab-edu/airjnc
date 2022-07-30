@@ -46,12 +46,24 @@ public class UserService {
     return userModelMapper.userEntityToUserDTO(userEntity);
   }
 
+  public String findEmail(UserFindEmailDTO userFindEmailDTO) {
+    return userRepository.getEmail(userFindEmailDTO);
+  }
+
   public void remove(Long id) {
     userRepository.remove(id);
   }
 
-  public String findEmail(UserFindEmailDTO userFindEmailDTO) {
-    return userRepository.getEmail(userFindEmailDTO);
+  public void resetPassword(UserResetPwdDTO userResetPwdDTO) {
+    String email = redisService.get(userResetPwdDTO.getCode());
+    redisService.remove(userResetPwdDTO.getCode());
+    String hash = hashService.encrypt(userResetPwdDTO.getPassword());
+    userRepository.updatePasswordByEmail(
+        UserUpdatePwdByEmailDTO.builder()
+            .email(email)
+            .password(hash)
+            .build()
+    );
   }
 
   public void resetPasswordViaEmail(UserResetPwdCodeViaEmailDTO userResetPwdCodeViaEmailDTO) {
@@ -74,17 +86,5 @@ public class UserService {
     String code = commonUtilService.generateCode();
     redisService.store(code, user.getEmail(), sessionTtlProperties.getResetPasswordCode());
     // TODO: send sms
-  }
-
-  public void resetPassword(UserResetPwdDTO userResetPwdDTO) {
-    String email = redisService.get(userResetPwdDTO.getCode());
-    redisService.remove(userResetPwdDTO.getCode());
-    String hash = hashService.encrypt(userResetPwdDTO.getPassword());
-    userRepository.updatePasswordByEmail(
-        UserUpdatePwdByEmailDTO.builder()
-            .email(email)
-            .password(hash)
-            .build()
-    );
   }
 }

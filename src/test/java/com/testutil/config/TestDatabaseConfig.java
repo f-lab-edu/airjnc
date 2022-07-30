@@ -24,17 +24,17 @@ public class TestDatabaseConfig {
   @Value("${spring.datasource.password}")
   String password;
 
+  private void clear(DriverManagerDataSource dataSource) {
+    JdbcTemplate template = new JdbcTemplate(dataSource);
+    template.update("delete from `user` where `id` = 1");
+  }
+
   @Bean
   DataSource dataSource() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource(url, username, password);
     clear(dataSource);
     initData(dataSource);
     return dataSource;
-  }
-
-  private void clear(DriverManagerDataSource dataSource) {
-    JdbcTemplate template = new JdbcTemplate(dataSource);
-    template.update("delete from `user` where `id` = 1");
   }
 
   private void initData(DriverManagerDataSource dataSource) {

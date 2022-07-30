@@ -32,9 +32,30 @@ public class UserController {
 
   private final UserStateService userStateService;
 
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public UserDTO create(@Validated @RequestBody UserCreateDTO userCreateDTO) {
+    UserDTO userDTO = userService.create(userCreateDTO);
+    userStateService.create(userDTO.getId());
+    return userDTO;
+  }
+
   @GetMapping("/findEmail")
   public String findEmail(@Validated @ModelAttribute UserFindEmailDTO userFindEmailDTO) {
     return userService.findEmail(userFindEmailDTO);
+  }
+
+  @DeleteMapping("/me")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @CheckAuth
+  public void remove(@CurrentUserId Long currentUserId) {
+    userService.remove(currentUserId);
+    userStateService.remove();
+  }
+
+  @PutMapping("/resetPassword")
+  public void resetPassword(@Validated @RequestBody UserResetPwdDTO userResetPwdDTO) {
+    userService.resetPassword(userResetPwdDTO);
   }
 
   @GetMapping(value = "/resetPassword", params = "via=email")
@@ -47,26 +68,5 @@ public class UserController {
   public void resetPasswordCodeViaPhone(
       @Validated @ModelAttribute UserResetPwdCodeViaPhoneDTO userResetPwdCodeViaPhoneDTO) {
     userService.resetPasswordViaPhone(userResetPwdCodeViaPhoneDTO);
-  }
-
-  @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  public UserDTO create(@Validated @RequestBody UserCreateDTO userCreateDTO) {
-    UserDTO userDTO = userService.create(userCreateDTO);
-    userStateService.create(userDTO.getId());
-    return userDTO;
-  }
-
-  @PutMapping("/resetPassword")
-  public void resetPassword(@Validated @RequestBody UserResetPwdDTO userResetPwdDTO) {
-    userService.resetPassword(userResetPwdDTO);
-  }
-
-  @DeleteMapping("/me")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  @CheckAuth
-  public void remove(@CurrentUserId Long currentUserId) {
-    userService.remove(currentUserId);
-    userStateService.remove();
   }
 }

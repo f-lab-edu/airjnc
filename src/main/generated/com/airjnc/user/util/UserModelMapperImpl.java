@@ -16,25 +16,6 @@ import org.springframework.stereotype.Component;
 public class UserModelMapperImpl implements UserModelMapper {
 
     @Override
-    public UserDTO userEntityToUserDTO(UserEntity userEntity) {
-        if ( userEntity == null ) {
-            return null;
-        }
-
-        UserDTO.UserDTOBuilder userDTO = UserDTO.builder();
-
-        userDTO.id( userEntity.getId() );
-        userDTO.email( userEntity.getEmail() );
-        userDTO.name( userEntity.getName() );
-        userDTO.gender( userEntity.getGender() );
-        userDTO.phoneNumber( userEntity.getPhoneNumber() );
-        userDTO.address( userEntity.getAddress() );
-        userDTO.birthDate( userEntity.getBirthDate() );
-
-        return userDTO.build();
-    }
-
-    @Override
     public UserEntity saveDTOToUserEntity(UserSaveDTO userSaveDTO) {
         if ( userSaveDTO == null ) {
             return null;
@@ -52,5 +33,24 @@ public class UserModelMapperImpl implements UserModelMapper {
         }
 
         return userEntity.build();
+    }
+
+    @Override
+    public UserDTO userEntityToUserDTO(UserEntity userEntity) {
+        if ( userEntity == null ) {
+            return null;
+        }
+
+        UserDTO.UserDTOBuilder userDTO = UserDTO.builder();
+
+        userDTO.id( userEntity.getId() );
+        userDTO.email( userEntity.getEmail() );
+        userDTO.name( userEntity.getName() );
+        userDTO.gender( userEntity.getGender() );
+        userDTO.phoneNumber( userEntity.getPhoneNumber() );
+        userDTO.address( userEntity.getAddress() );
+        userDTO.birthDate( userEntity.getBirthDate() );
+
+        return userDTO.build();
     }
 }

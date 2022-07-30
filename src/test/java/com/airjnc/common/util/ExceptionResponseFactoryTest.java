@@ -18,23 +18,30 @@ class ExceptionResponseFactoryTest {
 
   ResourceBundleMessageSource messageSource;
 
+  // argument 학습 테스트
+  @Test
+  void argumentsTest() {
+    //given
+    CommonCheckService commonCheckService = new CommonCheckService();
+    ExceptionResponse exceptionResponse = null;
+    int actual = 1;
+    int expected = 2;
+    //when
+    try {
+      commonCheckService.shouldBeMatch(actual, expected);
+    } catch (DefaultException ex) {
+      exceptionResponse = ErrorResponseFactory.create(ex, messageSource);
+    }
+    assertThat(exceptionResponse.getGlobal()).isNotNull();
+    assertThat(exceptionResponse.getGlobal().get(0))
+        .isEqualTo(String.format("%d != %d", actual, expected));
+  }
+
   @BeforeEach
   void beforeEach() {
     messageSource = new ResourceBundleMessageSource();
     messageSource.setBasename("messages/errors"); // message 기본 경로 설정
     messageSource.setDefaultEncoding("UTF-8");
-  }
-
-  @Test
-  void whenDefaultExceptionThenSuccessfullyResolveMessage() {
-    //given
-    DefaultException ex = new DefaultException();
-    //when
-    ExceptionResponse exceptionResponse = ErrorResponseFactory.create(ex, messageSource);
-    //then
-    assertThat(exceptionResponse.getGlobal().size()).isSameAs(1);
-    assertThat(exceptionResponse.getGlobal().get(0)).isEqualTo("Error");
-    assertThat(exceptionResponse.getField().size()).isSameAs(0);
   }
 
   // 어떤 Code들이 나오는지 학습 테스트
@@ -66,25 +73,17 @@ class ExceptionResponseFactoryTest {
      */
   }
 
-  // argument 학습 테스트
   @Test
-  void argumentsTest() {
+  void whenDefaultExceptionThenSuccessfullyResolveMessage() {
     //given
-    CommonCheckService commonCheckService = new CommonCheckService();
-    ExceptionResponse exceptionResponse = null;
-    int actual = 1;
-    int expected = 2;
+    DefaultException ex = new DefaultException();
     //when
-    try {
-      commonCheckService.shouldBeMatch(actual, expected);
-    } catch (DefaultException ex) {
-      exceptionResponse = ErrorResponseFactory.create(ex, messageSource);
-    }
-    assertThat(exceptionResponse.getGlobal()).isNotNull();
-    assertThat(exceptionResponse.getGlobal().get(0))
-        .isEqualTo(String.format("%d != %d", actual, expected));
+    ExceptionResponse exceptionResponse = ErrorResponseFactory.create(ex, messageSource);
+    //then
+    assertThat(exceptionResponse.getGlobal().size()).isSameAs(1);
+    assertThat(exceptionResponse.getGlobal().get(0)).isEqualTo("Error");
+    assertThat(exceptionResponse.getField().size()).isSameAs(0);
   }
-
 
   private static class Target {
 
@@ -92,12 +91,12 @@ class ExceptionResponseFactoryTest {
 
     private String field;
 
-    public String getTest() {
-      return test;
-    }
-
     public String getField() {
       return field;
+    }
+
+    public String getTest() {
+      return test;
     }
   }
 }

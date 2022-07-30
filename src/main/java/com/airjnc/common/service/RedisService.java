@@ -12,14 +12,6 @@ public class RedisService {
 
   private final RedisTemplate<String, String> redisTemplate;
 
-  public void store(String key, String value, Duration timeout) {
-    redisTemplate.opsForValue().set(
-        key,
-        value,
-        timeout
-    );
-  }
-
   public String get(String key) {
     String value = redisTemplate.opsForValue().get(key);
     if (value == null) {
@@ -30,5 +22,13 @@ public class RedisService {
 
   public Boolean remove(String key) {
     return redisTemplate.delete(key);
+  }
+
+  public void store(String key, String value, Duration timeout) {
+    redisTemplate.opsForValue().set(
+        key,
+        value,
+        timeout
+    );
   }
 }

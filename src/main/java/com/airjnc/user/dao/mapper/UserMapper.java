@@ -10,17 +10,17 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
 
-  int remove(Long id);
-
-  int save(UserSaveDTO userSaveDTO);
-
-  Optional<String> getEmail(UserFindEmailDTO userFindEmailDTO);
+  Optional<UserEntity> findByEmail(String email);
 
   Optional<UserEntity> findById(Long id);
 
-  Optional<UserEntity> findByEmail(String email);
-
   Optional<UserEntity> findByPhoneNumber(String phoneNumber);
+
+  Optional<String> getEmail(UserFindEmailDTO userFindEmailDTO);
+
+  int remove(Long id);
+
+  int save(UserSaveDTO userSaveDTO);
 
   int updatePasswordByEmail(UserUpdatePwdByEmailDTO userUpdatePwdByEmailDTO);
 }
