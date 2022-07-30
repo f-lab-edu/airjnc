@@ -1,12 +1,12 @@
 package com.testutil.fixture;
 
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.response.UserResp;
 import com.testutil.testdata.TestUser;
 
 public class UserDTOFixture {
 
-  public static UserDTO.UserDTOBuilder getBuilder() {
-    return UserDTO.builder()
+  public static UserResp.UserRespBuilder getBuilder() {
+    return UserResp.builder()
         .id(TestUser.ID)
         .email(TestUser.EMAIL)
         .name(TestUser.NAME)

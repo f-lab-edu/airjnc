@@ -33,13 +33,10 @@ public class UserEntity {
 
   private LocalDateTime updatedAt;
 
-  private LocalDateTime deletedAt;
 
   @Builder
-  public UserEntity(Long id, String email, String password, String name, Gender gender,
-      String phoneNumber,
-      String address, boolean isActive, LocalDate birthDate, LocalDateTime createdAt,
-      LocalDateTime updatedAt, LocalDateTime deletedAt) {
+  public UserEntity(Long id, String email, String password, String name, Gender gender, String phoneNumber,
+      String address, boolean isActive, LocalDate birthDate, LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.id = id;
     this.email = email;
     this.password = password;
@@ -51,6 +48,5 @@ public class UserEntity {
     this.birthDate = birthDate;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.deletedAt = deletedAt;
   }
 }

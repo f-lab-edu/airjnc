@@ -1,8 +1,8 @@
 package com.airjnc.user.util;
 
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.response.UserResp;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
@@ -13,7 +13,7 @@ import org.mapstruct.MappingConstants;
 )
 public interface UserModelMapper {
 
-  UserDTO userEntityToUserDTO(UserEntity userEntity);
+  UserEntity saveDTOToUserEntity(UserSaveDto userSaveDTO);
 
-  UserEntity createDTOToUserEntity(CreateDTO createDTO);
+  UserResp userEntityToUserDTO(UserEntity userEntity);
 }

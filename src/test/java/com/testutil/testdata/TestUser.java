@@ -41,7 +41,6 @@ public class TestUser {
         .isActive(IS_ACTIVE)
         .birthDate(BIRTH_DATE)
         .createdAt(CREATED_AT)
-        .updatedAt(UPDATED_AT)
-        .deletedAt(null);
+        .updatedAt(UPDATED_AT);
   }
 }

@@ -3,7 +3,7 @@ package com.airjnc.ncp.config;
 import com.airjnc.ncp.annotation.NcpMailRestTemplate;
 import com.airjnc.ncp.properties.NcpCredentialsProperties;
 import com.airjnc.ncp.properties.NcpMailerProperties;
-import com.airjnc.ncp.util.NcpMailerUrl;
+import com.airjnc.ncp.util.NcpApiUrl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -21,6 +21,6 @@ public class NcpConfig {
   @Bean
   @NcpMailRestTemplate
   public RestTemplate ncpMailRestTemplate() {
-    return restTemplateBuilder.rootUri(NcpMailerUrl.BASE).build();
+    return restTemplateBuilder.rootUri(NcpApiUrl.Mailer.BASE).build();
   }
 }

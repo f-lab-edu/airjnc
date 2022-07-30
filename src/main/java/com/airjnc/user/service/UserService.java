@@ -1,20 +1,20 @@
 package com.airjnc.user.service;
 
+import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.properties.SessionTtlProperties;
 import com.airjnc.common.service.CommonUtilService;
-import com.airjnc.common.service.RedisService;
-import com.airjnc.common.util.BCryptHashEncrypter;
-import com.airjnc.ncp.dto.NcpMailerSendDTO;
+import com.airjnc.common.service.HashService;
+import com.airjnc.ncp.dto.NcpMailerSendDto;
 import com.airjnc.ncp.service.NcpMailerService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.UpdatePasswordByEmailDTO;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.request.FindEmailDTO;
-import com.airjnc.user.dto.request.ResetPasswordCodeViaEmailDTO;
-import com.airjnc.user.dto.request.ResetPasswordCodeViaPhoneDTO;
-import com.airjnc.user.dto.request.ResetPasswordDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaEmailReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaPhoneReq;
+import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.response.UserInquiryEmailResp;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
+  private final HashService hashService;
 
   private final UserModelMapper userModelMapper;
 
@@ -33,55 +35,56 @@ public class UserService {
 
   private final CommonUtilService commonUtilService;
 
-  private final RedisService redisService;
+  private final RedisDao redisDao;
 
   private final SessionTtlProperties sessionTtlProperties;
 
-  public UserDTO create(CreateDTO createDTO) {
-    userCheckService.emailShouldNotBeDuplicated(createDTO.getEmail());
-    createDTO.changePasswordToHash();
-    UserEntity userEntity = userRepository.save(createDTO);
+  public UserResp create(UserCreateReq userCreateReq) {
+    userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
+    String hash = hashService.encrypt(userCreateReq.getPassword());
+    UserEntity userEntity = userRepository.save(userCreateReq.toSaveDTO(hash));
     return userModelMapper.userEntityToUserDTO(userEntity);
   }
 
-  public void remove(Long id) {
-    userRepository.remove(id);
+  public UserInquiryEmailResp inquiryEmail(UserInquiryEmailReq userInquiryEmailReq) {
+    return userRepository.findEmailByNameAndBirthDate(
+        userInquiryEmailReq.getName(),
+        userInquiryEmailReq.getBirthDate()
+    );
   }
 
-  public String findEmail(FindEmailDTO findEmailDTO) {
-    return userRepository.getEmail(findEmailDTO);
+  public void delete(Long id) {
+    userRepository.delete(id);
   }
 
-  public void resetPasswordViaEmail(ResetPasswordCodeViaEmailDTO resetPasswordCodeViaEmailDTO) {
-    UserEntity user = userRepository.findByEmail(resetPasswordCodeViaEmailDTO.getEmail());
-    // 명령-질의 분리 원칙를 지키기 위해 `resetPasswordViaPhone` 에서 중복코드가 있음에도 불구하고, 하나로 합치지 않았습니다.
+  public void resetPassword(UserResetPwdReq userResetPwdReq) {
+    String email = redisDao.get(userResetPwdReq.getCode());
+    redisDao.delete(userResetPwdReq.getCode());
+    String hash = hashService.encrypt(userResetPwdReq.getPassword());
+    userRepository.updatePasswordByEmail(email, hash);
+  }
+
+  private String generateAndRestoreCode(String email) {
     String code = commonUtilService.generateCode();
-    redisService.store(code, user.getEmail(), sessionTtlProperties.getResetPasswordCode());
-    //
+    redisDao.store(code, email, sessionTtlProperties.getResetPasswordCode());
+    return code;
+  }
+
+  public void getResetPwdCodeViaEmail(UserGetResetPwdCodeViaEmailReq userGetResetPwdCodeViaEmailReq) {
+    UserEntity user = userRepository.findByEmail(userGetResetPwdCodeViaEmailReq.getEmail());
+    String code = generateAndRestoreCode(user.getEmail());
     ncpMailerService.send(
-        NcpMailerSendDTO.builder()
-            .email(resetPasswordCodeViaEmailDTO.getEmail())
+        NcpMailerSendDto.builder()
+            .email(userGetResetPwdCodeViaEmailReq.getEmail())
             .name(user.getName())
             .code(code)
             .build()
     );
   }
 
-  public void resetPasswordViaPhone(ResetPasswordCodeViaPhoneDTO resetPasswordCodeViaPhoneDTO) {
-    UserEntity user = userRepository.findByPhoneNumber(resetPasswordCodeViaPhoneDTO.getPhoneNumber());
-    String code = commonUtilService.generateCode();
-    redisService.store(code, user.getEmail(), sessionTtlProperties.getResetPasswordCode());
+  public void getResetPwdCodeViaPhone(UserGetResetPwdCodeViaPhoneReq userGetResetPwdCodeViaPhoneReq) {
+    UserEntity user = userRepository.findByPhoneNumber(userGetResetPwdCodeViaPhoneReq.getPhone());
+    String code = generateAndRestoreCode(user.getEmail());
     // TODO: send sms
-  }
-
-  public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
-    String email = redisService.get(resetPasswordDTO.getCode());
-    redisService.remove(resetPasswordDTO.getCode());
-    userRepository.updatePasswordByEmail(
-        UpdatePasswordByEmailDTO.builder()
-            .email(email)
-            .password(BCryptHashEncrypter.encrypt(resetPasswordDTO.getPassword()))
-            .build()
-    );
   }
 }
