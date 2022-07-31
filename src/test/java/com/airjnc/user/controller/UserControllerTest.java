@@ -14,8 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.airjnc.common.aspect.Advice;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaEmailReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
@@ -141,11 +141,10 @@ class UserControllerTest {
     //when
     mockMvc.perform(
             get("/users/resetPassword")
-                .param("via", "email")
                 .param("email", email)
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should(times(1)).resetPasswordViaEmail(any(UserResetPwdCodeViaEmailReq.class));
+    then(userService).should(times(1)).getResetPwdCodeViaEmail(any(UserGetResetPwdCodeViaEmailReq.class));
   }
 }

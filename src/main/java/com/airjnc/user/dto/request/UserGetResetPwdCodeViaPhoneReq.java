@@ -6,13 +6,13 @@ import javax.validation.constraints.Pattern;
 import lombok.Getter;
 
 @Getter
-public class UserResetPwdCodeViaPhoneReq {
+public class UserGetResetPwdCodeViaPhoneReq {
 
   @NotBlank
   @Pattern(regexp = UserRegex.PHONE)
-  private final String phoneNumber;
+  private final String phone;
 
-  public UserResetPwdCodeViaPhoneReq(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
+  public UserGetResetPwdCodeViaPhoneReq(String phone) {
+    this.phone = phone;
   }
 }

@@ -18,9 +18,9 @@ import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaEmailReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaPhoneReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaEmailReq;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaPhoneReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
@@ -133,16 +133,16 @@ class UserServiceTest {
   @Test
   void resetPasswordViaEmail() {
     //given
-    UserResetPwdCodeViaEmailReq userResetPwdCodeViaEmailReq = new UserResetPwdCodeViaEmailReq(TestUser.EMAIL);
+    UserGetResetPwdCodeViaEmailReq userGetResetPwdCodeViaEmailReq = new UserGetResetPwdCodeViaEmailReq(TestUser.EMAIL);
     UserEntity user = TestUser.getBuilder().build();
-    given(userRepository.findByEmail(userResetPwdCodeViaEmailReq.getEmail())).willReturn(user);
+    given(userRepository.findByEmail(userGetResetPwdCodeViaEmailReq.getEmail())).willReturn(user);
     String code = "123456";
     given(commonUtilService.generateCode()).willReturn(code);
     given(sessionTtlProperties.getResetPasswordCode()).willReturn(Duration.ofMinutes(1L));
     //when
-    userService.resetPasswordViaEmail(userResetPwdCodeViaEmailReq);
+    userService.getResetPwdCodeViaEmail(userGetResetPwdCodeViaEmailReq);
     //then
-    then(userRepository).should(times(1)).findByEmail(userResetPwdCodeViaEmailReq.getEmail());
+    then(userRepository).should(times(1)).findByEmail(userGetResetPwdCodeViaEmailReq.getEmail());
     then(commonUtilService).should(times(1)).generateCode();
     then(redisDao).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
     then(ncpMailerService).should(times(1)).send(any(NcpMailerSendDto.class));
@@ -151,16 +151,17 @@ class UserServiceTest {
   @Test
   void resetPasswordViaPhone() {
     //given
-    UserResetPwdCodeViaPhoneReq userResetPwdCodeViaPhoneReq = new UserResetPwdCodeViaPhoneReq(TestUser.PHONE_NUMBER);
+    UserGetResetPwdCodeViaPhoneReq userGetResetPwdCodeViaPhoneReq = new UserGetResetPwdCodeViaPhoneReq(
+        TestUser.PHONE_NUMBER);
     UserEntity user = TestUser.getBuilder().build();
-    given(userRepository.findByPhoneNumber(userResetPwdCodeViaPhoneReq.getPhoneNumber())).willReturn(user);
+    given(userRepository.findByPhoneNumber(userGetResetPwdCodeViaPhoneReq.getPhone())).willReturn(user);
     String code = "123456";
     given(commonUtilService.generateCode()).willReturn(code);
     given(sessionTtlProperties.getResetPasswordCode()).willReturn(Duration.ofMinutes(1L));
     //when
-    userService.resetPasswordViaPhone(userResetPwdCodeViaPhoneReq);
+    userService.getResetPwdCodeViaPhone(userGetResetPwdCodeViaPhoneReq);
     //then
-    then(userRepository).should(times(1)).findByPhoneNumber(userResetPwdCodeViaPhoneReq.getPhoneNumber());
+    then(userRepository).should(times(1)).findByPhoneNumber(userGetResetPwdCodeViaPhoneReq.getPhone());
     then(commonUtilService).should(times(1)).generateCode();
     then(redisDao).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
   }

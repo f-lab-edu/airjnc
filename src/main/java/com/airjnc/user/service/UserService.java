@@ -9,9 +9,9 @@ import com.airjnc.ncp.service.NcpMailerService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaEmailReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaPhoneReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaEmailReq;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaPhoneReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
@@ -64,25 +64,27 @@ public class UserService {
     userRepository.updatePasswordByEmail(email, hash);
   }
 
-  public void resetPasswordViaEmail(UserResetPwdCodeViaEmailReq userResetPwdCodeViaEmailReq) {
-    UserEntity user = userRepository.findByEmail(userResetPwdCodeViaEmailReq.getEmail());
-    // 명령-질의 분리 원칙를 지키기 위해 `resetPasswordViaPhone` 에서 중복코드가 있음에도 불구하고, 하나로 합치지 않았습니다.
+  private String generateAndRestoreCode(String email) {
     String code = commonUtilService.generateCode();
-    redisDao.store(code, user.getEmail(), sessionTtlProperties.getResetPasswordCode());
-    //
+    redisDao.store(code, email, sessionTtlProperties.getResetPasswordCode());
+    return code;
+  }
+
+  public void getResetPwdCodeViaEmail(UserGetResetPwdCodeViaEmailReq userGetResetPwdCodeViaEmailReq) {
+    UserEntity user = userRepository.findByEmail(userGetResetPwdCodeViaEmailReq.getEmail());
+    String code = generateAndRestoreCode(user.getEmail());
     ncpMailerService.send(
         NcpMailerSendDto.builder()
-            .email(userResetPwdCodeViaEmailReq.getEmail())
+            .email(userGetResetPwdCodeViaEmailReq.getEmail())
             .name(user.getName())
             .code(code)
             .build()
     );
   }
 
-  public void resetPasswordViaPhone(UserResetPwdCodeViaPhoneReq userResetPwdCodeViaPhoneReq) {
-    UserEntity user = userRepository.findByPhoneNumber(userResetPwdCodeViaPhoneReq.getPhoneNumber());
-    String code = commonUtilService.generateCode();
-    redisDao.store(code, user.getEmail(), sessionTtlProperties.getResetPasswordCode());
+  public void getResetPwdCodeViaPhone(UserGetResetPwdCodeViaPhoneReq userGetResetPwdCodeViaPhoneReq) {
+    UserEntity user = userRepository.findByPhoneNumber(userGetResetPwdCodeViaPhoneReq.getPhone());
+    String code = generateAndRestoreCode(user.getEmail());
     // TODO: send sms
   }
 }

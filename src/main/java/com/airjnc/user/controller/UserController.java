@@ -3,9 +3,9 @@ package com.airjnc.user.controller;
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.annotation.CurrentUserId;
 import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaEmailReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaPhoneReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaEmailReq;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaPhoneReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
@@ -59,16 +59,16 @@ public class UserController {
     userService.resetPassword(userResetPwdReq);
   }
 
-  @GetMapping(value = "/resetPassword", params = "via=email")
-  public void resetPasswordCodeViaEmail(
-      @Validated @ModelAttribute UserResetPwdCodeViaEmailReq userResetPwdCodeViaEmailReq) {
-    userService.resetPasswordViaEmail(userResetPwdCodeViaEmailReq);
+  @GetMapping(value = "/resetPassword", params = "email")
+  public void getResetPwdCodeViaEmail(
+      @Validated @ModelAttribute UserGetResetPwdCodeViaEmailReq userGetResetPwdCodeViaEmailReq) {
+    userService.getResetPwdCodeViaEmail(userGetResetPwdCodeViaEmailReq);
   }
 
   // Naver에서 발신번호 등록이 계속해서 안되고 있어서, 일단 보류함
-//  @GetMapping(value = "/resetPassword", params = "via=phone")
-  public void resetPasswordCodeViaPhone(
-      @Validated @ModelAttribute UserResetPwdCodeViaPhoneReq userResetPwdCodeViaPhoneReq) {
-    userService.resetPasswordViaPhone(userResetPwdCodeViaPhoneReq);
+//  @GetMapping(value = "/resetPassword", params = "phone")
+  public void getResetPwdCodeViaPhone(
+      @Validated @ModelAttribute UserGetResetPwdCodeViaPhoneReq userGetResetPwdCodeViaPhoneReq) {
+    userService.getResetPwdCodeViaPhone(userGetResetPwdCodeViaPhoneReq);
   }
 }
