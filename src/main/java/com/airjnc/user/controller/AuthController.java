@@ -1,8 +1,8 @@
 package com.airjnc.user.controller;
 
 import com.airjnc.common.annotation.CheckAuth;
-import com.airjnc.user.dto.request.AuthLogInDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.request.UserLogInReq;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.AuthService;
 import com.airjnc.user.service.UserStateService;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +23,10 @@ public class AuthController {
   private final UserStateService userStateService;
 
   @PostMapping("/logIn")
-  public UserDTO logIn(@Validated @RequestBody AuthLogInDTO authLogInDTO) {
-    UserDTO userDTO = authService.logIn(authLogInDTO);
-    userStateService.create(userDTO.getId());
-    return userDTO;
+  public UserResp logIn(@Validated @RequestBody UserLogInReq userLogInReq) {
+    UserResp userResp = authService.logIn(userLogInReq);
+    userStateService.create(userResp.getId());
+    return userResp;
   }
 
   @GetMapping("/logOut")

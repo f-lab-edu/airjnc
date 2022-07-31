@@ -33,7 +33,7 @@ class NcpMailerReqTest {
     String parameters = clazz.getDeclaredField("parameters").getType().getName();
     //then
     assertThat(address.contains("String")).isTrue();
-    assertThat(type.contains("NcpMailerRequest$Recipient$Type")).isTrue();
+    assertThat(type.contains("NcpMailerReq$Recipient$Type")).isTrue();
     assertThat(parameters.contains("Map")).isTrue();
   }
 }

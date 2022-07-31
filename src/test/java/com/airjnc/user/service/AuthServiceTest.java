@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import com.airjnc.user.dto.request.AuthLogInDTO;
-import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.request.UserLogInReq;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.LogInDTOFixture;
@@ -38,18 +38,18 @@ class AuthServiceTest {
   @Test
   void userShouldBeLoggedIn() {
     //given
-    AuthLogInDTO authLogInDTO = LogInDTOFixture.getBuilder().build();
+    UserLogInReq userLogInReq = LogInDTOFixture.getBuilder().build();
     UserEntity userEntity = TestUser.getBuilder().build();
-    UserDTO userDTO = UserDTOFixture.getBuilder().build();
-    given(userRepository.findByEmail(authLogInDTO.getEmail())).willReturn(userEntity);
-    given(userModelMapper.userEntityToUserDTO(userEntity)).willReturn(userDTO);
+    UserResp userResp = UserDTOFixture.getBuilder().build();
+    given(userRepository.findByEmail(userLogInReq.getEmail())).willReturn(userEntity);
+    given(userModelMapper.userEntityToUserDTO(userEntity)).willReturn(userResp);
     //when
-    UserDTO result = authService.logIn(authLogInDTO);
+    UserResp result = authService.logIn(userLogInReq);
     //then
-    then(userRepository).should(times(1)).findByEmail(authLogInDTO.getEmail());
+    then(userRepository).should(times(1)).findByEmail(userLogInReq.getEmail());
     then(userCheckService).should(times(1))
-        .passwordShouldBeMatch(authLogInDTO.getPassword(), userEntity.getPassword());
+        .passwordShouldBeMatch(userLogInReq.getPassword(), userEntity.getPassword());
     then(userModelMapper).should(times(1)).userEntityToUserDTO(userEntity);
-    assertThat(result).isSameAs(userDTO);
+    assertThat(result).isSameAs(userResp);
   }
 }

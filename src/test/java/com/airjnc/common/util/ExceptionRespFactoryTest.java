@@ -1,10 +1,10 @@
 package com.airjnc.common.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import com.airjnc.common.dto.response.ExceptionResponse;
+import com.airjnc.common.dto.response.ExceptionResp;
 import com.airjnc.common.exception.DefaultException;
 import com.airjnc.common.service.CommonCheckService;
-import com.airjnc.common.util.factory.ErrorResponseFactory;
+import com.airjnc.common.util.factory.ErrorRespFactory;
 import com.airjnc.common.util.factory.ErrorsFactory;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
 import com.testutil.annotation.UnitTest;
@@ -14,7 +14,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.Errors;
 
 @UnitTest
-class ExceptionResponseFactoryTest {
+class ExceptionRespFactoryTest {
 
   ResourceBundleMessageSource messageSource;
 
@@ -23,17 +23,17 @@ class ExceptionResponseFactoryTest {
   void argumentsTest() {
     //given
     CommonCheckService commonCheckService = new CommonCheckService();
-    ExceptionResponse exceptionResponse = null;
+    ExceptionResp exceptionResp = null;
     int actual = 1;
     int expected = 2;
     //when
     try {
       commonCheckService.shouldBeMatch(actual, expected);
     } catch (DefaultException ex) {
-      exceptionResponse = ErrorResponseFactory.create(ex, messageSource);
+      exceptionResp = ErrorRespFactory.create(ex, messageSource);
     }
-    assertThat(exceptionResponse.getGlobal()).isNotNull();
-    assertThat(exceptionResponse.getGlobal().get(0))
+    assertThat(exceptionResp.getGlobal()).isNotNull();
+    assertThat(exceptionResp.getGlobal().get(0))
         .isEqualTo(String.format("%d != %d", actual, expected));
   }
 
@@ -54,7 +54,7 @@ class ExceptionResponseFactoryTest {
 //    errors.reject(ErrorCode.DUPLICATED.name());
     EmailIsDuplicatedException ex = new EmailIsDuplicatedException(errors);
     //when
-    ExceptionResponse exceptionResponse = ErrorResponseFactory.create(ex, messageSource);
+    ExceptionResp exceptionResp = ErrorRespFactory.create(ex, messageSource);
     //then
     /*
      * objectName = "Target"
@@ -78,11 +78,11 @@ class ExceptionResponseFactoryTest {
     //given
     DefaultException ex = new DefaultException();
     //when
-    ExceptionResponse exceptionResponse = ErrorResponseFactory.create(ex, messageSource);
+    ExceptionResp exceptionResp = ErrorRespFactory.create(ex, messageSource);
     //then
-    assertThat(exceptionResponse.getGlobal().size()).isSameAs(1);
-    assertThat(exceptionResponse.getGlobal().get(0)).isEqualTo("Error");
-    assertThat(exceptionResponse.getField().size()).isSameAs(0);
+    assertThat(exceptionResp.getGlobal().size()).isSameAs(1);
+    assertThat(exceptionResp.getGlobal().get(0)).isEqualTo("Error");
+    assertThat(exceptionResp.getField().size()).isSameAs(0);
   }
 
   private static class Target {

@@ -20,7 +20,7 @@ import org.springframework.http.MediaType;
 
 @ExtendWith(MockitoExtension.class)
 @UnitTest
-class NcpCommonServiceTest {
+class NcpBaseServiceTest {
 
   private final String url = "/url";
 
@@ -31,7 +31,7 @@ class NcpCommonServiceTest {
   ObjectMapper objectMapper;
 
   @InjectMocks
-  NcpCommonService ncpCommonService;
+  NcpBaseService ncpBaseService;
 
   void assertHeaders(HttpHeaders headers) {
     // ncp api 요청시, 공용 Headers 값 검증
@@ -55,7 +55,7 @@ class NcpCommonServiceTest {
     String jsonBody = "jsonBody";
     given(objectMapper.writeValueAsString(body)).willReturn(jsonBody);
     //when
-    HttpEntity<String> entity = ncpCommonService.createEntity(url, body);
+    HttpEntity<String> entity = ncpBaseService.createEntity(url, body);
     //then
     then(objectMapper).should(times(1)).writeValueAsString(body);
     assertHeaders(entity.getHeaders());
@@ -65,7 +65,7 @@ class NcpCommonServiceTest {
   @Test
   void createHeaders() {
     //when
-    HttpHeaders headers = ncpCommonService.createHeaders(url);
+    HttpHeaders headers = ncpBaseService.createHeaders(url);
     //then
     assertHeaders(headers);
   }

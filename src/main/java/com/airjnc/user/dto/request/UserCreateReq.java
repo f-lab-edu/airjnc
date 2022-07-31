@@ -1,9 +1,9 @@
 package com.airjnc.user.dto.request;
 
-import com.airjnc.common.util.CommonRegex;
-import com.airjnc.user.dto.UserSaveDTO;
 import com.airjnc.user.domain.Gender;
+import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.util.UserRegex;
+import java.time.LocalDate;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,10 +12,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserCreateDTO {
+public class UserCreateReq {
 
   @NotBlank
   @Email
@@ -31,12 +32,12 @@ public class UserCreateDTO {
   @Pattern(regexp = UserRegex.PASSWORD)
   private String password;
 
-  @NotBlank
-  @Pattern(regexp = CommonRegex.localDate)
-  private String birthDate;
+  @NotNull
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate birthDate;
 
   @Builder
-  public UserCreateDTO(String email, String password, String name, Gender gender, String birthDate) {
+  public UserCreateReq(String email, String password, String name, Gender gender, LocalDate birthDate) {
     this.email = email;
     this.password = password;
     this.name = name;
@@ -44,8 +45,8 @@ public class UserCreateDTO {
     this.birthDate = birthDate;
   }
 
-  public UserSaveDTO toSaveDTO(String hash) {
-    return UserSaveDTO.builder()
+  public UserSaveDto toSaveDTO(String hash) {
+    return UserSaveDto.builder()
         .email(email)
         .name(name)
         .gender(gender)

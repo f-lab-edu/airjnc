@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SessionUserStateService implements UserStateService {
+public class UserStateSessionService implements UserStateService {
 
   private final HttpSession httpSession;
 

@@ -1,22 +1,21 @@
 package com.airjnc.user.util;
 
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.UserSaveDTO;
-import com.airjnc.user.dto.response.UserDTO;
-import java.time.LocalDate;
+import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.response.UserResp;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-31T15:01:47+0900",
+    date = "2022-07-31T17:41:27+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 11.0.10 (AdoptOpenJDK)"
 )
 @Component
 public class UserModelMapperImpl implements UserModelMapper {
 
     @Override
-    public UserEntity saveDTOToUserEntity(UserSaveDTO userSaveDTO) {
+    public UserEntity saveDTOToUserEntity(UserSaveDto userSaveDTO) {
         if ( userSaveDTO == null ) {
             return null;
         }
@@ -28,29 +27,27 @@ public class UserModelMapperImpl implements UserModelMapper {
         userEntity.password( userSaveDTO.getPassword() );
         userEntity.name( userSaveDTO.getName() );
         userEntity.gender( userSaveDTO.getGender() );
-        if ( userSaveDTO.getBirthDate() != null ) {
-            userEntity.birthDate( LocalDate.parse( userSaveDTO.getBirthDate() ) );
-        }
+        userEntity.birthDate( userSaveDTO.getBirthDate() );
 
         return userEntity.build();
     }
 
     @Override
-    public UserDTO userEntityToUserDTO(UserEntity userEntity) {
+    public UserResp userEntityToUserDTO(UserEntity userEntity) {
         if ( userEntity == null ) {
             return null;
         }
 
-        UserDTO.UserDTOBuilder userDTO = UserDTO.builder();
+        UserResp.UserRespBuilder userResp = UserResp.builder();
 
-        userDTO.id( userEntity.getId() );
-        userDTO.email( userEntity.getEmail() );
-        userDTO.name( userEntity.getName() );
-        userDTO.gender( userEntity.getGender() );
-        userDTO.phoneNumber( userEntity.getPhoneNumber() );
-        userDTO.address( userEntity.getAddress() );
-        userDTO.birthDate( userEntity.getBirthDate() );
+        userResp.id( userEntity.getId() );
+        userResp.email( userEntity.getEmail() );
+        userResp.name( userEntity.getName() );
+        userResp.gender( userEntity.getGender() );
+        userResp.phoneNumber( userEntity.getPhoneNumber() );
+        userResp.address( userEntity.getAddress() );
+        userResp.birthDate( userEntity.getBirthDate() );
 
-        return userDTO.build();
+        return userResp.build();
     }
 }

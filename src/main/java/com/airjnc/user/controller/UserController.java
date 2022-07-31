@@ -2,12 +2,13 @@ package com.airjnc.user.controller;
 
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.annotation.CurrentUserId;
-import com.airjnc.user.dto.request.UserCreateDTO;
-import com.airjnc.user.dto.request.UserFindEmailDTO;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaEmailDTO;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaPhoneDTO;
-import com.airjnc.user.dto.request.UserResetPwdDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserResetPwdCodeViaEmailReq;
+import com.airjnc.user.dto.request.UserResetPwdCodeViaPhoneReq;
+import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.response.UserInquiryEmailResp;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
 import lombok.RequiredArgsConstructor;
@@ -34,15 +35,15 @@ public class UserController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public UserDTO create(@Validated @RequestBody UserCreateDTO userCreateDTO) {
-    UserDTO userDTO = userService.create(userCreateDTO);
-    userStateService.create(userDTO.getId());
-    return userDTO;
+  public UserResp create(@Validated @RequestBody UserCreateReq userCreateReq) {
+    UserResp userResp = userService.create(userCreateReq);
+    userStateService.create(userResp.getId());
+    return userResp;
   }
 
-  @GetMapping("/findEmail")
-  public String findEmail(@Validated @ModelAttribute UserFindEmailDTO userFindEmailDTO) {
-    return userService.findEmail(userFindEmailDTO);
+  @GetMapping("/inquiryEmail")
+  public UserInquiryEmailResp findEmail(@Validated @ModelAttribute UserInquiryEmailReq userInquiryEmailReq) {
+    return userService.inquiryEmail(userInquiryEmailReq);
   }
 
   @DeleteMapping("/me")
@@ -54,19 +55,19 @@ public class UserController {
   }
 
   @PutMapping("/resetPassword")
-  public void resetPassword(@Validated @RequestBody UserResetPwdDTO userResetPwdDTO) {
-    userService.resetPassword(userResetPwdDTO);
+  public void resetPassword(@Validated @RequestBody UserResetPwdReq userResetPwdReq) {
+    userService.resetPassword(userResetPwdReq);
   }
 
   @GetMapping(value = "/resetPassword", params = "via=email")
   public void resetPasswordCodeViaEmail(
-      @Validated @ModelAttribute UserResetPwdCodeViaEmailDTO userResetPwdCodeViaEmailDTO) {
-    userService.resetPasswordViaEmail(userResetPwdCodeViaEmailDTO);
+      @Validated @ModelAttribute UserResetPwdCodeViaEmailReq userResetPwdCodeViaEmailReq) {
+    userService.resetPasswordViaEmail(userResetPwdCodeViaEmailReq);
   }
 
   @GetMapping(value = "/resetPassword", params = "via=phone")
   public void resetPasswordCodeViaPhone(
-      @Validated @ModelAttribute UserResetPwdCodeViaPhoneDTO userResetPwdCodeViaPhoneDTO) {
-    userService.resetPasswordViaPhone(userResetPwdCodeViaPhoneDTO);
+      @Validated @ModelAttribute UserResetPwdCodeViaPhoneReq userResetPwdCodeViaPhoneReq) {
+    userService.resetPasswordViaPhone(userResetPwdCodeViaPhoneReq);
   }
 }

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class NcpCommonService {
+public class NcpBaseService {
 
   private final NcpCredentialsProperties ncpCredentialsProperties;
 

@@ -1,9 +1,9 @@
 package com.airjnc.user.util.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import com.airjnc.user.dto.response.UserDTO;
-import com.airjnc.user.dto.UserSaveDTO;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.CreateDTOFixture;
@@ -26,7 +26,7 @@ class UserEntityMapperTest {
   @Test
   void fromCreateDTO() {
     //given
-    UserSaveDTO createDTO = CreateDTOFixture.getBuilder().build().toSaveDTO("1234");
+    UserSaveDto createDTO = CreateDTOFixture.getBuilder().build().toSaveDTO("1234");
     //when
     UserEntity result = userModelMapper.saveDTOToUserEntity(createDTO);
     //then
@@ -38,7 +38,7 @@ class UserEntityMapperTest {
     //given
     UserEntity userEntity = TestUser.getBuilder().build();
     //when
-    UserDTO result = userModelMapper.userEntityToUserDTO(userEntity);
+    UserResp result = userModelMapper.userEntityToUserDTO(userEntity);
     //then
     assertThat(result.getId()).isEqualTo(userEntity.getId());
     assertThat(result.getName()).isEqualTo(userEntity.getName());

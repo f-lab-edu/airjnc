@@ -9,24 +9,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.airjnc.common.aspect.Advice;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
-import com.airjnc.user.dto.request.UserCreateDTO;
-import com.airjnc.user.dto.request.UserFindEmailDTO;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaEmailDTO;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaPhoneDTO;
-import com.airjnc.user.dto.request.UserResetPwdDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserResetPwdCodeViaEmailReq;
+import com.airjnc.user.dto.request.UserResetPwdCodeViaPhoneReq;
+import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.response.UserInquiryEmailResp;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.AopTest;
 import com.testutil.fixture.CreateDTOFixture;
-import com.testutil.fixture.FindEmailDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
+import com.testutil.fixture.UserInquiryEmailReqDTOFixture;
+import com.testutil.fixture.UserInquiryEmailResDTOFixture;
 import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,37 +62,39 @@ class UserControllerTest {
   @Test
   void create() throws Exception {
     //given
-    UserCreateDTO userCreateDTO = CreateDTOFixture.getBuilder().build();
-    UserDTO userDTO = UserDTOFixture.getBuilder().build();
-    given(userService.create(any(UserCreateDTO.class))).willReturn(userDTO);
+    UserCreateReq userCreateReq = CreateDTOFixture.getBuilder().build();
+    UserResp userResp = UserDTOFixture.getBuilder().build();
+    given(userService.create(any(UserCreateReq.class))).willReturn(userResp);
     //when
     mockMvc.perform(
             post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userCreateDTO))
+                .content(objectMapper.writeValueAsString(userCreateReq))
         ).andDo(print())
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("id").value(userDTO.getId()));
+        .andExpect(jsonPath("id").value(userResp.getId()));
     //then
-    then(userService).should(times(1)).create(any(UserCreateDTO.class));
-    then(userStateService).should(times(1)).create(userDTO.getId());
+    then(userService).should(times(1)).create(any(UserCreateReq.class));
+    then(userStateService).should(times(1)).create(userResp.getId());
   }
 
   @Test
-  void findEmail() throws Exception {
+  void inquiryEmail() throws Exception {
     //given
-    UserFindEmailDTO userFindEmailDTO = FindEmailDTOFixture.getBuilder().build();
-    given(userService.findEmail(any(UserFindEmailDTO.class))).willReturn(TestUser.EMAIL);
+    UserInquiryEmailReq userInquiryEmailReq = UserInquiryEmailReqDTOFixture.getBuilder().build();
+    UserInquiryEmailResp userInquiryEmailResp = UserInquiryEmailResDTOFixture.getBuilder().build();
+    given(userService.inquiryEmail(any(UserInquiryEmailReq.class))).willReturn(userInquiryEmailResp);
     //when
     mockMvc.perform(
-            get("/users/findEmail")
-                .param("name", userFindEmailDTO.getName())
-                .param("birthDate", userFindEmailDTO.getBirthDate())
+            get("/users/inquiryEmail")
+                .param("name", userInquiryEmailReq.getName())
+                .param("birthDate", userInquiryEmailReq.getBirthDate().toString())
         ).andDo(print())
         .andExpect(status().isOk())
-        .andExpect(content().string(TestUser.EMAIL));
+        .andExpect(jsonPath("id").value(userInquiryEmailResp.getId()))
+        .andExpect(jsonPath("email").value(userInquiryEmailResp.getEmail()));
     //then
-    then(userService).should(times(1)).findEmail(any(UserFindEmailDTO.class));
+    then(userService).should(times(1)).inquiryEmail(any(UserInquiryEmailReq.class));
   }
 
   @Test
@@ -117,20 +120,19 @@ class UserControllerTest {
   @Test
   void resetPassword() throws Exception {
     //given
-    UserResetPwdDTO userResetPwdDTO = UserResetPwdDTO.builder()
+    UserResetPwdReq userResetPwdReq = UserResetPwdReq.builder()
         .code("123456")
         .password("q1w2e3r4t5!")
-        .passwordConfirm("q1w2e3r4t5!")
         .build();
     //when
     mockMvc.perform(
             put("/users/resetPassword")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userResetPwdDTO))
+                .content(objectMapper.writeValueAsString(userResetPwdReq))
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should(times(1)).resetPassword(any(UserResetPwdDTO.class));
+    then(userService).should(times(1)).resetPassword(any(UserResetPwdReq.class));
   }
 
   @Test
@@ -145,7 +147,7 @@ class UserControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should(times(1)).resetPasswordViaEmail(any(UserResetPwdCodeViaEmailDTO.class));
+    then(userService).should(times(1)).resetPasswordViaEmail(any(UserResetPwdCodeViaEmailReq.class));
   }
 
   @Test
@@ -160,6 +162,6 @@ class UserControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should(times(1)).resetPasswordViaPhone(any(UserResetPwdCodeViaPhoneDTO.class));
+    then(userService).should(times(1)).resetPasswordViaPhone(any(UserResetPwdCodeViaPhoneReq.class));
   }
 }

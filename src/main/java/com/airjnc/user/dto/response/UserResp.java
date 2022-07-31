@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class UserDTO {
+public class UserResp {
 
   private final Long id;
 
@@ -20,17 +20,20 @@ public class UserDTO {
 
   private final String address;
 
+  private final boolean isActive;
+
   private final LocalDate birthDate;
 
   @Builder
-  public UserDTO(Long id, String email, String name, Gender gender, String phoneNumber, String address,
-      LocalDate birthDate) {
+  public UserResp(Long id, String email, String name, Gender gender, String phoneNumber, String address,
+      boolean isActive, LocalDate birthDate) {
     this.id = id;
     this.email = email;
     this.name = name;
     this.gender = gender;
     this.phoneNumber = phoneNumber;
     this.address = address;
+    this.isActive = isActive;
     this.birthDate = birthDate;
   }
 }

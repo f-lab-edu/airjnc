@@ -15,13 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 @UnitTest
-class SessionUserStateServiceTest {
+class UserStateSessionServiceTest {
 
   @Mock
   HttpSession httpSession;
 
   @InjectMocks
-  SessionUserStateService sessionStateService;
+  UserStateSessionService sessionStateService;
 
   @Test
   void sessionShouldBeRemoved() {

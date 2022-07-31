@@ -5,13 +5,13 @@ import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-public class UserResetPwdCodeViaEmailDTO {
+public class UserResetPwdCodeViaEmailReq {
 
   @Email
   @NotBlank
   private final String email;
 
-  public UserResetPwdCodeViaEmailDTO(String email) {
+  public UserResetPwdCodeViaEmailReq(String email) {
     this.email = email;
   }
 }

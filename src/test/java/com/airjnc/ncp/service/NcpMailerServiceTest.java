@@ -6,11 +6,11 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import com.airjnc.common.service.CommonCheckService;
-import com.airjnc.ncp.properties.NcpMailerProperties;
 import com.airjnc.ncp.dto.NcpMailerReq;
-import com.airjnc.ncp.dto.NcpMailerRes;
-import com.airjnc.ncp.dto.NcpMailerSendDTO;
-import com.airjnc.ncp.util.NcpMailerUrl;
+import com.airjnc.ncp.dto.NcpMailerResp;
+import com.airjnc.ncp.dto.NcpMailerSendDto;
+import com.airjnc.ncp.properties.NcpMailerProperties;
+import com.airjnc.ncp.util.NcpApiUrl;
 import com.testutil.annotation.UnitTest;
 import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class NcpMailerServiceTest {
   RestTemplate restTemplate;
 
   @Mock
-  NcpCommonService ncpCommonService;
+  NcpBaseService ncpBaseService;
 
   @Mock
   NcpMailerProperties ncpMailerProperties;
@@ -48,19 +48,19 @@ class NcpMailerServiceTest {
     String code = "123456";
 
     HttpEntity<String> entity = new HttpEntity<>("body");
-    given(ncpCommonService.createEntity(eq(NcpMailerUrl.CREATE_MAIL_REQULEST), any(NcpMailerReq.class))).willReturn(
+    given(ncpBaseService.createEntity(eq(NcpApiUrl.Mailer.CREATE_MAIL_REQULEST), any(NcpMailerReq.class))).willReturn(
         entity);
 
-    NcpMailerRes res = NcpMailerRes.builder().requestId("requestId").count(1).build();
-    given(restTemplate.postForObject(NcpMailerUrl.CREATE_MAIL_REQULEST, entity, NcpMailerRes.class)).willReturn(
+    NcpMailerResp res = NcpMailerResp.builder().requestId("requestId").count(1).build();
+    given(restTemplate.postForObject(NcpApiUrl.Mailer.CREATE_MAIL_REQULEST, entity, NcpMailerResp.class)).willReturn(
         res);
     //when
-    ncpMailerService.send(NcpMailerSendDTO.builder().email(email).name(name).code(code).build());
+    ncpMailerService.send(NcpMailerSendDto.builder().email(email).name(name).code(code).build());
     //then
-    then(ncpCommonService).should(times(1))
-        .createEntity(eq(NcpMailerUrl.CREATE_MAIL_REQULEST), any(NcpMailerReq.class));
+    then(ncpBaseService).should(times(1))
+        .createEntity(eq(NcpApiUrl.Mailer.CREATE_MAIL_REQULEST), any(NcpMailerReq.class));
     then(restTemplate).should(times(1))
-        .postForObject(NcpMailerUrl.CREATE_MAIL_REQULEST, entity, NcpMailerRes.class);
+        .postForObject(NcpApiUrl.Mailer.CREATE_MAIL_REQULEST, entity, NcpMailerResp.class);
     then(commonCheckService).should(times(1)).shouldBeMatch(res.getCount(), 1);
   }
 }

@@ -40,8 +40,8 @@ public class TestDatabaseConfig {
   private void initData(DriverManagerDataSource dataSource) {
     JdbcTemplate template = new JdbcTemplate(dataSource);
     String sql =
-        "insert into `user` (id, email, password, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at, deleted_at) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "insert into `user` (id, email, password, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     UserEntity user = TestUser.getBuilder().build();
     template.update(
         sql,
@@ -55,8 +55,7 @@ public class TestDatabaseConfig {
         user.isActive(),
         user.getBirthDate(),
         user.getCreatedAt(),
-        user.getUpdatedAt(),
-        user.getDeletedAt()
+        user.getUpdatedAt()
     );
   }
 }

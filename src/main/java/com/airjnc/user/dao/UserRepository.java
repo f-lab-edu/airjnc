@@ -1,9 +1,9 @@
 package com.airjnc.user.dao;
 
-import com.airjnc.user.dto.request.UserFindEmailDTO;
-import com.airjnc.user.dto.UserSaveDTO;
-import com.airjnc.user.dto.UserUpdatePwdByEmailDTO;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.response.UserInquiryEmailResp;
+import java.time.LocalDate;
 
 public interface UserRepository {
 
@@ -13,11 +13,11 @@ public interface UserRepository {
 
   UserEntity findByPhoneNumber(String phoneNumber);
 
-  String getEmail(UserFindEmailDTO userFindEmailDTO);
+  UserInquiryEmailResp findEmailByNameAndBirthDate(String name, LocalDate birthDate);
 
   void remove(Long id);
 
-  UserEntity save(UserSaveDTO userSaveDTO);
+  UserEntity save(UserSaveDto userSaveDTO);
 
-  void updatePasswordByEmail(UserUpdatePwdByEmailDTO userUpdatePwdByEmailDTO);
+  void updatePasswordByEmail(String email, String password);
 }

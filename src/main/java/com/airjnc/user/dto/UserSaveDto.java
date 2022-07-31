@@ -1,11 +1,12 @@
 package com.airjnc.user.dto;
 
 import com.airjnc.user.domain.Gender;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class UserSaveDTO {
+public class UserSaveDto {
 
   private final Long id;
 
@@ -17,10 +18,10 @@ public class UserSaveDTO {
 
   private final String password;
 
-  private final String birthDate;
+  private final LocalDate birthDate;
 
   @Builder
-  public UserSaveDTO(Long id, String email, String name, Gender gender, String password, String birthDate) {
+  public UserSaveDto(Long id, String email, String name, Gender gender, String password, LocalDate birthDate) {
     this.id = id;
     this.email = email;
     this.name = name;

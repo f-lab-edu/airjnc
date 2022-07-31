@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class NcpMailerSendDTO {
+public class NcpMailerSendDto {
 
   private final String email;
 
@@ -13,7 +13,7 @@ public class NcpMailerSendDTO {
   private final String code;
 
   @Builder
-  public NcpMailerSendDTO(String email, String name, String code) {
+  public NcpMailerSendDto(String email, String name, String code) {
     this.email = email;
     this.name = name;
     this.code = code;

@@ -1,14 +1,14 @@
 package com.airjnc.user.dao.impl;
 
 import com.airjnc.common.exception.NotFoundException;
-import com.airjnc.user.dto.request.UserFindEmailDTO;
 import com.airjnc.common.service.CommonCheckService;
+import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.dao.UserRepository;
-import com.airjnc.user.dto.UserSaveDTO;
-import com.airjnc.user.dto.UserUpdatePwdByEmailDTO;
-import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.util.UserModelMapper;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -38,8 +38,8 @@ public class MybatisUserRepository implements UserRepository {
   }
 
   @Override
-  public String getEmail(UserFindEmailDTO userFindEmailDTO) {
-    return userMapper.getEmail(userFindEmailDTO).orElseThrow(NotFoundException::new);
+  public UserInquiryEmailResp findEmailByNameAndBirthDate(String name, LocalDate birthDate) {
+    return userMapper.findEmailByNameAndBirthDate(name, birthDate).orElseThrow(NotFoundException::new);
   }
 
   @Override
@@ -49,15 +49,15 @@ public class MybatisUserRepository implements UserRepository {
   }
 
   @Override
-  public UserEntity save(UserSaveDTO userSaveDTO) {
+  public UserEntity save(UserSaveDto userSaveDTO) {
     int affect = userMapper.save(userSaveDTO);
     commonCheckService.shouldBeMatch(affect, 1);
     return userModelMapper.saveDTOToUserEntity(userSaveDTO);
   }
 
   @Override
-  public void updatePasswordByEmail(UserUpdatePwdByEmailDTO userUpdatePwdByEmailDTO) {
-    int affect = userMapper.updatePasswordByEmail(userUpdatePwdByEmailDTO);
+  public void updatePasswordByEmail(String email, String password) {
+    int affect = userMapper.updatePasswordByEmail(email, password);
     commonCheckService.shouldBeMatch(affect, 1);
   }
 }
