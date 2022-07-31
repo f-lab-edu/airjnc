@@ -1,5 +1,7 @@
 package com.airjnc.user.controller;
 
+import com.airjnc.common.auth.dto.AuthInfoDTO;
+import com.airjnc.common.auth.service.AuthService;
 import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.FindPwdResponseDTO;
@@ -22,6 +24,7 @@ import javax.validation.constraints.NotBlank;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("login/findpassword")
     public ResponseEntity<FindPwdResponseDTO> findPasswordByEmail(@RequestParam("email")
@@ -38,8 +41,14 @@ public class UserController {
 
     @PostMapping("login")
     public ResponseEntity<Object> userLogIn(@RequestBody LogInRequestDTO logInRequestDTO) {
-        userService.logIn(logInRequestDTO);
-        return ResponseEntity.ok().body(null);
+        AuthInfoDTO authInfoDTO = userService.logIn(logInRequestDTO);
+        authService.setAuthInfo(authInfoDTO);
+        return ResponseEntity.ok().body("success");
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Object> tempMain() {
+        return ResponseEntity.ok().body("success");
     }
 
 }

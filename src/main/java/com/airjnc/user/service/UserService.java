@@ -1,5 +1,6 @@
 package com.airjnc.user.service;
 
+import com.airjnc.common.auth.dto.AuthInfoDTO;
 import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.FindPwdResponseDTO;
@@ -11,5 +12,5 @@ public interface UserService {
 
     public UserDTO create(SignUpDTO signUpDTO);
 
-    public void logIn(LogInRequestDTO logInRequestDTO);
+    public AuthInfoDTO logIn(LogInRequestDTO logInRequestDTO);
 }

@@ -4,6 +4,7 @@ import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.User;
 import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
+import com.airjnc.common.auth.dto.AuthInfoDTO;
 import com.airjnc.user.dto.response.UserDTO;
 
 import java.time.LocalDate;
@@ -72,6 +73,13 @@ public class UserFixture {
         return LogInRequestDTO.builder()
             .email(EMAIL)
             .password(PASSWORD)
+            ;
+    }
+    
+    public static AuthInfoDTO.AuthInfoDTOBuilder getAuthInfoDTOBuilder() {
+        return AuthInfoDTO.builder()
+            .email(EMAIL)
+            .name(NAME)
             ;
     }
 

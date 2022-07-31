@@ -1,5 +1,6 @@
 package com.airjnc.user.service;
 
+import com.airjnc.common.auth.dto.AuthInfoDTO;
 import com.airjnc.common.error.exception.DuplicateException;
 import com.airjnc.common.util.BCryptHashEncoder;
 import com.airjnc.user.domain.User;
@@ -43,17 +44,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void logIn(LogInRequestDTO logInRequestDTO) {
+    public AuthInfoDTO logIn(LogInRequestDTO logInRequestDTO) {
         Optional<User> user = userRepository.selectUserByEmail(logInRequestDTO.getEmail());
-        if (user.isPresent()) {
-            if (BCryptHashEncoder.isMatch(logInRequestDTO.getPassword(), user.get().getPassword())) {
-                return;
-            }
-        }
-        throw new UserLoginNotMatchException();
+        return checkLogInInfo(logInRequestDTO, user);
     }
 
+    
+    /*
+    private method
+     */
 
+    // create
     private void checkDuplicateEmail(SignUpDTO signUpDTO) {
         Optional<User> user = userRepository.selectUserByEmail(signUpDTO.getEmail());
         if (user.isEmpty()) {
@@ -61,6 +62,22 @@ public class UserServiceImpl implements UserService {
         }
         throw new DuplicateException("Email");
     }
+
+    // login
+    private AuthInfoDTO checkLogInInfo(LogInRequestDTO logInRequestDTO, Optional<User> user) {
+        if (user.isPresent()) {
+            if (BCryptHashEncoder.isMatch(logInRequestDTO.getPassword(), user.get().getPassword())) {
+                return AuthInfoDTO.builder()
+                    .id(user.get().getId())
+                    .email(user.get().getEmail())
+                    .name(user.get().getName())
+                    .build();
+            }
+        }
+        throw new UserLoginNotMatchException();
+    }
+    
+
 }
 
     

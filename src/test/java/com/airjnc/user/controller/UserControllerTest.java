@@ -1,5 +1,8 @@
 package com.airjnc.user.controller;
 
+import com.airjnc.common.auth.dto.AuthInfoDTO;
+import com.airjnc.common.auth.service.AuthService;
+import com.airjnc.common.auth.service.SessionAuthService;
 import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.FindPwdResponseDTO;
@@ -8,19 +11,24 @@ import com.airjnc.user.exception.UserLoginNotMatchException;
 import com.airjnc.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.assertj.core.api.Assertions;
+import org.hibernate.validator.internal.IgnoreForbiddenApisErrors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import util.UserFixture;
 
 import java.util.Locale;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,13 +41,18 @@ class UserControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @SpyBean
+    private SessionAuthService authService;
+
     @MockBean
     private UserService userService;
+    
 
     private UserDTO userDTO;
     private SignUpDTO signUpDTO;
     private SignUpDTO invalidSignUpDTO;
     private LogInRequestDTO logInRequestDTO;
+    private AuthInfoDTO authInfoDTO;
 
     @BeforeEach
     public void setUp() {
@@ -61,6 +74,9 @@ class UserControllerTest {
             .build();
 
         this.logInRequestDTO = UserFixture.getLogInRequestDTOBuilder()
+            .build();
+
+        this.authInfoDTO = UserFixture.getAuthInfoDTOBuilder()
             .build();
     }
 
@@ -145,7 +161,7 @@ class UserControllerTest {
     public void successLogin() throws Exception {
         //given
         String logInUserJson = new ObjectMapper().writeValueAsString(logInRequestDTO);
-        BDDMockito.willDoNothing().given(userService).logIn(logInRequestDTO);
+        BDDMockito.given(userService.logIn(logInRequestDTO)).willReturn(authInfoDTO);
 
         //when, then
         mvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(logInUserJson))
@@ -165,6 +181,23 @@ class UserControllerTest {
             .andDo(print())
             .andExpect(status().is4xxClientError());
     }
+    
+    @Test
+    @DisplayName("Session 저장 확인")
+    public void successSessionSave() throws Exception {
+        //given
+        String logInUserJson = new ObjectMapper().writeValueAsString(logInRequestDTO);
+        BDDMockito.given(userService.logIn(logInRequestDTO)).willReturn(authInfoDTO);
+
+        //when, then
+        mvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(logInUserJson))
+            .andDo(print())
+            .andExpect(status().isOk());
+
+        assertThat(authService.getAuthInfo()).isEqualTo(authInfoDTO);
+    }
+    
+    
 
 
 }
