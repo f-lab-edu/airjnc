@@ -1,14 +1,14 @@
-package com.airjnc.common.service;
+package com.airjnc.common.dao;
 
 import com.airjnc.common.exception.NotFoundException;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
+@Repository
 @RequiredArgsConstructor
-public class RedisService {
+public class RedisDao {
 
   private final RedisTemplate<String, String> redisTemplate;
 
@@ -20,7 +20,7 @@ public class RedisService {
     return value;
   }
 
-  public Boolean remove(String key) {
+  public Boolean delete(String key) {
     return redisTemplate.delete(key);
   }
 

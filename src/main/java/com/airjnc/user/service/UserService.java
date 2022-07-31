@@ -1,9 +1,9 @@
 package com.airjnc.user.service;
 
+import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.properties.SessionTtlProperties;
 import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.common.service.HashService;
-import com.airjnc.common.service.RedisService;
 import com.airjnc.ncp.dto.NcpMailerSendDto;
 import com.airjnc.ncp.service.NcpMailerService;
 import com.airjnc.user.dao.UserRepository;
@@ -35,7 +35,7 @@ public class UserService {
 
   private final CommonUtilService commonUtilService;
 
-  private final RedisService redisService;
+  private final RedisDao redisDao;
 
   private final SessionTtlProperties sessionTtlProperties;
 
@@ -53,13 +53,13 @@ public class UserService {
     );
   }
 
-  public void remove(Long id) {
-    userRepository.remove(id);
+  public void delete(Long id) {
+    userRepository.delete(id);
   }
 
   public void resetPassword(UserResetPwdReq userResetPwdReq) {
-    String email = redisService.get(userResetPwdReq.getCode());
-    redisService.remove(userResetPwdReq.getCode());
+    String email = redisDao.get(userResetPwdReq.getCode());
+    redisDao.delete(userResetPwdReq.getCode());
     String hash = hashService.encrypt(userResetPwdReq.getPassword());
     userRepository.updatePasswordByEmail(email, hash);
   }
@@ -68,7 +68,7 @@ public class UserService {
     UserEntity user = userRepository.findByEmail(userResetPwdCodeViaEmailReq.getEmail());
     // 명령-질의 분리 원칙를 지키기 위해 `resetPasswordViaPhone` 에서 중복코드가 있음에도 불구하고, 하나로 합치지 않았습니다.
     String code = commonUtilService.generateCode();
-    redisService.store(code, user.getEmail(), sessionTtlProperties.getResetPasswordCode());
+    redisDao.store(code, user.getEmail(), sessionTtlProperties.getResetPasswordCode());
     //
     ncpMailerService.send(
         NcpMailerSendDto.builder()
@@ -82,7 +82,7 @@ public class UserService {
   public void resetPasswordViaPhone(UserResetPwdCodeViaPhoneReq userResetPwdCodeViaPhoneReq) {
     UserEntity user = userRepository.findByPhoneNumber(userResetPwdCodeViaPhoneReq.getPhoneNumber());
     String code = commonUtilService.generateCode();
-    redisService.store(code, user.getEmail(), sessionTtlProperties.getResetPasswordCode());
+    redisDao.store(code, user.getEmail(), sessionTtlProperties.getResetPasswordCode());
     // TODO: send sms
   }
 }

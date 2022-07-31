@@ -43,8 +43,8 @@ public class MybatisUserRepository implements UserRepository {
   }
 
   @Override
-  public void remove(Long id) {
-    int affect = userMapper.remove(id);
+  public void delete(Long id) {
+    int affect = userMapper.delete(id);
     commonCheckService.shouldBeMatch(affect, 1);
   }
 

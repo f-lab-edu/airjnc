@@ -8,10 +8,10 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.properties.SessionTtlProperties;
 import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.common.service.HashService;
-import com.airjnc.common.service.RedisService;
 import com.airjnc.ncp.dto.NcpMailerSendDto;
 import com.airjnc.ncp.service.NcpMailerService;
 import com.airjnc.user.dao.UserRepository;
@@ -56,7 +56,7 @@ class UserServiceTest {
   CommonUtilService commonUtilService;
 
   @Mock
-  RedisService redisService;
+  RedisDao redisDao;
 
   @Mock
   NcpMailerService ncpMailerService;
@@ -105,9 +105,9 @@ class UserServiceTest {
     //given
     UserEntity userEntity = TestUser.getBuilder().build();
     //when
-    userService.remove(userEntity.getId());
+    userService.delete(userEntity.getId());
     //then
-    then(userRepository).should(times(1)).remove(userEntity.getId());
+    then(userRepository).should(times(1)).delete(userEntity.getId());
   }
 
   @Test
@@ -119,13 +119,13 @@ class UserServiceTest {
         .build();
     String email = "test@google.com";
     String hash = "hash";
-    given(redisService.get(userResetPwdReq.getCode())).willReturn(email);
+    given(redisDao.get(userResetPwdReq.getCode())).willReturn(email);
     given(hashService.encrypt(userResetPwdReq.getPassword())).willReturn(hash);
     //when
     userService.resetPassword(userResetPwdReq);
     //then
-    then(redisService).should(times(1)).get(userResetPwdReq.getCode());
-    then(redisService).should(times(1)).remove(userResetPwdReq.getCode());
+    then(redisDao).should(times(1)).get(userResetPwdReq.getCode());
+    then(redisDao).should(times(1)).delete(userResetPwdReq.getCode());
     then(hashService).should(times(1)).encrypt(userResetPwdReq.getPassword());
     then(userRepository).should(times(1)).updatePasswordByEmail(email, hash);
   }
@@ -144,7 +144,7 @@ class UserServiceTest {
     //then
     then(userRepository).should(times(1)).findByEmail(userResetPwdCodeViaEmailReq.getEmail());
     then(commonUtilService).should(times(1)).generateCode();
-    then(redisService).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
+    then(redisDao).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
     then(ncpMailerService).should(times(1)).send(any(NcpMailerSendDto.class));
   }
 
@@ -162,7 +162,7 @@ class UserServiceTest {
     //then
     then(userRepository).should(times(1)).findByPhoneNumber(userResetPwdCodeViaPhoneReq.getPhoneNumber());
     then(commonUtilService).should(times(1)).generateCode();
-    then(redisService).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
+    then(redisDao).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
   }
 }
 

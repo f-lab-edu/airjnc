@@ -22,7 +22,7 @@ public interface UserMapper {
       @Param("birthDate") LocalDate birthDate
   );
 
-  int remove(Long id);
+  int delete(Long id);
 
   int save(UserSaveDto userSaveDTO);
 

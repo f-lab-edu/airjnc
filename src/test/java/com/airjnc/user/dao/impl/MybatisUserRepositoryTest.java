@@ -83,7 +83,7 @@ class MybatisUserRepositoryTest {
     //given
     UserEntity testUser = TestUser.getBuilder().build();
     //when
-    userRepository.remove(testUser.getId());
+    userRepository.delete(testUser.getId());
     //then
     Assertions.assertThrows(
         NotFoundException.class,

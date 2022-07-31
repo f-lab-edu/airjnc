@@ -15,7 +15,7 @@ public interface UserRepository {
 
   UserInquiryEmailResp findEmailByNameAndBirthDate(String name, LocalDate birthDate);
 
-  void remove(Long id);
+  void delete(Long id);
 
   UserEntity save(UserSaveDto userSaveDTO);
 

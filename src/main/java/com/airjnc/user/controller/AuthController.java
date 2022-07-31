@@ -32,6 +32,6 @@ public class AuthController {
   @GetMapping("/logOut")
   @CheckAuth
   public void logOut() {
-    userStateService.remove();
+    userStateService.delete();
   }
 }

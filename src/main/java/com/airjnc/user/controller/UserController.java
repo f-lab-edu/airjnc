@@ -49,9 +49,9 @@ public class UserController {
   @DeleteMapping("/me")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @CheckAuth
-  public void remove(@CurrentUserId Long currentUserId) {
-    userService.remove(currentUserId);
-    userStateService.remove();
+  public void delete(@CurrentUserId Long currentUserId) {
+    userService.delete(currentUserId);
+    userStateService.delete();
   }
 
   @PutMapping("/resetPassword")
@@ -65,7 +65,8 @@ public class UserController {
     userService.resetPasswordViaEmail(userResetPwdCodeViaEmailReq);
   }
 
-  @GetMapping(value = "/resetPassword", params = "via=phone")
+  // Naver에서 발신번호 등록이 계속해서 안되고 있어서, 일단 보류함
+//  @GetMapping(value = "/resetPassword", params = "via=phone")
   public void resetPasswordCodeViaPhone(
       @Validated @ModelAttribute UserResetPwdCodeViaPhoneReq userResetPwdCodeViaPhoneReq) {
     userService.resetPasswordViaPhone(userResetPwdCodeViaPhoneReq);

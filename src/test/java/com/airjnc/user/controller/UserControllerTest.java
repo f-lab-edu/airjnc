@@ -16,7 +16,6 @@ import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdCodeViaEmailReq;
-import com.airjnc.user.dto.request.UserResetPwdCodeViaPhoneReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
@@ -113,8 +112,8 @@ class UserControllerTest {
     then(advice).should(times(1)).beforeCheckAuth();
     then(currentUserIdArgumentResolver).should(times(1))
         .resolveArgument(any(), any(), any(), any());
-    then(userService).should(times(1)).remove(userId);
-    then(userStateService).should(times(1)).remove();
+    then(userService).should(times(1)).delete(userId);
+    then(userStateService).should(times(1)).delete();
   }
 
   @Test
@@ -148,20 +147,5 @@ class UserControllerTest {
         .andExpect(status().isOk());
     //then
     then(userService).should(times(1)).resetPasswordViaEmail(any(UserResetPwdCodeViaEmailReq.class));
-  }
-
-  @Test
-  void resetPasswordCodeViaPhone() throws Exception {
-    //given
-    String phoneNumber = TestUser.PHONE_NUMBER;
-    //when
-    mockMvc.perform(
-            get("/users/resetPassword")
-                .param("via", "phone")
-                .param("phoneNumber", phoneNumber)
-        ).andDo(print())
-        .andExpect(status().isOk());
-    //then
-    then(userService).should(times(1)).resetPasswordViaPhone(any(UserResetPwdCodeViaPhoneReq.class));
   }
 }
