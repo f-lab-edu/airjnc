@@ -10,6 +10,8 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserMapper {
 
+  int delete(Long id);
+
   Optional<UserEntity> findByEmail(String email);
 
   Optional<UserEntity> findById(Long id);
@@ -21,7 +23,11 @@ public interface UserMapper {
       @Param("birthDate") LocalDate birthDate
   );
 
-  int delete(Long id);
+  Optional<UserEntity> findOnlyDeletedById(Long id);
+
+  Optional<UserEntity> findWithDeletedByEmail(String email);
+
+  int restore(Long id);
 
   int save(UserSaveDto userSaveDTO);
 

@@ -41,11 +41,6 @@ public class UserController {
     return userResp;
   }
 
-  @GetMapping("/inquiryEmail")
-  public UserInquiryEmailResp findEmail(@Validated @ModelAttribute UserInquiryEmailReq userInquiryEmailReq) {
-    return userService.inquiryEmail(userInquiryEmailReq);
-  }
-
   @DeleteMapping("/me")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @CheckAuth
@@ -54,9 +49,9 @@ public class UserController {
     userStateService.delete();
   }
 
-  @PutMapping("/resetPassword")
-  public void resetPassword(@Validated @RequestBody UserResetPwdReq userResetPwdReq) {
-    userService.resetPassword(userResetPwdReq);
+  @GetMapping("/inquiryEmail")
+  public UserInquiryEmailResp findEmail(@Validated @ModelAttribute UserInquiryEmailReq userInquiryEmailReq) {
+    return userService.inquiryEmail(userInquiryEmailReq);
   }
 
   @GetMapping(value = "/resetPassword", params = "email")
@@ -70,5 +65,16 @@ public class UserController {
   public void getResetPwdCodeViaPhone(
       @Validated @ModelAttribute UserGetResetPwdCodeViaPhoneReq userGetResetPwdCodeViaPhoneReq) {
     userService.getResetPwdCodeViaPhone(userGetResetPwdCodeViaPhoneReq);
+  }
+
+  @PutMapping("/resetPassword")
+  public void resetPassword(@Validated @RequestBody UserResetPwdReq userResetPwdReq) {
+    userService.resetPassword(userResetPwdReq);
+  }
+
+  @PutMapping(value = "/me", params = "type=restore")
+  @CheckAuth
+  public void restore(@CurrentUserId Long userId) {
+    userService.restore(userId);
   }
 }

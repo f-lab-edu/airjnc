@@ -43,7 +43,7 @@ public class UserService {
     userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
     String hash = hashService.encrypt(userCreateReq.getPassword());
     UserEntity userEntity = userRepository.save(userCreateReq.toSaveDTO(hash));
-    return userModelMapper.userEntityToUserDTO(userEntity);
+    return userModelMapper.userEntityToUserResp(userEntity);
   }
 
   public UserInquiryEmailResp inquiryEmail(UserInquiryEmailReq userInquiryEmailReq) {
@@ -54,8 +54,8 @@ public class UserService {
     return userModelMapper.userEntityToUserInquiryEmailResp(userEntity);
   }
 
-  public void delete(Long id) {
-    userRepository.delete(id);
+  public void delete(Long currentUserId) {
+    userRepository.delete(currentUserId);
   }
 
   public void resetPassword(UserResetPwdReq userResetPwdReq) {
@@ -87,5 +87,11 @@ public class UserService {
     UserEntity user = userRepository.findByPhoneNumber(userGetResetPwdCodeViaPhoneReq.getPhone());
     String code = generateAndRestoreCode(user.getEmail());
     // TODO: send sms
+  }
+
+  public void restore(Long userId) {
+    UserEntity user = userRepository.findOnlyDeletedById(userId);
+    userCheckService.shouldBeDeleted(user);
+    userRepository.restore(userId);
   }
 }
