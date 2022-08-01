@@ -168,5 +168,18 @@ class UserServiceTest {
     then(commonUtilService).should(times(1)).generateCode();
     then(redisDao).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
   }
+
+  @Test
+  void restore() {
+    //given
+    UserEntity user = TestUser.getBuilder().build();
+    given(userRepository.findOnlyDeletedById(user.getId())).willReturn(user);
+    //when
+    userService.restore(user.getId());
+    //then
+    then(userRepository).should(times(1)).findOnlyDeletedById(user.getId());
+    then(userCheckService).should(times(1)).shouldBeDeleted(user);
+    then(userRepository).should(times(1)).restore(user.getId());
+  }
 }
 
