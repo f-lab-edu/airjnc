@@ -41,15 +41,15 @@ class AuthServiceTest {
     UserLogInReq userLogInReq = LogInDTOFixture.getBuilder().build();
     UserEntity userEntity = TestUser.getBuilder().build();
     UserResp userResp = UserDTOFixture.getBuilder().build();
-    given(userRepository.findByEmail(userLogInReq.getEmail())).willReturn(userEntity);
-    given(userModelMapper.userEntityToUserDTO(userEntity)).willReturn(userResp);
+    given(userRepository.findWithDeletedByEmail(userLogInReq.getEmail())).willReturn(userEntity);
+    given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
     //when
     UserResp result = authService.logIn(userLogInReq);
     //then
-    then(userRepository).should(times(1)).findByEmail(userLogInReq.getEmail());
+    then(userRepository).should(times(1)).findWithDeletedByEmail(userLogInReq.getEmail());
     then(userCheckService).should(times(1))
         .passwordShouldBeMatch(userLogInReq.getPassword(), userEntity.getPassword());
-    then(userModelMapper).should(times(1)).userEntityToUserDTO(userEntity);
+    then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
     assertThat(result).isSameAs(userResp);
   }
 }
