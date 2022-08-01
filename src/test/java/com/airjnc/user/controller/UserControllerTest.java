@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import com.airjnc.common.aspect.Advice;
+import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
@@ -21,12 +21,13 @@ import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.testutil.annotation.AopTest;
 import com.testutil.fixture.CreateDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
 import com.testutil.fixture.UserInquiryEmailReqDTOFixture;
 import com.testutil.fixture.UserInquiryEmailResDTOFixture;
 import com.testutil.testdata.TestUser;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -37,7 +38,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(UserController.class)
-@AopTest
 class UserControllerTest {
 
   @Autowired
@@ -53,10 +53,10 @@ class UserControllerTest {
   UserStateService userStateService;
 
   @SpyBean
-  Advice advice;
+  CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
 
   @SpyBean
-  CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
+  CheckAuthInterceptor checkAuthInterceptor;
 
   @Test
   void create() throws Exception {
@@ -96,9 +96,9 @@ class UserControllerTest {
     then(userService).should(times(1)).inquiryEmail(any(UserInquiryEmailReq.class));
   }
 
-  void checkArgumentResolverAndAspectAdvice() {
-    // advice, argumentResolver가 정상적으로 적용되었는 지 테스트
-    then(advice).should(times(1)).beforeCheckAuth();
+  private void checkInterceptorAndArgumentResolver() throws Exception {
+    then(checkAuthInterceptor).should(times(1))
+        .preHandle(any(HttpServletRequest.class), any(HttpServletResponse.class), any(Object.class));
     then(currentUserIdArgumentResolver).should(times(1))
         .resolveArgument(any(), any(), any(), any());
   }
@@ -114,7 +114,7 @@ class UserControllerTest {
         ).andDo(print())
         .andExpect(status().isNoContent());
     //then
-    checkArgumentResolverAndAspectAdvice();
+    checkInterceptorAndArgumentResolver();
     then(userService).should(times(1)).delete(userId);
     then(userStateService).should(times(1)).delete();
   }
@@ -164,6 +164,6 @@ class UserControllerTest {
         .andExpect(status().isOk());
     //then
     then(userService).should(times(1)).restore(userId);
-    checkArgumentResolverAndAspectAdvice();
+    checkInterceptorAndArgumentResolver();
   }
 }
