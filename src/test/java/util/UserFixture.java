@@ -1,7 +1,9 @@
 package util;
 
+import com.airjnc.common.auth.dto.AuthInfoDTO;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.User;
+import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.UserDTO;
 
@@ -64,6 +66,20 @@ public class UserFixture {
             .phoneNumber(PHONE_NUMBER)
             .address(ADDRESS)
             .birthDate(BIRTH_DATE)
+            ;
+    }
+
+    public static LogInRequestDTO.LogInRequestDTOBuilder getLogInRequestDTOBuilder() {
+        return LogInRequestDTO.builder()
+            .email(EMAIL)
+            .password(PASSWORD)
+            ;
+    }
+
+    public static AuthInfoDTO.AuthInfoDTOBuilder getAuthInfoDTOBuilder() {
+        return AuthInfoDTO.builder()
+            .email(EMAIL)
+            .name(NAME)
             ;
     }
 

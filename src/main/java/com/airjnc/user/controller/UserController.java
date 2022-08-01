@@ -1,5 +1,10 @@
 package com.airjnc.user.controller;
 
+import com.airjnc.common.annotation.CurrentUser;
+import com.airjnc.common.annotation.UserLoginCheck;
+import com.airjnc.common.auth.dto.AuthInfoDTO;
+import com.airjnc.common.auth.service.AuthService;
+import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.FindPwdResponseDTO;
 import com.airjnc.user.dto.response.UserDTO;
@@ -21,6 +26,7 @@ import javax.validation.constraints.NotBlank;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("login/findpassword")
     public ResponseEntity<FindPwdResponseDTO> findPasswordByEmail(@RequestParam("email")
@@ -34,5 +40,28 @@ public class UserController {
         UserDTO userDTO = userService.create(signUpDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
+
+    @PostMapping("login")
+    public ResponseEntity<Object> userLogIn(@RequestBody LogInRequestDTO logInRequestDTO) {
+        AuthInfoDTO authInfoDTO = userService.logIn(logInRequestDTO);
+        authService.setAuthInfo(authInfoDTO);
+        return ResponseEntity.ok().body("LogIn Success");
+    }
+
+    @GetMapping("logout")
+    public ResponseEntity<Object> userLogOut() {
+        authService.clearAuthInfo();
+        return ResponseEntity.ok().body("LogOut Success");
+    }
+
+
+    // @UserLoginCheck, @CurrentUser 통합테스트를 위한 임시 url  -> 추후 정상 URL추가 후 삭제 예정
+    @GetMapping("")
+    @UserLoginCheck
+
+    public ResponseEntity<AuthInfoDTO> tempMain(@CurrentUser AuthInfoDTO authInfoDTO) {
+        return ResponseEntity.ok().body(authInfoDTO);
+    }
+
 
 }
