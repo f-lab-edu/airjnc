@@ -9,10 +9,10 @@ import com.airjnc.ncp.service.NcpMailerService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.UserCreateReq;
-import com.airjnc.user.dto.request.UserGetResetPwdCodeViaEmailReq;
-import com.airjnc.user.dto.request.UserGetResetPwdCodeViaPhoneReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.request.UserinquiryPasswordViaEmailReq;
+import com.airjnc.user.dto.request.inquiryPasswordViaPhoneReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
@@ -71,20 +71,20 @@ public class UserService {
     return code;
   }
 
-  public void getResetPwdCodeViaEmail(UserGetResetPwdCodeViaEmailReq userGetResetPwdCodeViaEmailReq) {
-    UserEntity user = userRepository.findByEmail(userGetResetPwdCodeViaEmailReq.getEmail());
+  public void inquiryPasswordViaEmail(UserinquiryPasswordViaEmailReq userinquiryPasswordViaEmailReq) {
+    UserEntity user = userRepository.findByEmail(userinquiryPasswordViaEmailReq.getEmail());
     String code = generateAndRestoreCode(user.getEmail());
     ncpMailerService.send(
         NcpMailerSendDto.builder()
-            .email(userGetResetPwdCodeViaEmailReq.getEmail())
+            .email(userinquiryPasswordViaEmailReq.getEmail())
             .name(user.getName())
             .code(code)
             .build()
     );
   }
 
-  public void getResetPwdCodeViaPhone(UserGetResetPwdCodeViaPhoneReq userGetResetPwdCodeViaPhoneReq) {
-    UserEntity user = userRepository.findByPhoneNumber(userGetResetPwdCodeViaPhoneReq.getPhone());
+  public void inquiryPasswordViaPhone(inquiryPasswordViaPhoneReq inquiryPasswordViaPhoneReq) {
+    UserEntity user = userRepository.findByPhoneNumber(inquiryPasswordViaPhoneReq.getPhone());
     String code = generateAndRestoreCode(user.getEmail());
     // TODO: send sms
   }

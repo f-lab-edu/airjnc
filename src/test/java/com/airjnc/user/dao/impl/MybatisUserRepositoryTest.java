@@ -87,7 +87,7 @@ class MybatisUserRepositoryTest {
   }
 
   @Test
-  void findEmailByNameAndBirthDate() {
+  void findWithDeletedByNameAndBirthDate() {
     //when
     UserEntity findUser = userRepository.findWithDeletedByNameAndBirthDate(testUser.getName(), testUser.getBirthDate());
     //then

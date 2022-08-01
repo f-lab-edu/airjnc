@@ -18,10 +18,10 @@ import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.dto.request.UserCreateReq;
-import com.airjnc.user.dto.request.UserGetResetPwdCodeViaEmailReq;
-import com.airjnc.user.dto.request.UserGetResetPwdCodeViaPhoneReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.request.UserinquiryPasswordViaEmailReq;
+import com.airjnc.user.dto.request.inquiryPasswordViaPhoneReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
@@ -136,16 +136,16 @@ class UserServiceTest {
   @Test
   void resetPasswordViaEmail() {
     //given
-    UserGetResetPwdCodeViaEmailReq userGetResetPwdCodeViaEmailReq = new UserGetResetPwdCodeViaEmailReq(TestUser.EMAIL);
+    UserinquiryPasswordViaEmailReq userinquiryPasswordViaEmailReq = new UserinquiryPasswordViaEmailReq(TestUser.EMAIL);
     UserEntity user = TestUser.getBuilder().build();
-    given(userRepository.findByEmail(userGetResetPwdCodeViaEmailReq.getEmail())).willReturn(user);
+    given(userRepository.findByEmail(userinquiryPasswordViaEmailReq.getEmail())).willReturn(user);
     String code = "123456";
     given(commonUtilService.generateCode()).willReturn(code);
     given(sessionTtlProperties.getResetPasswordCode()).willReturn(Duration.ofMinutes(1L));
     //when
-    userService.getResetPwdCodeViaEmail(userGetResetPwdCodeViaEmailReq);
+    userService.inquiryPasswordViaEmail(userinquiryPasswordViaEmailReq);
     //then
-    then(userRepository).should(times(1)).findByEmail(userGetResetPwdCodeViaEmailReq.getEmail());
+    then(userRepository).should(times(1)).findByEmail(userinquiryPasswordViaEmailReq.getEmail());
     then(commonUtilService).should(times(1)).generateCode();
     then(redisDao).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
     then(ncpMailerService).should(times(1)).send(any(NcpMailerSendDto.class));
@@ -154,17 +154,17 @@ class UserServiceTest {
   @Test
   void resetPasswordViaPhone() {
     //given
-    UserGetResetPwdCodeViaPhoneReq userGetResetPwdCodeViaPhoneReq = new UserGetResetPwdCodeViaPhoneReq(
+    inquiryPasswordViaPhoneReq inquiryPasswordViaPhoneReq = new inquiryPasswordViaPhoneReq(
         TestUser.PHONE_NUMBER);
     UserEntity user = TestUser.getBuilder().build();
-    given(userRepository.findByPhoneNumber(userGetResetPwdCodeViaPhoneReq.getPhone())).willReturn(user);
+    given(userRepository.findByPhoneNumber(inquiryPasswordViaPhoneReq.getPhone())).willReturn(user);
     String code = "123456";
     given(commonUtilService.generateCode()).willReturn(code);
     given(sessionTtlProperties.getResetPasswordCode()).willReturn(Duration.ofMinutes(1L));
     //when
-    userService.getResetPwdCodeViaPhone(userGetResetPwdCodeViaPhoneReq);
+    userService.inquiryPasswordViaPhone(inquiryPasswordViaPhoneReq);
     //then
-    then(userRepository).should(times(1)).findByPhoneNumber(userGetResetPwdCodeViaPhoneReq.getPhone());
+    then(userRepository).should(times(1)).findByPhoneNumber(inquiryPasswordViaPhoneReq.getPhone());
     then(commonUtilService).should(times(1)).generateCode();
     then(redisDao).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
   }
