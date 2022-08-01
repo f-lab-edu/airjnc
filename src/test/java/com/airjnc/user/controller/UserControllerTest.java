@@ -4,7 +4,6 @@ import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -35,6 +34,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(UserController.class)
 @AopTest
@@ -96,22 +96,25 @@ class UserControllerTest {
     then(userService).should(times(1)).inquiryEmail(any(UserInquiryEmailReq.class));
   }
 
+  void checkArgumentResolverAndAspectAdvice() {
+    // advice, argumentResolver가 정상적으로 적용되었는 지 테스트
+    then(advice).should(times(1)).beforeCheckAuth();
+    then(currentUserIdArgumentResolver).should(times(1))
+        .resolveArgument(any(), any(), any(), any());
+  }
+
   @Test
-  void remove() throws Exception {
+  void delete() throws Exception {
     //given
     Long userId = 1L;
     given(userStateService.getUserId()).willReturn(userId);
     //when
     mockMvc.perform(
-            delete("/users/me")
-                .contentType(MediaType.APPLICATION_JSON)
+            MockMvcRequestBuilders.delete("/users/me")
         ).andDo(print())
         .andExpect(status().isNoContent());
     //then
-    // advice, argumentResolver가 정상적으로 적용되었는 지 테스트
-    then(advice).should(times(1)).beforeCheckAuth();
-    then(currentUserIdArgumentResolver).should(times(1))
-        .resolveArgument(any(), any(), any(), any());
+    checkArgumentResolverAndAspectAdvice();
     then(userService).should(times(1)).delete(userId);
     then(userStateService).should(times(1)).delete();
   }
@@ -146,5 +149,21 @@ class UserControllerTest {
         .andExpect(status().isOk());
     //then
     then(userService).should(times(1)).getResetPwdCodeViaEmail(any(UserGetResetPwdCodeViaEmailReq.class));
+  }
+
+  @Test
+  void restore() throws Exception {
+    //given
+    Long userId = 1L;
+    given(userStateService.getUserId()).willReturn(userId);
+    //when
+    mockMvc.perform(
+            put("/users/me")
+                .param("type", "restore")
+        ).andDo(print())
+        .andExpect(status().isOk());
+    //then
+    then(userService).should(times(1)).restore(userId);
+    checkArgumentResolverAndAspectAdvice();
   }
 }

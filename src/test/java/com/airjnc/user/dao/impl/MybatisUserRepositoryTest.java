@@ -39,16 +39,30 @@ class MybatisUserRepositoryTest {
   @Mock
   UserModelMapper userModelMapper;
 
+  UserEntity testUser;
+
   @BeforeEach
   void beforeEach() {
     userRepository = new MybatisUserRepository(userMapper, commonCheckService,
         userModelMapper);
+    testUser = TestUser.getBuilder().build();
+  }
+
+  @Test
+  @Transactional
+  void delete() {
+    //when
+    userRepository.delete(testUser.getId());
+    //then
+    Assertions.assertThrows(
+        NotFoundException.class,
+        () -> userRepository.findByEmail(testUser.getEmail())
+    );
+    then(commonCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 
   @Test
   void findByEmail() {
-    //given
-    UserEntity testUser = TestUser.getBuilder().build();
     //when
     UserEntity findUser = userRepository.findByEmail(testUser.getEmail());
     //then
@@ -58,8 +72,6 @@ class MybatisUserRepositoryTest {
 
   @Test
   void findById() {
-    //given
-    UserEntity testUser = TestUser.getBuilder().build();
     //when
     UserEntity findUser = userRepository.findById(testUser.getId());
     //then
@@ -67,9 +79,15 @@ class MybatisUserRepositoryTest {
   }
 
   @Test
-  void getEmail() {
-    //given
-    UserEntity testUser = TestUser.getBuilder().build();
+  void findByPhoneNumber() {
+    //when
+    UserEntity findUser = userRepository.findByPhoneNumber(testUser.getPhoneNumber());
+    //then
+    assertThat(findUser.getId()).isSameAs(testUser.getId());
+  }
+
+  @Test
+  void findEmailByNameAndBirthDate() {
     //when
     UserEntity findUser = userRepository.findWithDeletedByNameAndBirthDate(testUser.getName(), testUser.getBirthDate());
     //then
@@ -78,17 +96,54 @@ class MybatisUserRepositoryTest {
 
   @Test
   @Transactional
-  void remove() {
-    //given
-    UserEntity testUser = TestUser.getBuilder().build();
-    //when
+  void findOnlyDeletedById_givenDeletedThenSuccess() {
     userRepository.delete(testUser.getId());
+    //when
+    UserEntity findUser = userRepository.findOnlyDeletedById(testUser.getId());
     //then
+    assertThat(testUser.getId()).isEqualTo(findUser.getId());
+  }
+
+  @Test
+  void findOnlyDeletedById_givenNotDeletedThenThrowException() {
+    //when
     Assertions.assertThrows(
         NotFoundException.class,
-        () -> userRepository.findByEmail(testUser.getEmail())
+        () -> userRepository.findOnlyDeletedById(testUser.getId())
     );
-    then(commonCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
+  }
+
+  @Test
+  @Transactional
+  void findWithDeletedByEmail_givenDeletedThenSuccess() {
+    //given
+    userMapper.delete(testUser.getId());
+    //when
+    UserEntity findUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
+    //then
+    assertThat(testUser.getId()).isEqualTo(findUser.getId());
+  }
+
+  @Test
+  void findWithDeletedByEmail_givenNotDeletedThenSuccess() {
+    //when
+    UserEntity findUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
+    //then
+    assertThat(testUser.getId()).isEqualTo(findUser.getId());
+  }
+
+  @Test
+  @Transactional
+  void restore() {
+    //given
+    userMapper.delete(testUser.getId());
+    UserEntity deletedUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
+    //when
+    userRepository.restore(testUser.getId());
+    UserEntity restoredUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
+    //then
+    assertThat(deletedUser.isDeleted()).isTrue();
+    assertThat(restoredUser.isDeleted()).isFalse();
   }
 
   @Test
