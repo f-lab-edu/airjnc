@@ -1,14 +1,19 @@
 package com.airjnc.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import com.airjnc.common.exception.DefaultException;
 import com.airjnc.common.exception.NotFoundException;
 import com.airjnc.common.service.HashService;
 import com.airjnc.user.dao.UserRepository;
+import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
 import com.airjnc.user.exception.PasswordIsNotMatchException;
+import com.airjnc.user.exception.UserIsNotDeletedException;
+import com.testutil.annotation.UnitTest;
 import com.testutil.testdata.TestUser;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.Errors;
 
 @ExtendWith(MockitoExtension.class)
+@UnitTest
 class UserCheckServiceTest {
 
   @Mock
@@ -85,6 +91,29 @@ class UserCheckServiceTest {
         //then
         assertObjectNameOfGlobalError(e, "passwordIsNotMatch");
       }
+    }
+  }
+
+  @Nested
+  class ShouldBeDeleted {
+
+    @Test
+    void whenUserDeletedThenSuccess() {
+      //given
+      UserEntity user = TestUser.getBuilder().deletedAt(LocalDateTime.now()).build();
+      //when
+      userCheckService.shouldBeDeleted(user);
+    }
+
+    @Test
+    void whenUserIsNotDeletedThenThrow() {
+      //given
+      UserEntity user = TestUser.getBuilder().build();
+      //when
+      assertThrows(
+          UserIsNotDeletedException.class,
+          () -> userCheckService.shouldBeDeleted(user)
+      );
     }
   }
 }

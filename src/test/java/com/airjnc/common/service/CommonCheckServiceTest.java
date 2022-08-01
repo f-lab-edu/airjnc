@@ -2,9 +2,11 @@ package com.airjnc.common.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.airjnc.common.exception.DefaultException;
+import com.testutil.annotation.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+@UnitTest
 class CommonCheckServiceTest {
 
   CommonCheckService commonCheckService;
