@@ -4,8 +4,10 @@ import com.airjnc.common.exception.NotFoundException;
 import com.airjnc.common.service.HashService;
 import com.airjnc.common.util.factory.ErrorsFactory;
 import com.airjnc.user.dao.UserRepository;
+import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
 import com.airjnc.user.exception.PasswordIsNotMatchException;
+import com.airjnc.user.exception.UserIsNotDeletedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,6 @@ public class UserCheckService {
   private final UserRepository userRepository;
 
   private final HashService hashService;
-
 
   public void emailShouldNotBeDuplicated(String email) {
     try {
@@ -43,6 +44,15 @@ public class UserCheckService {
          */
     throw new PasswordIsNotMatchException(
         ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "passwordIsNotMatch")
+    );
+  }
+
+  public void shouldBeDeleted(UserEntity user) {
+    if (user.isDeleted()) {
+      return;
+    }
+    throw new UserIsNotDeletedException(
+        ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "userIsNotDeleted")
     );
   }
 }

@@ -7,6 +7,8 @@ import java.time.LocalDate;
 
 public interface UserRepository {
 
+  void delete(Long id);
+
   UserEntity findByEmail(String email);
 
   UserEntity findById(Long id);
@@ -15,7 +17,11 @@ public interface UserRepository {
 
   UserInquiryEmailResp findEmailByNameAndBirthDate(String name, LocalDate birthDate);
 
-  void delete(Long id);
+  UserEntity findOnlyDeletedById(Long id);
+
+  UserEntity findWithDeletedByEmail(String email);
+
+  void restore(Long id);
 
   UserEntity save(UserSaveDto userSaveDTO);
 

@@ -78,7 +78,7 @@ class UserServiceTest {
     UserEntity userEntity = TestUser.getBuilder().build();
     given(userRepository.save(any(UserSaveDto.class))).willReturn(userEntity);
     UserResp userResp = UserDTOFixture.getBuilder().build();
-    given(userModelMapper.userEntityToUserDTO(userEntity)).willReturn(userResp);
+    given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
     //when
     UserResp result = userService.create(userCreateReq);
     //then
@@ -86,7 +86,7 @@ class UserServiceTest {
     then(hashService).should(times(1)).encrypt(userCreateReq.getPassword());
     then(userCreateReq).should(times(1)).toSaveDTO(hash);
     then(userRepository).should(times(1)).save(userSaveDTO);
-    then(userModelMapper).should(times(1)).userEntityToUserDTO(any(UserEntity.class));
+    then(userModelMapper).should(times(1)).userEntityToUserResp(any(UserEntity.class));
     assertThat(result.getId()).isEqualTo(userResp.getId());
   }
 

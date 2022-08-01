@@ -5,7 +5,7 @@
     UPDATE user
     set deleted_at = now()
     WHERE id = #{id}
-      AND deleted_at IS NULL
+      AND deleted_at IS NULL;
   </delete>
   <insert id="save" keyProperty="id" useGeneratedKeys="true">
     INSERT INTO user (email, password, name, gender)
@@ -34,6 +34,36 @@
     FROM user
     WHERE id = #{id}
       AND deleted_at IS NULL;
+  </select>
+  <select id="findWithDeletedByEmail" resultType="UserEntity">
+    SELECT id,
+           email,
+           name,
+           gender,
+           phone_number,
+           address,
+           is_active,
+           birthdate,
+           created_at,
+           updated_at,
+           deleted_at
+    FROM user
+    WHERE email = #{email};
+  </select>
+  <select id="findOnlyDeletedById" resultType="UserEntity">
+    SELECT id,
+           email,
+           name,
+           gender,
+           phone_number,
+           address,
+           is_active,
+           birthdate,
+           created_at,
+           updated_at
+    FROM user
+    WHERE id = #{id}
+      AND deleted_at IS NOT NULL;
   </select>
   <select id="findByEmail" resultType="UserEntity">
     SELECT id,
@@ -68,7 +98,13 @@
   <update id="updatePasswordByEmail">
     UPDATE user
     SET password = #{password}
-    WHERE deleted_at IS NULL
-      AND email = #{email};
+    WHERE email = #{email}
+      AND deleted_at IS NULL;
+  </update>
+  <update id="restore">
+    UPDATE user
+    SET deleted_at = NULL
+    WHERE id = #{id}
+      AND deleted_at IS NOT NULL;
   </update>
 </mapper>

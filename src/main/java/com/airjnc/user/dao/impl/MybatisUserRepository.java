@@ -23,6 +23,12 @@ public class MybatisUserRepository implements UserRepository {
   private final UserModelMapper userModelMapper;
 
   @Override
+  public void delete(Long id) {
+    int affect = userMapper.delete(id);
+    commonCheckService.shouldBeMatch(affect, 1);
+  }
+
+  @Override
   public UserEntity findByEmail(String email) {
     return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
   }
@@ -43,8 +49,18 @@ public class MybatisUserRepository implements UserRepository {
   }
 
   @Override
-  public void delete(Long id) {
-    int affect = userMapper.delete(id);
+  public UserEntity findOnlyDeletedById(Long id) {
+    return userMapper.findOnlyDeletedById(id).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public UserEntity findWithDeletedByEmail(String email) {
+    return userMapper.findWithDeletedByEmail(email).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public void restore(Long id) {
+    int affect = userMapper.restore(id);
     commonCheckService.shouldBeMatch(affect, 1);
   }
 

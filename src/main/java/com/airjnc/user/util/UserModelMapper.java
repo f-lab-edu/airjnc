@@ -15,5 +15,5 @@ public interface UserModelMapper {
 
   UserEntity saveDTOToUserEntity(UserSaveDto userSaveDTO);
 
-  UserResp userEntityToUserDTO(UserEntity userEntity);
+  UserResp userEntityToUserResp(UserEntity userEntity);
 }

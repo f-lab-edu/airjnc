@@ -19,8 +19,8 @@ public class AuthService {
   private final UserCheckService userCheckService;
 
   public UserResp logIn(UserLogInReq userLogInReq) {
-    UserEntity userEntity = userRepository.findByEmail(userLogInReq.getEmail());
+    UserEntity userEntity = userRepository.findWithDeletedByEmail(userLogInReq.getEmail());
     userCheckService.passwordShouldBeMatch(userLogInReq.getPassword(), userEntity.getPassword());
-    return userModelMapper.userEntityToUserDTO(userEntity);
+    return userModelMapper.userEntityToUserResp(userEntity);
   }
 }

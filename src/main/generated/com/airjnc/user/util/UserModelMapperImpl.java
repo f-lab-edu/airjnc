@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-31T17:41:27+0900",
+    date = "2022-08-01T13:26:52+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 11.0.10 (AdoptOpenJDK)"
 )
 @Component
@@ -33,7 +33,7 @@ public class UserModelMapperImpl implements UserModelMapper {
     }
 
     @Override
-    public UserResp userEntityToUserDTO(UserEntity userEntity) {
+    public UserResp userEntityToUserResp(UserEntity userEntity) {
         if ( userEntity == null ) {
             return null;
         }
@@ -47,6 +47,7 @@ public class UserModelMapperImpl implements UserModelMapper {
         userResp.phoneNumber( userEntity.getPhoneNumber() );
         userResp.address( userEntity.getAddress() );
         userResp.birthDate( userEntity.getBirthDate() );
+        userResp.deletedAt( userEntity.getDeletedAt() );
 
         return userResp.build();
     }

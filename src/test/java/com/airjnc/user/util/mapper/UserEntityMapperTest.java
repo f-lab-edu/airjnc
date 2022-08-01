@@ -38,7 +38,7 @@ class UserEntityMapperTest {
     //given
     UserEntity userEntity = TestUser.getBuilder().build();
     //when
-    UserResp result = userModelMapper.userEntityToUserDTO(userEntity);
+    UserResp result = userModelMapper.userEntityToUserResp(userEntity);
     //then
     assertThat(result.getId()).isEqualTo(userEntity.getId());
     assertThat(result.getName()).isEqualTo(userEntity.getName());
