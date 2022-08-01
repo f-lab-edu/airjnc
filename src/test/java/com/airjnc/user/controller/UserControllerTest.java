@@ -1,8 +1,9 @@
 package com.airjnc.user.controller;
 
 import com.airjnc.common.auth.dto.AuthInfoDTO;
-import com.airjnc.common.auth.service.AuthService;
 import com.airjnc.common.auth.service.SessionAuthService;
+import com.airjnc.common.resolver.CurrentUserArgumentResolver;
+import com.airjnc.common.util.constant.SessionKey;
 import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.FindPwdResponseDTO;
@@ -12,23 +13,23 @@ import com.airjnc.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.assertj.core.api.Assertions;
-import org.hibernate.validator.internal.IgnoreForbiddenApisErrors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 import util.UserFixture;
 
 import java.util.Locale;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -44,9 +45,12 @@ class UserControllerTest {
     @SpyBean
     private SessionAuthService authService;
 
+    @SpyBean
+    private CurrentUserArgumentResolver currentUserArgumentResolver;
+
     @MockBean
     private UserService userService;
-    
+
 
     private UserDTO userDTO;
     private SignUpDTO signUpDTO;
@@ -181,23 +185,46 @@ class UserControllerTest {
             .andDo(print())
             .andExpect(status().is4xxClientError());
     }
-    
+
     @Test
     @DisplayName("Session 저장 확인")
     public void successSessionSave() throws Exception {
         //given
-        String logInUserJson = new ObjectMapper().writeValueAsString(logInRequestDTO);
-        BDDMockito.given(userService.logIn(logInRequestDTO)).willReturn(authInfoDTO);
-
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(SessionKey.USER.getKey(), authInfoDTO);
         //when, then
-        mvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(logInUserJson))
+        mvc.perform(get("/user").contentType(MediaType.APPLICATION_JSON).session(session))
             .andDo(print())
             .andExpect(status().isOk());
-
-        assertThat(authService.getAuthInfo()).isEqualTo(authInfoDTO);
     }
-    
-    
 
+    @Test
+    @DisplayName("@CurrentUser 확인")
+    public void successGetCurrentUser() throws Exception {
+        //given
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(SessionKey.USER.getKey(), authInfoDTO);
+        //when, then
+        mvc.perform(get("/user").contentType(MediaType.APPLICATION_JSON).session(session))
+            .andDo(print())
+            .andExpect(jsonPath("$.email").value(authInfoDTO.getEmail()));
+    }
+
+    @Test
+    @DisplayName("로그아웃시 Session삭제 확인")
+    public void whenLogOutThenClearSession() throws Exception {
+        //given
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(SessionKey.USER.getKey(), authInfoDTO);
+        //when, then
+        mvc.perform(get("/user/logout").contentType(MediaType.APPLICATION_JSON).session(session))
+            .andDo(print())
+            .andExpect(new ResultMatcher() {
+                @Override
+                public void match(MvcResult result) throws Exception {
+                    Assertions.assertThat(result.getRequest().getSession().getAttribute(SessionKey.USER.getKey())).isNull();
+                }
+            });
+    }
 
 }

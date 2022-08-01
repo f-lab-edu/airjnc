@@ -1,5 +1,7 @@
 package com.airjnc.user.controller;
 
+import com.airjnc.common.annotation.CurrentUser;
+import com.airjnc.common.annotation.UserLoginCheck;
 import com.airjnc.common.auth.dto.AuthInfoDTO;
 import com.airjnc.common.auth.service.AuthService;
 import com.airjnc.user.dto.request.LogInRequestDTO;
@@ -43,12 +45,23 @@ public class UserController {
     public ResponseEntity<Object> userLogIn(@RequestBody LogInRequestDTO logInRequestDTO) {
         AuthInfoDTO authInfoDTO = userService.logIn(logInRequestDTO);
         authService.setAuthInfo(authInfoDTO);
-        return ResponseEntity.ok().body("success");
+        return ResponseEntity.ok().body("LogIn Success");
     }
 
-    @GetMapping("")
-    public ResponseEntity<Object> tempMain() {
-        return ResponseEntity.ok().body("success");
+    @GetMapping("logout")
+    public ResponseEntity<Object> userLogOut() {
+        authService.clearAuthInfo();
+        return ResponseEntity.ok().body("LogOut Success");
     }
+
+
+    // @UserLoginCheck, @CurrentUser 통합테스트를 위한 임시 url  -> 추후 정상 URL추가 후 삭제 예정
+    @GetMapping("")
+    @UserLoginCheck
+
+    public ResponseEntity<AuthInfoDTO> tempMain(@CurrentUser AuthInfoDTO authInfoDTO) {
+        return ResponseEntity.ok().body(authInfoDTO);
+    }
+
 
 }
