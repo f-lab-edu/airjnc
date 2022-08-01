@@ -1,39 +1,24 @@
-package com.airjnc.ncp.service;
+package com.airjnc.common.service;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import com.airjnc.ncp.properties.NcpCredentialsProperties;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.airjnc.common.properties.NcpCredentialProperties;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@EnableConfigurationProperties(NcpCredentialProperties.class)
 public class NcpBaseService {
 
-  private final NcpCredentialsProperties ncpCredentialsProperties;
-
-  private final ObjectMapper objectMapper;
-
-  public HttpEntity<String> createEntity(String url, Object body) {
-    try {
-      String jsonBody = objectMapper.writeValueAsString(body);
-
-      HttpHeaders headers = createHeaders(url);
-
-      return new HttpEntity<>(jsonBody, headers);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
-  }
+  private final NcpCredentialProperties ncpCredentialProperties;
 
   public HttpHeaders createHeaders(String url) {
     // https://api.ncloud-docs.com/docs/common-ncpapi
@@ -43,7 +28,7 @@ public class NcpBaseService {
 
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("x-ncp-apigw-timestamp", time);
-    headers.set("x-ncp-iam-access-key", ncpCredentialsProperties.getAccessKey());
+    headers.set("x-ncp-iam-access-key", ncpCredentialProperties.getAccessKey());
     headers.set("x-ncp-apigw-signature-v2", getSignature(time, url));
 
     return headers;
@@ -54,8 +39,8 @@ public class NcpBaseService {
       String method = "POST";
       String space = " ";
       String newLine = "\n";
-      String accessKey = ncpCredentialsProperties.getAccessKey();
-      String secretKey = ncpCredentialsProperties.getSecretKey();
+      String accessKey = ncpCredentialProperties.getAccessKey();
+      String secretKey = ncpCredentialProperties.getSecretKey();
 
       String stringToSign = method + space + url + newLine + time + newLine + accessKey;
 

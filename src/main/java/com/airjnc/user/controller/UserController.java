@@ -4,8 +4,8 @@ import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.annotation.CurrentUserId;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserInquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
-import com.airjnc.user.dto.request.UserinquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.request.inquiryPasswordViaPhoneReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
@@ -56,7 +56,7 @@ public class UserController {
 
   @GetMapping(value = "/inquiryPassword", params = "email")
   public void inquiryPasswordViaEmail(
-      @Validated @ModelAttribute UserinquiryPasswordViaEmailReq userinquiryPasswordViaEmailReq) {
+      @Validated @ModelAttribute UserInquiryPasswordViaEmailReq userinquiryPasswordViaEmailReq) {
     userService.inquiryPasswordViaEmail(userinquiryPasswordViaEmailReq);
   }
 

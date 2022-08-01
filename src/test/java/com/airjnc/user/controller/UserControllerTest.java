@@ -14,8 +14,8 @@ import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserInquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
-import com.airjnc.user.dto.request.UserinquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
@@ -148,7 +148,7 @@ class UserControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should(times(1)).inquiryPasswordViaEmail(any(UserinquiryPasswordViaEmailReq.class));
+    then(userService).should(times(1)).inquiryPasswordViaEmail(any(UserInquiryPasswordViaEmailReq.class));
   }
 
   @Test

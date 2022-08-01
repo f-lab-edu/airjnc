@@ -12,15 +12,15 @@ import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.properties.SessionTtlProperties;
 import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.common.service.HashService;
-import com.airjnc.ncp.dto.NcpMailerSendDto;
-import com.airjnc.ncp.service.NcpMailerService;
+import com.airjnc.mail.dto.SendUsingTemplateDto;
+import com.airjnc.mail.service.MailService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserInquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
-import com.airjnc.user.dto.request.UserinquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.request.inquiryPasswordViaPhoneReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
@@ -59,7 +59,7 @@ class UserServiceTest {
   RedisDao redisDao;
 
   @Mock
-  NcpMailerService ncpMailerService;
+  MailService mailService;
 
   @Mock
   SessionTtlProperties sessionTtlProperties;
@@ -136,19 +136,20 @@ class UserServiceTest {
   @Test
   void resetPasswordViaEmail() {
     //given
-    UserinquiryPasswordViaEmailReq userinquiryPasswordViaEmailReq = new UserinquiryPasswordViaEmailReq(TestUser.EMAIL);
+    UserInquiryPasswordViaEmailReq userInquiryPasswordViaEmailReq = new UserInquiryPasswordViaEmailReq(TestUser.EMAIL);
     UserEntity user = TestUser.getBuilder().build();
-    given(userRepository.findByEmail(userinquiryPasswordViaEmailReq.getEmail())).willReturn(user);
+    given(userRepository.findByEmail(userInquiryPasswordViaEmailReq.getEmail())).willReturn(user);
     String code = "123456";
     given(commonUtilService.generateCode()).willReturn(code);
     given(sessionTtlProperties.getResetPasswordCode()).willReturn(Duration.ofMinutes(1L));
     //when
-    userService.inquiryPasswordViaEmail(userinquiryPasswordViaEmailReq);
+    userService.inquiryPasswordViaEmail(userInquiryPasswordViaEmailReq);
     //then
-    then(userRepository).should(times(1)).findByEmail(userinquiryPasswordViaEmailReq.getEmail());
+    then(userRepository).should(times(1)).findByEmail(userInquiryPasswordViaEmailReq.getEmail());
     then(commonUtilService).should(times(1)).generateCode();
     then(redisDao).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
-    then(ncpMailerService).should(times(1)).send(any(NcpMailerSendDto.class));
+    then(mailService).should(times(1))
+        .send(eq(userInquiryPasswordViaEmailReq.getEmail()), any(SendUsingTemplateDto.class));
   }
 
   @Test

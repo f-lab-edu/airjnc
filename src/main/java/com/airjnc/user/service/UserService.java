@@ -4,14 +4,14 @@ import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.properties.SessionTtlProperties;
 import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.common.service.HashService;
-import com.airjnc.ncp.dto.NcpMailerSendDto;
-import com.airjnc.ncp.service.NcpMailerService;
+import com.airjnc.mail.dto.SendUsingTemplateDto;
+import com.airjnc.mail.service.MailService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserInquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
-import com.airjnc.user.dto.request.UserinquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.request.inquiryPasswordViaPhoneReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
@@ -31,7 +31,7 @@ public class UserService {
 
   private final UserCheckService userCheckService;
 
-  private final NcpMailerService ncpMailerService;
+  private final MailService mailService;
 
   private final CommonUtilService commonUtilService;
 
@@ -58,25 +58,18 @@ public class UserService {
     userRepository.delete(currentUserId);
   }
 
-  public void resetPassword(UserResetPwdReq userResetPwdReq) {
-    String email = redisDao.get(userResetPwdReq.getCode());
-    redisDao.delete(userResetPwdReq.getCode());
-    String hash = hashService.encrypt(userResetPwdReq.getPassword());
-    userRepository.updatePasswordByEmail(email, hash);
-  }
-
   private String generateAndRestoreCode(String email) {
     String code = commonUtilService.generateCode();
     redisDao.store(code, email, sessionTtlProperties.getResetPasswordCode());
     return code;
   }
 
-  public void inquiryPasswordViaEmail(UserinquiryPasswordViaEmailReq userinquiryPasswordViaEmailReq) {
-    UserEntity user = userRepository.findByEmail(userinquiryPasswordViaEmailReq.getEmail());
+  public void inquiryPasswordViaEmail(UserInquiryPasswordViaEmailReq userInquiryPasswordViaEmailReq) {
+    UserEntity user = userRepository.findByEmail(userInquiryPasswordViaEmailReq.getEmail());
     String code = generateAndRestoreCode(user.getEmail());
-    ncpMailerService.send(
-        NcpMailerSendDto.builder()
-            .email(userinquiryPasswordViaEmailReq.getEmail())
+    mailService.send(
+        userInquiryPasswordViaEmailReq.getEmail(),
+        SendUsingTemplateDto.builder()
             .name(user.getName())
             .code(code)
             .build()
@@ -87,6 +80,13 @@ public class UserService {
     UserEntity user = userRepository.findByPhoneNumber(inquiryPasswordViaPhoneReq.getPhone());
     String code = generateAndRestoreCode(user.getEmail());
     // TODO: send sms
+  }
+
+  public void resetPassword(UserResetPwdReq userResetPwdReq) {
+    String email = redisDao.get(userResetPwdReq.getCode());
+    redisDao.delete(userResetPwdReq.getCode());
+    String hash = hashService.encrypt(userResetPwdReq.getPassword());
+    userRepository.updatePasswordByEmail(email, hash);
   }
 
   public void restore(Long userId) {

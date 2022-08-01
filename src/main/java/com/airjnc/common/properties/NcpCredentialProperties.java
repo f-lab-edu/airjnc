@@ -1,4 +1,4 @@
-package com.airjnc.ncp.properties;
+package com.airjnc.common.properties;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,10 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @Getter
 @RequiredArgsConstructor
 @ConstructorBinding
-@ConfigurationProperties(prefix = "cloud.naver.mailer")
-public class NcpMailerProperties {
+@ConfigurationProperties("cloud.naver.credential")
+public class NcpCredentialProperties {
 
-  private final int resetPasswordTemplateSid;
+  private final String accessKey;
+
+  private final String secretKey;
 }

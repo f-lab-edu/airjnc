@@ -16,11 +16,17 @@ logging:
   level:
     org:
       springframework:
-        jdbc:
+        jdbc: debug
+    com:
+      airjnc: trace
 cloud:
   naver:
     credentials:
       accessKey:
       secretKey:
-    mailer:
-      resetPasswordTemplateSid:
+    maile:
+      templateSid:
+        resetPassword:
+      uri:
+        send:
+

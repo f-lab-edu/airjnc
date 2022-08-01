@@ -1,4 +1,4 @@
-package com.airjnc.ncp.annotation;
+package com.airjnc.mail.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

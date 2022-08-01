@@ -5,13 +5,13 @@ import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-public class UserinquiryPasswordViaEmailReq {
+public class UserInquiryPasswordViaEmailReq {
 
   @Email
   @NotBlank
   private final String email;
 
-  public UserinquiryPasswordViaEmailReq(String email) {
+  public UserInquiryPasswordViaEmailReq(String email) {
     this.email = email;
   }
 }

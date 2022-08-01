@@ -1,10 +1,10 @@
-package com.airjnc.ncp.service;
+package com.airjnc.common.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import com.airjnc.ncp.properties.NcpCredentialsProperties;
+import com.airjnc.common.properties.NcpCredentialProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.UnitTest;
@@ -22,50 +22,36 @@ import org.springframework.http.MediaType;
 @UnitTest
 class NcpBaseServiceTest {
 
-  private final String url = "/url";
-
-  @Mock
-  NcpCredentialsProperties ncpCredentialsProperties;
+  private final String uri = "/uri";
 
   @Mock
   ObjectMapper objectMapper;
 
+  @Mock
+  NcpCredentialProperties ncpCredentialProperties;
+
   @InjectMocks
   NcpBaseService ncpBaseService;
+
+  String accessKey = "accessKey";
+
+  String secretKey = "secretKey";
 
   void assertHeaders(HttpHeaders headers) {
     // ncp api 요청시, 공용 Headers 값 검증
     assertThat(headers.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
     assertThat(headers.get("x-ncp-apigw-timestamp").get(0)).asString();
-    assertThat(headers.get("x-ncp-iam-access-key").get(0)).isEqualTo(
-        ncpCredentialsProperties.getAccessKey());
+    assertThat(headers.get("x-ncp-iam-access-key").get(0)).isEqualTo(accessKey);
     assertThat(headers.get("x-ncp-apigw-signature-v2").get(0)).asString();
-  }
-
-  @BeforeEach
-  void beforeEach() {
-    given(ncpCredentialsProperties.getAccessKey()).willReturn("accessKey");
-    given(ncpCredentialsProperties.getSecretKey()).willReturn("secretKey");
-  }
-
-  @Test
-  void createEntity() throws JsonProcessingException {
-    //given
-    Object body = new Object();
-    String jsonBody = "jsonBody";
-    given(objectMapper.writeValueAsString(body)).willReturn(jsonBody);
-    //when
-    HttpEntity<String> entity = ncpBaseService.createEntity(url, body);
-    //then
-    then(objectMapper).should(times(1)).writeValueAsString(body);
-    assertHeaders(entity.getHeaders());
-    assertThat(entity.getBody()).isEqualTo(jsonBody);
   }
 
   @Test
   void createHeaders() {
+    //given
+    given(ncpCredentialProperties.getAccessKey()).willReturn(accessKey);
+    given(ncpCredentialProperties.getSecretKey()).willReturn(secretKey);
     //when
-    HttpHeaders headers = ncpBaseService.createHeaders(url);
+    HttpHeaders headers = ncpBaseService.createHeaders(uri);
     //then
     assertHeaders(headers);
   }
