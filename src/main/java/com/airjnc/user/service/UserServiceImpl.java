@@ -4,10 +4,13 @@ import com.airjnc.common.auth.dto.AuthInfoDTO;
 import com.airjnc.common.error.exception.DuplicateException;
 import com.airjnc.common.util.BCryptHashEncoder;
 import com.airjnc.user.domain.User;
+import com.airjnc.user.dto.request.FindEmailRequestDTO;
 import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
+import com.airjnc.user.dto.response.FindEmailResponseDTO;
 import com.airjnc.user.dto.response.FindPwdResponseDTO;
 import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.exception.FindEmailNotMatchException;
 import com.airjnc.user.exception.UserLoginNotMatchException;
 import com.airjnc.user.mapper.UserMapper;
 import com.airjnc.user.repository.UserRepository;
@@ -24,6 +27,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    @Override
+    public FindEmailResponseDTO findEmailByNameAndPhoneNumber(FindEmailRequestDTO findEmailRequestDTO) {
+        Optional<User> user = userRepository.selectUserByNameAndPhoneNumber(findEmailRequestDTO.getName(), findEmailRequestDTO.getPhoneNumber());
+        isNameAndPhoneNumber(user);
+
+        return FindEmailResponseDTO.builder().email(user.get().getEmail())
+            .build();
+    }
 
     @Override
     public FindPwdResponseDTO findPasswordByEmail(String email) {
@@ -53,6 +65,13 @@ public class UserServiceImpl implements UserService {
     /*
     private method
      */
+
+    // findEmailByNameAndPhoneNumber
+    private void isNameAndPhoneNumber(Optional<User> user) {
+        if (user.isEmpty()) {
+            throw new FindEmailNotMatchException();
+        }
+    }
 
     // create
     private void checkDuplicateEmail(SignUpDTO signUpDTO) {

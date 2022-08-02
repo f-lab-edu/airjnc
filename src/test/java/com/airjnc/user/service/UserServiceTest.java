@@ -3,9 +3,11 @@ package com.airjnc.user.service;
 import com.airjnc.common.error.exception.DuplicateException;
 import com.airjnc.common.util.BCryptHashEncoder;
 import com.airjnc.user.domain.User;
+import com.airjnc.user.dto.request.FindEmailRequestDTO;
 import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.exception.FindEmailNotMatchException;
 import com.airjnc.user.exception.UserLoginNotMatchException;
 import com.airjnc.user.mapper.UserMapper;
 import com.airjnc.user.repository.UserRepository;
@@ -22,6 +24,7 @@ import util.UserFixture;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -43,6 +46,7 @@ class UserServiceTest {
     private SignUpDTO signUpDTO;
     private LogInRequestDTO logInRequestDTO;
     private User encodePwdUser;
+    private FindEmailRequestDTO findEmailRequestDTO;
 
 
     @BeforeEach
@@ -62,6 +66,9 @@ class UserServiceTest {
 
         this.encodePwdUser = UserFixture.getUserBuilder()
             .password(BCryptHashEncoder.encode(UserFixture.PASSWORD))
+            .build();
+
+        this.findEmailRequestDTO = UserFixture.getFindEmailRequestDTOBuilder()
             .build();
     }
 
@@ -110,5 +117,25 @@ class UserServiceTest {
         assertThrows(UserLoginNotMatchException.class, () -> userServiceImpl.logIn(logInRequestDTO));
     }
 
+    @Test
+    @DisplayName("이메일찾기 성공")
+    public void whenValidNameAndPhoneNumberThenSuccessFindEmail() {
+        //given
+        BDDMockito.given(userRepository.selectUserByNameAndPhoneNumber(findEmailRequestDTO.getName(), findEmailRequestDTO.getPhoneNumber()))
+            .willReturn(Optional.of(user));
+        // when, then
+        assertThat(userServiceImpl.findEmailByNameAndPhoneNumber(findEmailRequestDTO).getEmail()).isEqualTo(UserFixture.EMAIL);
+    }
+
+    @Test
+    @DisplayName("이메일찾기 실패-이름_전화번호매칭실패")
+    public void whenInvalidNameAndPhoneNumberThenFailFindEmail() {
+        //given
+        BDDMockito.given(userRepository.selectUserByNameAndPhoneNumber(findEmailRequestDTO.getName(), findEmailRequestDTO.getPhoneNumber()))
+            .willReturn(Optional.empty());
+        // when, then
+        assertThrows(FindEmailNotMatchException.class, () -> userServiceImpl.findEmailByNameAndPhoneNumber(findEmailRequestDTO));
+    }
+    
 
 }

@@ -3,6 +3,7 @@ package util;
 import com.airjnc.common.auth.dto.AuthInfoDTO;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.User;
+import com.airjnc.user.dto.request.FindEmailRequestDTO;
 import com.airjnc.user.dto.request.LogInRequestDTO;
 import com.airjnc.user.dto.request.SignUpDTO;
 import com.airjnc.user.dto.response.UserDTO;
@@ -80,6 +81,13 @@ public class UserFixture {
         return AuthInfoDTO.builder()
             .email(EMAIL)
             .name(NAME)
+            ;
+    }
+
+    public static FindEmailRequestDTO.FindEmailRequestDTOBuilder getFindEmailRequestDTOBuilder() {
+        return FindEmailRequestDTO.builder()
+            .name(NAME)
+            .phoneNumber(PHONE_NUMBER)
             ;
     }
 
