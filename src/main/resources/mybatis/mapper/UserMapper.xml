@@ -38,6 +38,13 @@
         where email = #{email}
     </select>
 
+    <select id="selectUserByNameAndPhoneNumber" parameterType="String" resultMap="userResultMap">
+        select 
+               email
+        from user
+        where name = #{name} and phone_number = #{phoneNumber}
+    </select>
+
     <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into user
             (email, password, name, gender, phone_number, address, birthdate)
