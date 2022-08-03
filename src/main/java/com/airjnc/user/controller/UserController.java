@@ -2,15 +2,23 @@ package com.airjnc.user.controller;
 
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.annotation.CurrentUserId;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaEmailReq;
+import com.airjnc.user.dto.request.UserGetResetPwdCodeViaPhoneReq;
+import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.response.UserInquiryEmailResp;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -27,18 +35,40 @@ public class UserController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public UserDTO create(@RequestBody @Validated CreateDTO createDTO) {
-    UserDTO userDTO = userService.create(createDTO);
-    userStateService.create(userDTO.getId());
-    return userDTO;
+  public UserResp create(@Validated @RequestBody UserCreateReq userCreateReq) {
+    UserResp userResp = userService.create(userCreateReq);
+    userStateService.create(userResp.getId());
+    return userResp;
   }
 
+  @GetMapping("/inquiryEmail")
+  public UserInquiryEmailResp findEmail(@Validated @ModelAttribute UserInquiryEmailReq userInquiryEmailReq) {
+    return userService.inquiryEmail(userInquiryEmailReq);
+  }
 
   @DeleteMapping("/me")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @CheckAuth
-  public void remove(@CurrentUserId Long currentUserId) {
-    userService.remove(currentUserId);
-    userStateService.remove();
+  public void delete(@CurrentUserId Long currentUserId) {
+    userService.delete(currentUserId);
+    userStateService.delete();
+  }
+
+  @PutMapping("/resetPassword")
+  public void resetPassword(@Validated @RequestBody UserResetPwdReq userResetPwdReq) {
+    userService.resetPassword(userResetPwdReq);
+  }
+
+  @GetMapping(value = "/resetPassword", params = "email")
+  public void getResetPwdCodeViaEmail(
+      @Validated @ModelAttribute UserGetResetPwdCodeViaEmailReq userGetResetPwdCodeViaEmailReq) {
+    userService.getResetPwdCodeViaEmail(userGetResetPwdCodeViaEmailReq);
+  }
+
+  // Naver에서 발신번호 등록이 계속해서 안되고 있어서, 일단 보류함
+//  @GetMapping(value = "/resetPassword", params = "phone")
+  public void getResetPwdCodeViaPhone(
+      @Validated @ModelAttribute UserGetResetPwdCodeViaPhoneReq userGetResetPwdCodeViaPhoneReq) {
+    userService.getResetPwdCodeViaPhone(userGetResetPwdCodeViaPhoneReq);
   }
 }

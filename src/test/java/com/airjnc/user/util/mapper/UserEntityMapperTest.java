@@ -2,12 +2,12 @@ package com.airjnc.user.util.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.CreateDTOFixture;
-import com.testutil.fixture.UserEntityFixture;
+import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -24,23 +24,23 @@ class UserEntityMapperTest {
   }
 
   @Test
-  void toUserDTO() {
+  void fromCreateDTO() {
     //given
-    UserEntity userEntity = UserEntityFixture.getBuilder().build();
+    UserSaveDto createDTO = CreateDTOFixture.getBuilder().build().toSaveDTO("1234");
     //when
-    UserDTO result = userModelMapper.userEntityToUserDTO(userEntity);
+    UserEntity result = userModelMapper.saveDTOToUserEntity(createDTO);
     //then
-    assertThat(result.getId()).isEqualTo(userEntity.getId());
-    assertThat(result.getName()).isEqualTo(userEntity.getName());
+    assertThat(result.getEmail()).isEqualTo(createDTO.getEmail());
   }
 
   @Test
-  void fromCreateDTO() {
+  void toUserDTO() {
     //given
-    CreateDTO createDTO = CreateDTOFixture.getBuilder().build();
+    UserEntity userEntity = TestUser.getBuilder().build();
     //when
-    UserEntity result = userModelMapper.createDTOToUserEntity(createDTO);
+    UserResp result = userModelMapper.userEntityToUserDTO(userEntity);
     //then
-    assertThat(result.getEmail()).isEqualTo(createDTO.getEmail());
+    assertThat(result.getId()).isEqualTo(userEntity.getId());
+    assertThat(result.getName()).isEqualTo(userEntity.getName());
   }
 }

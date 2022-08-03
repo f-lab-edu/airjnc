@@ -1,15 +1,22 @@
 package com.airjnc.user.dao;
 
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.UserSaveDto;
+import java.time.LocalDate;
 
 public interface UserRepository {
 
-  UserEntity findById(Long id);
-
   UserEntity findByEmail(String email);
 
-  UserEntity save(CreateDTO createDTO);
+  UserEntity findById(Long id);
 
-  void remove(Long id);
+  UserEntity findByPhoneNumber(String phoneNumber);
+
+  UserEntity findWithDeletedByNameAndBirthDate(String name, LocalDate birthDate);
+
+  void delete(Long id);
+
+  UserEntity save(UserSaveDto userSaveDTO);
+
+  void updatePasswordByEmail(String email, String password);
 }
