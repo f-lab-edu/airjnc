@@ -1,4 +1,4 @@
-package com.airjnc.common.util.constant;
+package com.airjnc.common.util.enumerate;
 
 public enum ErrorCode {
   INTERNAL,

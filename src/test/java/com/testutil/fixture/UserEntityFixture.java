@@ -23,7 +23,7 @@ public class UserEntityFixture {
 
   public static final boolean IS_ACTIVE = true;
 
-  public static final LocalDate BIRTH_DATE = LocalDate.of(2000, 5, 15);
+  public static final LocalDate BIRTH_DATE = LocalDate.of(2020, 1, 1);
 
   public static final LocalDateTime CREATED_AT = LocalDateTime.of(2022, 1, 1, 9, 0);
 

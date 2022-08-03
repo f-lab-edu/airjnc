@@ -3,6 +3,7 @@ package com.airjnc.user.service;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.request.FindEmailDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.util.UserModelMapper;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,9 @@ public class UserService {
 
   public void remove(Long id) {
     userRepository.remove(id);
+  }
+
+  public String findEmail(FindEmailDTO findEmailDTO) {
+    return userRepository.getEmail(findEmailDTO);
   }
 }

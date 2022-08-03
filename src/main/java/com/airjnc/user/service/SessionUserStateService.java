@@ -1,6 +1,6 @@
 package com.airjnc.user.service;
 
-import com.airjnc.common.util.constant.SessionKey;
+import com.airjnc.common.util.enumerate.SessionKey;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

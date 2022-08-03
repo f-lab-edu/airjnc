@@ -6,6 +6,7 @@ import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.request.FindEmailDTO;
 import com.airjnc.user.util.UserModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,13 +22,9 @@ public class MybatisUserRepository implements UserRepository {
   private final UserModelMapper userModelMapper;
 
   @Override
-  public UserEntity findById(Long id) {
-    return userMapper.findById(id).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public UserEntity findByEmail(String email) {
-    return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
+  public void remove(Long id) {
+    int affect = userMapper.remove(id);
+    commonInternalCheckService.shouldBeMatch(affect, 1);
   }
 
   @Override
@@ -38,8 +35,17 @@ public class MybatisUserRepository implements UserRepository {
   }
 
   @Override
-  public void remove(Long id) {
-    int affect = userMapper.remove(id);
-    commonInternalCheckService.shouldBeMatch(affect, 1);
+  public String getEmail(FindEmailDTO findEmailDTO) {
+    return userMapper.getEmail(findEmailDTO).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public UserEntity findById(Long id) {
+    return userMapper.findById(id).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
+  public UserEntity findByEmail(String email) {
+    return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
   }
 }

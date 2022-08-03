@@ -11,8 +11,6 @@ import com.testutil.annotation.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 
 @UnitTest
@@ -28,29 +26,15 @@ class ErrorResponseFactoryTest {
   }
 
   @Test
-  void whenCodeIsInPropertiesThenGetTheMessageInProperties() {
+  void whenDefaultExceptionThenSuccessfullyResolveMessage() {
     //given
     DefaultException ex = new DefaultException();
     //when
     ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
     //then
     assertThat(errorResponse.getGlobal().size()).isSameAs(1);
-    assertThat(errorResponse.getGlobal().get(0)).isEqualTo("message from errors.properties");
+    assertThat(errorResponse.getGlobal().get(0)).isEqualTo("Error");
     assertThat(errorResponse.getField().size()).isSameAs(0);
-  }
-
-  @Test
-  void whenPassBindExceptionThenSuccessfullyResolveMessage() {
-    //given
-    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(new Target(), "target");
-    bindingResult.rejectValue("test", "required");
-    BindException ex = new BindException(bindingResult);
-    //when
-    ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
-    //then
-    assertThat(errorResponse.getGlobal().size()).isSameAs(0);
-    assertThat(errorResponse.getField().size()).isSameAs(1);
-    assertThat(errorResponse.getField().get("test")).isEqualTo("required message");
   }
 
   // 어떤 Code들이 나오는지 학습 테스트

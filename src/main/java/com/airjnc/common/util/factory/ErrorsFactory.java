@@ -1,6 +1,6 @@
 package com.airjnc.common.util.factory;
 
-import com.airjnc.common.util.constant.ErrorCode;
+import com.airjnc.common.util.enumerate.ErrorCode;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 

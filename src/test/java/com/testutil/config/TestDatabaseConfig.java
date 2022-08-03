@@ -36,19 +36,27 @@ public class TestDatabaseConfig {
 
   private void clear(DriverManagerDataSource dataSource) {
     JdbcTemplate template = new JdbcTemplate(dataSource);
-    template.update("delete from `user` where `id` = 1");
+    template.update("delete from `user` where `id` = " + UserEntityFixture.ID);
   }
 
   private void initData(DriverManagerDataSource dataSource) {
     JdbcTemplate template = new JdbcTemplate(dataSource);
+    String sql =
+        "insert into `user` (id, email, password, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at, deleted_at) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     UserEntity user = UserEntityFixture.getBuilder().build();
     template.update(
-        "insert into `user` (id, email, password, name, gender, phone_number, address, is_active," +
-            "birthdate, created_at, updated_at, deleted_at)" +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        user.getId(), user.getEmail(), user.getPassword(), user.getName(), user.getGender().name(),
+        sql,
+        user.getId(),
+        user.getEmail(),
+        user.getPassword(),
+        user.getName(),
+        user.getGender().name(),
         user.getPhoneNumber(),
-        user.getAddress(), user.isActive(), user.getBirthDate(), user.getCreatedAt(),
+        user.getAddress(),
+        user.isActive(),
+        user.getBirthDate(),
+        user.getCreatedAt(),
         user.getUpdatedAt(),
         user.getDeletedAt()
     );
