@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface UserRepository {
 
-    public Optional<User> selectUserById(Long id);
+    Optional<User> selectUserById(Long id);
 
-    public Optional<User> selectUserByEmail(String email);
-    
-    public Optional<User> selectUserByNameAndPhoneNumber(String name, String phoneNumber);
+    Optional<User> selectUserByEmail(String email);
 
-    public User insertUser(User user);
+    Optional<User> selectUserByNameAndPhoneNumber(String name, String phoneNumber);
+
+    User insertUser(User user);
 }

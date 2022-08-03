@@ -8,13 +8,13 @@ import java.util.Optional;
 
 public interface UserDAO {
 
-    public Optional<User> selectUserById(Long id);
+    Optional<User> selectUserById(Long id);
 
-    public Optional<User> selectUserByEmail(String email);
+    Optional<User> selectUserByEmail(String email);
 
-    public Optional<User> selectUserByNameAndPhoneNumber(@Param("name") String name, @Param("phoneNumber") String phoneNumber);
+    Optional<User> selectUserByNameAndPhoneNumber(@Param("name") String name, @Param("phoneNumber") String phoneNumber);
 
-    public void insertUser(User userEntity);
+    void insertUser(User userEntity);
 
 
 }

@@ -19,7 +19,7 @@ public class ErrorResponseBody {
 
     private final String message;
     private final List<CustomFieldError> errors;
-    private int status;
+    private final int status;
 
 
     private ErrorResponseBody(final MessageSource messageSource, final ErrorCode code, final List<CustomFieldError> errors) {
@@ -54,9 +54,9 @@ public class ErrorResponseBody {
 
     @Getter
     public static class CustomFieldError {
-        private String field;
-        private String value;
-        private String reason;
+        private final String field;
+        private final String value;
+        private final String reason;
 
         private CustomFieldError(String field, String value, String reason) {
             this.field = field;

@@ -1,12 +1,10 @@
 package com.airjnc.user.dto.request;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = {"name", "phoneNumber"})
 public class FindEmailRequestDTO {
 
     String name;

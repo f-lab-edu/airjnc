@@ -8,9 +8,9 @@ import lombok.ToString;
 @ToString
 public class AuthInfoDTO {
 
-    private Long id;
-    private String email;
-    private String name;
+    private final Long id;
+    private final String email;
+    private final String name;
 
 
     @Builder

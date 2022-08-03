@@ -10,11 +10,11 @@ import com.airjnc.user.dto.response.UserDTO;
 
 public interface UserService {
 
-    public FindEmailResponseDTO findEmailByNameAndPhoneNumber(FindEmailRequestDTO findEmailRequestDTO);
+    FindEmailResponseDTO findEmailByNameAndPhoneNumber(FindEmailRequestDTO findEmailRequestDTO);
 
-    public FindPwdResponseDTO findPasswordByEmail(String email);
+    FindPwdResponseDTO findPasswordByEmail(String email);
 
-    public UserDTO create(SignUpDTO signUpDTO);
+    UserDTO create(SignUpDTO signUpDTO);
 
-    public AuthInfoDTO logIn(LogInRequestDTO logInRequestDTO);
+    AuthInfoDTO logIn(LogInRequestDTO logInRequestDTO);
 }
