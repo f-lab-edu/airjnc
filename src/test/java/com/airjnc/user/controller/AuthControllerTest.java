@@ -10,8 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.airjnc.common.aspect.Advice;
-import com.airjnc.user.dto.request.LogInDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.request.UserLogInReq;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.AuthService;
 import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,20 +48,20 @@ class AuthControllerTest {
   @Test
   void logIn() throws Exception {
     //given
-    LogInDTO logInDTO = LogInDTOFixture.getBuilder().build();
-    UserDTO userDTO = UserDTOFixture.getBuilder().build();
-    given(authService.logIn(any(LogInDTO.class))).willReturn(userDTO);
+    UserLogInReq userLogInReq = LogInDTOFixture.getBuilder().build();
+    UserResp userResp = UserDTOFixture.getBuilder().build();
+    given(authService.logIn(any(UserLogInReq.class))).willReturn(userResp);
     //when
     mockMvc.perform(
             post("/auth/logIn")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(logInDTO))
+                .content(objectMapper.writeValueAsString(userLogInReq))
         ).andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("id").value(userDTO.getId()));
+        .andExpect(jsonPath("id").value(userResp.getId()));
     //then
-    then(authService).should(times(1)).logIn(any(LogInDTO.class));
-    then(userStateService).should(times(1)).create(userDTO.getId());
+    then(authService).should(times(1)).logIn(any(UserLogInReq.class));
+    then(userStateService).should(times(1)).create(userResp.getId());
   }
 
   @Test
@@ -74,6 +74,6 @@ class AuthControllerTest {
         .andExpect(status().isOk());
     //then
     then(advice).should(times(1)).beforeCheckAuth();
-    then(userStateService).should(times(1)).remove();
+    then(userStateService).should(times(1)).delete();
   }
 }

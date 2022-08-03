@@ -4,7 +4,7 @@ public interface UserStateService {
 
   void create(Long userId);
 
-  void remove();
-
   Long getUserId();
+
+  void delete();
 }
