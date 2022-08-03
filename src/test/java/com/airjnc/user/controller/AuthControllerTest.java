@@ -9,15 +9,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import com.airjnc.common.aspect.Advice;
-import com.airjnc.user.dto.request.LogInDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.common.interceptor.CheckAuthInterceptor;
+import com.airjnc.user.dto.request.UserLogInReq;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.AuthService;
 import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.testutil.annotation.AopTest;
 import com.testutil.fixture.LogInDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,7 +28,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AuthController.class)
-@AopTest
 class AuthControllerTest {
 
   @Autowired
@@ -43,25 +43,32 @@ class AuthControllerTest {
   UserStateService userStateService;
 
   @SpyBean
-  Advice advice;
+  CheckAuthInterceptor checkAuthInterceptor;
+
+  private void checkInterceptor(int n) throws Exception {
+    then(checkAuthInterceptor).should(times(1))
+        .preHandle(any(HttpServletRequest.class), any(HttpServletResponse.class), any(Object.class));
+    then(userStateService).should(times(n)).getUserId();
+  }
 
   @Test
   void logIn() throws Exception {
     //given
-    LogInDTO logInDTO = LogInDTOFixture.getBuilder().build();
-    UserDTO userDTO = UserDTOFixture.getBuilder().build();
-    given(authService.logIn(any(LogInDTO.class))).willReturn(userDTO);
+    UserLogInReq userLogInReq = LogInDTOFixture.getBuilder().build();
+    UserResp userResp = UserDTOFixture.getBuilder().build();
+    given(authService.logIn(any(UserLogInReq.class))).willReturn(userResp);
     //when
     mockMvc.perform(
             post("/auth/logIn")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(logInDTO))
+                .content(objectMapper.writeValueAsString(userLogInReq))
         ).andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("id").value(userDTO.getId()));
+        .andExpect(jsonPath("id").value(userResp.getId()));
     //then
-    then(authService).should(times(1)).logIn(any(LogInDTO.class));
-    then(userStateService).should(times(1)).create(userDTO.getId());
+    checkInterceptor(0);
+    then(authService).should(times(1)).logIn(any(UserLogInReq.class));
+    then(userStateService).should(times(1)).create(userResp.getId());
   }
 
   @Test
@@ -73,7 +80,7 @@ class AuthControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(advice).should(times(1)).beforeCheckAuth();
-    then(userStateService).should(times(1)).remove();
+    checkInterceptor(1);
+    then(userStateService).should(times(1)).delete();
   }
 }

@@ -4,15 +4,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.anyInt;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
-import com.airjnc.common.service.CommonInternalCheckService;
+import com.airjnc.common.exception.NotFoundException;
+import com.airjnc.common.service.CommonCheckService;
+import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.dao.UserRepository;
-import com.airjnc.user.dao.mapper.UserMapper;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.MybatisTest;
-import com.testutil.fixture.UserEntityFixture;
+import com.testutil.testdata.TestUser;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -30,63 +34,147 @@ class MybatisUserRepositoryTest {
   UserMapper userMapper;
 
   @Spy
-  CommonInternalCheckService commonInternalCheckService;
+  CommonCheckService commonCheckService;
 
   @Mock
   UserModelMapper userModelMapper;
 
+  UserEntity testUser;
+
   @BeforeEach
   void beforeEach() {
-    userRepository = new MybatisUserRepository(userMapper, commonInternalCheckService,
+    userRepository = new MybatisUserRepository(userMapper, commonCheckService,
         userModelMapper);
+    testUser = TestUser.getBuilder().build();
   }
 
   @Test
-  void findById() {
-    //given
-    UserEntity user = UserEntityFixture.getBuilder().build();
+  @Transactional
+  void delete() {
     //when
-    UserEntity findUser = userRepository.findById(user.getId());
+    userRepository.delete(testUser.getId());
     //then
-    assertThat(findUser.getId()).isSameAs(user.getId());
+    Assertions.assertThrows(
+        NotFoundException.class,
+        () -> userRepository.findByEmail(testUser.getEmail())
+    );
+    then(commonCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 
   @Test
   void findByEmail() {
-    //given
-    UserEntity user = UserEntityFixture.getBuilder().build();
     //when
-    UserEntity findUser = userRepository.findByEmail(user.getEmail());
+    UserEntity findUser = userRepository.findByEmail(testUser.getEmail());
     //then
-    assertThat(findUser.getId()).isSameAs(user.getId());
-    assertThat(findUser.getEmail()).isEqualTo(user.getEmail());
+    assertThat(findUser.getId()).isSameAs(testUser.getId());
+    assertThat(findUser.getEmail()).isEqualTo(testUser.getEmail());
+  }
+
+  @Test
+  void findById() {
+    //when
+    UserEntity findUser = userRepository.findById(testUser.getId());
+    //then
+    assertThat(findUser.getId()).isSameAs(testUser.getId());
+  }
+
+  @Test
+  void findByPhoneNumber() {
+    //when
+    UserEntity findUser = userRepository.findByPhoneNumber(testUser.getPhoneNumber());
+    //then
+    assertThat(findUser.getId()).isSameAs(testUser.getId());
+  }
+
+  @Test
+  void findWithDeletedByNameAndBirthDate() {
+    //when
+    UserEntity findUser = userRepository.findWithDeletedByNameAndBirthDate(testUser.getName(), testUser.getBirthDate());
+    //then
+    assertThat(findUser.getEmail()).isEqualTo(testUser.getEmail());
+  }
+
+  @Test
+  @Transactional
+  void findOnlyDeletedById_givenDeletedThenSuccess() {
+    userRepository.delete(testUser.getId());
+    //when
+    UserEntity findUser = userRepository.findOnlyDeletedById(testUser.getId());
+    //then
+    assertThat(testUser.getId()).isEqualTo(findUser.getId());
+  }
+
+  @Test
+  void findOnlyDeletedById_givenNotDeletedThenThrowException() {
+    //when
+    Assertions.assertThrows(
+        NotFoundException.class,
+        () -> userRepository.findOnlyDeletedById(testUser.getId())
+    );
+  }
+
+  @Test
+  @Transactional
+  void findWithDeletedByEmail_givenDeletedThenSuccess() {
+    //given
+    userMapper.delete(testUser.getId());
+    //when
+    UserEntity findUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
+    //then
+    assertThat(testUser.getId()).isEqualTo(findUser.getId());
+  }
+
+  @Test
+  void findWithDeletedByEmail_givenNotDeletedThenSuccess() {
+    //when
+    UserEntity findUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
+    //then
+    assertThat(testUser.getId()).isEqualTo(findUser.getId());
+  }
+
+  @Test
+  @Transactional
+  void restore() {
+    //given
+    userMapper.delete(testUser.getId());
+    UserEntity deletedUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
+    //when
+    userRepository.restore(testUser.getId());
+    UserEntity restoredUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
+    //then
+    assertThat(deletedUser.isDeleted()).isTrue();
+    assertThat(restoredUser.isDeleted()).isFalse();
   }
 
   @Test
   @Transactional
   void save() {
     //given
-    CreateDTO createDTO = CreateDTO.builder()
+    UserSaveDto userSaveDTO = UserCreateReq.builder()
         .email("abc@google.com")
         .password("q1w2e3")
         .name("abcUser")
         .gender(Gender.FEMALE)
-        .build();
+        .build()
+        .toSaveDTO("hash");
     //when
-    userRepository.save(createDTO);
+    userRepository.save(userSaveDTO);
     //then
-    then(commonInternalCheckService).should(times(1)).shouldBeMatch(1, 1);
+    UserEntity byEmail = userRepository.findByEmail(userSaveDTO.getEmail());
+    assertThat(byEmail.getName()).isEqualTo(userSaveDTO.getName());
+    then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
   }
 
   @Test
   @Transactional
-  void remove() {
+  void updatePasswordByEmail() {
     //given
-    UserEntity userEntity = UserEntityFixture.getBuilder().build();
+    String email = TestUser.EMAIL;
+    String passwrod = "q1w2e3r4t5!@#";
     //when
-    userRepository.remove(userEntity.getId());
+    userRepository.updatePasswordByEmail(email, passwrod);
     //then
-    then(commonInternalCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
+    then(commonCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 }
 

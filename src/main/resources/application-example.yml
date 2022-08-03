@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url:
+    username:
+    password:
+  messages:
+    basename:
+  session:
+    store-type:
+  redis:
+    session:
+      host:
+      password:
+      port:
+logging:
+  level:
+    org:
+      springframework:
+        jdbc: debug
+    com:
+      airjnc: trace
+cloud:
+  naver:
+    credentials:
+      accessKey:
+      secretKey:
+    maile:
+      templateSid:
+        resetPassword:
+      uri:
+        send:
+
