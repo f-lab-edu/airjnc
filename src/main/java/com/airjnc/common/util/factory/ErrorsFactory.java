@@ -1,32 +1,56 @@
 package com.airjnc.common.util.factory;
 
-import com.airjnc.common.util.constant.ErrorCode;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 public final class ErrorsFactory {
 
+  public static Errors create(Object target, String objectName) {
+    return new BeanPropertyBindingResult(target, objectName);
+  }
+
   public static Errors create(Object target) {
-    return new BeanPropertyBindingResult(target, target.getClass().getSimpleName());
+    return create(target, target.getClass().getSimpleName());
   }
 
   public static Errors create(String objectName) {
-    return new BeanPropertyBindingResult(null, objectName);
+    return create(null, objectName);
   }
 
-  public static Errors create(ErrorCode errorCode) {
-        /*
-        globalError
-            1. "errorCode.getCode()"."objectName"
-            2. "errorCode.getCode()"
-        Ex) `errorCode -> ErrorCode.DEFAULT, objectName -> RootException.class.getSimpleName()`
-            1. Default.RootException
-            2. Default
-        Ex) `errorCode -> ErrorCode.DEFAULT, objectName -> ""`
-            1. Default
-         */
-    Errors errors = new BeanPropertyBindingResult(null, "");
-    errors.reject(errorCode.name());
+  /**
+   * [create global Error] create message code -> `errorCode`.`objectName`
+   */
+  public static Errors createAndReject(Object target, String errorCode, String objectName, Object[] errorArgs) {
+    /*
+     * messageCode 생성 순위
+        1. errorCode.objectName
+        2. errorCode
+     * Example) errorCode->"DEFAULT", objectName->""
+        1. DEFAULT
+     */
+    Errors errors = new BeanPropertyBindingResult(target, objectName);
+    errors.reject(errorCode, errorArgs, null);
     return errors;
+  }
+
+  /**
+   * [create global Error] create message code -> `errorCode`.`objectName`
+   */
+  public static Errors createAndReject(String errorCode) {
+    return createAndReject(null, errorCode, "", null);
+  }
+
+  /**
+   * [create global Error] create message code -> `errorCode`.`objectName`
+   */
+  public static Errors createAndReject(String errorCode, String objectName) {
+    return createAndReject(null, errorCode, objectName, null);
+  }
+
+  /**
+   * [create global Error] create message code -> `errorCode`.`objectName`
+   */
+  public static Errors createAndReject(String errorCode, String objectName, Object[] errorArgs) {
+    return createAndReject(null, errorCode, objectName, errorArgs);
   }
 }
