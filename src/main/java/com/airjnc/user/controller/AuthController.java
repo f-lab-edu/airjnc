@@ -23,7 +23,7 @@ public class AuthController {
   private final UserStateService userStateService;
 
   @PostMapping("/logIn")
-  public UserResp logIn(@RequestBody @Validated AuthLogInReq authLogInReq) {
+  public UserResp logIn(@Validated @RequestBody AuthLogInReq authLogInReq) {
     UserResp userResp = authService.logIn(authLogInReq);
     userStateService.create(userResp.getId());
     return userResp;
