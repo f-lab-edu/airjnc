@@ -9,7 +9,7 @@ import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.fixture.UserEntityFixture;
@@ -77,14 +77,14 @@ class MybatisUserRepositoryTest {
   @Transactional
   void save() {
     //given
-    CreateDTO createDTO = CreateDTO.builder()
+    UserSaveDto userSaveDto = UserSaveDto.builder()
         .email("abc@google.com")
         .password("q1w2e3")
         .name("abcUser")
         .gender(Gender.FEMALE)
         .build();
     //when
-    userRepository.save(createDTO);
+    userRepository.save(userSaveDto);
     //then
     then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
   }

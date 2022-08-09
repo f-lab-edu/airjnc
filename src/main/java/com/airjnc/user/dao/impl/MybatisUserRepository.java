@@ -5,7 +5,7 @@ import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.util.UserModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -37,9 +37,9 @@ public class MybatisUserRepository implements UserRepository {
   }
 
   @Override
-  public UserEntity save(CreateDTO createDTO) {
-    int affect = userMapper.save(createDTO);
+  public UserEntity save(UserSaveDto userSaveDto) {
+    int affect = userMapper.save(userSaveDto);
     commonCheckService.shouldBeMatch(affect, 1);
-    return userModelMapper.createDTOToUserEntity(createDTO);
+    return userModelMapper.userSaveDtoToUserEntity(userSaveDto);
   }
 }

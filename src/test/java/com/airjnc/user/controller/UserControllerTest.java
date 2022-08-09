@@ -10,13 +10,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.testutil.fixture.CreateDTOFixture;
-import com.testutil.fixture.UserDTOFixture;
+import com.testutil.fixture.UserCreateReqFixture;
+import com.testutil.fixture.UserRespFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -46,20 +46,20 @@ class UserControllerTest {
   @Test
   void create() throws Exception {
     //given
-    CreateDTO createDTO = CreateDTOFixture.getBuilder().build();
-    UserDTO userDTO = UserDTOFixture.getBuilder().build();
-    given(userService.create(any(CreateDTO.class))).willReturn(userDTO);
+    UserCreateReq userCreateReq = UserCreateReqFixture.getBuilder().build();
+    UserResp userResp = UserRespFixture.getBuilder().build();
+    given(userService.create(any(UserCreateReq.class))).willReturn(userResp);
     //when
     mockMvc.perform(
             post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createDTO))
+                .content(objectMapper.writeValueAsString(userCreateReq))
         ).andDo(print())
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("id").value(userDTO.getId()));
+        .andExpect(jsonPath("id").value(userResp.getId()));
     //then
-    then(userService).should(times(1)).create(any(CreateDTO.class));
-    then(userStateService).should(times(1)).create(userDTO.getId());
+    then(userService).should(times(1)).create(any(UserCreateReq.class));
+    then(userStateService).should(times(1)).create(userResp.getId());
   }
 
   @Test
