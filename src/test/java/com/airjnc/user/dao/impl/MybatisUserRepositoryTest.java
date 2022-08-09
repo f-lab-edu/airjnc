@@ -37,8 +37,7 @@ class MybatisUserRepositoryTest {
 
   @BeforeEach
   void beforeEach() {
-    userRepository = new MybatisUserRepository(userMapper, commonCheckService,
-        userModelMapper);
+    userRepository = new MybatisUserRepository(userMapper, commonCheckService, userModelMapper);
   }
 
   @Test
