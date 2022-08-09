@@ -3,7 +3,7 @@ package com.airjnc.user.dao.impl;
 import com.airjnc.common.exception.NotFoundException;
 import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.user.dao.UserRepository;
-import com.airjnc.user.dao.mapper.UserMapper;
+import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.util.UserModelMapper;
