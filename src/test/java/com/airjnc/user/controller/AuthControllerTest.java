@@ -66,6 +66,6 @@ class AuthControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userStateService).should(times(1)).remove();
+    then(userStateService).should(times(1)).delete();
   }
 }

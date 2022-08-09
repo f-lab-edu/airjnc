@@ -19,7 +19,7 @@ public class SessionUserStateService implements UserStateService {
     return (Long) httpSession.getAttribute(SessionKey.USER.name());
   }
 
-  public void remove() {
+  public void delete() {
     httpSession.removeAttribute(SessionKey.USER.name());
   }
 }

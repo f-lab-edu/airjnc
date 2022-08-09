@@ -77,8 +77,8 @@ class UserControllerTest {
     // advice, argumentResolver가 정상적으로 적용되었는 지 테스트
     then(currentUserIdArgumentResolver).should(times(1))
         .resolveArgument(any(), any(), any(), any());
-    then(userService).should(times(1)).remove(userId);
-    then(userStateService).should(times(1)).remove();
+    then(userService).should(times(1)).delete(userId);
+    then(userStateService).should(times(1)).delete();
   }
 }
 
