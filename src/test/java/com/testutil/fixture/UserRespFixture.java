@@ -1,10 +1,10 @@
 package com.testutil.fixture;
 
 import com.airjnc.user.domain.Gender;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.response.UserResp;
 import java.time.LocalDate;
 
-public class UserDTOFixture {
+public class UserRespFixture {
 
   public static final Long ID = 2L;
 
@@ -20,8 +20,8 @@ public class UserDTOFixture {
 
   public static final LocalDate BIRTH_DATE = LocalDate.of(2000, 5, 15);
 
-  public static UserDTO.UserDTOBuilder getBuilder() {
-    return UserDTO.builder()
+  public static UserResp.UserRespBuilder getBuilder() {
+    return UserResp.builder()
         .id(ID)
         .email(EMAIL)
         .name(NAME)
