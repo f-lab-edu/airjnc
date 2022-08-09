@@ -1,7 +1,9 @@
 package com.airjnc.common.resolver;
 
 import com.airjnc.common.annotation.CurrentUserId;
-import com.airjnc.user.service.UserStateService;
+import com.airjnc.common.interceptor.CheckAuthInterceptor;
+import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -15,12 +17,11 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class CurrentUserIdArgumentResolver implements HandlerMethodArgumentResolver {
 
-  private final UserStateService userStateService;
-
   @Override
   public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
       NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-    return userStateService.getUserId();
+    HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
+    return Objects.requireNonNull(servletRequest).getAttribute(CheckAuthInterceptor.AUTH_KEY);
   }
 
   @Override

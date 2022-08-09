@@ -9,14 +9,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import com.airjnc.common.aspect.Advice;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.user.dto.request.CreateDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.testutil.annotation.AopTest;
 import com.testutil.fixture.CreateDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
 import org.junit.jupiter.api.Test;
@@ -28,7 +26,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(UserController.class)
-@AopTest
 class UserControllerTest {
 
   @Autowired
@@ -42,9 +39,6 @@ class UserControllerTest {
 
   @MockBean
   UserStateService userStateService;
-
-  @SpyBean
-  Advice advice;
 
   @SpyBean
   CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
@@ -81,7 +75,6 @@ class UserControllerTest {
         .andExpect(status().isNoContent());
     //then
     // advice, argumentResolver가 정상적으로 적용되었는 지 테스트
-    then(advice).should(times(1)).beforeCheckAuth();
     then(currentUserIdArgumentResolver).should(times(1))
         .resolveArgument(any(), any(), any(), any());
     then(userService).should(times(1)).remove(userId);

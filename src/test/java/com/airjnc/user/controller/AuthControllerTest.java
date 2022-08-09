@@ -9,25 +9,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import com.airjnc.common.aspect.Advice;
 import com.airjnc.user.dto.request.LogInDTO;
 import com.airjnc.user.dto.response.UserDTO;
 import com.airjnc.user.service.AuthService;
 import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.testutil.annotation.AopTest;
 import com.testutil.fixture.LogInDTOFixture;
 import com.testutil.fixture.UserDTOFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AuthController.class)
-@AopTest
 class AuthControllerTest {
 
   @Autowired
@@ -41,9 +37,6 @@ class AuthControllerTest {
 
   @MockBean
   UserStateService userStateService;
-
-  @SpyBean
-  Advice advice;
 
   @Test
   void logIn() throws Exception {
@@ -73,7 +66,6 @@ class AuthControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(advice).should(times(1)).beforeCheckAuth();
     then(userStateService).should(times(1)).remove();
   }
 }
