@@ -2,7 +2,7 @@ package com.airjnc.user.dto.request;
 
 import com.airjnc.common.util.BCryptHashEncrypter;
 import com.airjnc.user.domain.Gender;
-import com.airjnc.user.util.Regex;
+import com.airjnc.user.util.UserRegex;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -28,7 +28,7 @@ public class CreateDTO {
   private Gender gender;
 
   @NotNull
-  @Pattern(regexp = Regex.Password.format)
+  @Pattern(regexp = UserRegex.PASSWORD)
   private String password;
 
   @Builder

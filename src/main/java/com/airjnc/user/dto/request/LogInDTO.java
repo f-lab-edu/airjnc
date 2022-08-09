@@ -1,6 +1,6 @@
 package com.airjnc.user.dto.request;
 
-import com.airjnc.user.util.Regex;
+import com.airjnc.user.util.UserRegex;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -18,7 +18,7 @@ public class LogInDTO {
   private String email;
 
   @NotNull
-  @Pattern(regexp = Regex.Password.format)
+  @Pattern(regexp = UserRegex.PASSWORD)
   private String password;
 
   @Builder
