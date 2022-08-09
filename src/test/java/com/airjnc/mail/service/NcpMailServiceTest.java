@@ -15,7 +15,7 @@ import com.airjnc.mail.dto.NcpMailSendRespDto;
 import com.airjnc.mail.dto.SendUsingTemplateDto;
 import com.airjnc.mail.properties.NcpMailProperties;
 import com.testutil.annotation.UnitTest;
-import com.testutil.fixture.UserEntityFixture;
+import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -83,9 +83,9 @@ class NcpMailServiceTest {
     given(commonUtilService.createHttpEntity(eq(headers), any(NcpMailSendReqDto.class))).willReturn(entity);
     given(restTemplate.postForObject(sendUri, entity, NcpMailSendRespDto.class)).willReturn(res);
     //when
-    SendUsingTemplateDto sendUsingTemplateDto = SendUsingTemplateDto.builder().name(UserEntityFixture.NAME).code("123456")
+    SendUsingTemplateDto sendUsingTemplateDto = SendUsingTemplateDto.builder().name(TestUser.NAME).code("123456")
         .build();
-    ncpMailService.send(UserEntityFixture.EMAIL, sendUsingTemplateDto);
+    ncpMailService.send(TestUser.EMAIL, sendUsingTemplateDto);
     //then
     then(commonNcpService).should(times(1)).createHeaders(sendUri);
     then(commonUtilService).should(times(1)).createHttpEntity(eq(headers), any(NcpMailSendReqDto.class));

@@ -16,7 +16,7 @@ import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.UserCreateReqFixture;
 import com.testutil.fixture.UserRespFixture;
-import com.testutil.fixture.UserEntityFixture;
+import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,7 +46,7 @@ class UserServiceTest {
   void userShouldBeCreated() {
     //given
     UserCreateReq userCreateReq = spy(UserCreateReqFixture.getBuilder().build());
-    UserEntity userEntity = UserEntityFixture.getBuilder().build();
+    UserEntity userEntity = TestUser.getBuilder().build();
     UserResp userResp = UserRespFixture.getBuilder().build();
     given(userRepository.save(any(UserSaveDto.class))).willReturn(userEntity);
     given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
@@ -63,7 +63,7 @@ class UserServiceTest {
   @Test
   void userShouldBeRemoved() {
     //given
-    UserEntity userEntity = UserEntityFixture.getBuilder().build();
+    UserEntity userEntity = TestUser.getBuilder().build();
     //when
     userService.delete(userEntity.getId());
     //then

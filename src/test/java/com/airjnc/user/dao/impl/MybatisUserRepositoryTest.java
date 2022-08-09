@@ -5,14 +5,14 @@ import static org.mockito.BDDMockito.anyInt;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import com.airjnc.common.service.CommonCheckService;
-import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dao.UserMapper;
+import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.MybatisTest;
-import com.testutil.fixture.UserEntityFixture;
+import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -44,7 +44,7 @@ class MybatisUserRepositoryTest {
   @Test
   void findByEmail() {
     //given
-    UserEntity user = UserEntityFixture.getBuilder().build();
+    UserEntity user = TestUser.getBuilder().build();
     //when
     UserEntity findUser = userRepository.findByEmail(user.getEmail());
     //then
@@ -55,7 +55,7 @@ class MybatisUserRepositoryTest {
   @Test
   void findById() {
     //given
-    UserEntity user = UserEntityFixture.getBuilder().build();
+    UserEntity user = TestUser.getBuilder().build();
     //when
     UserEntity findUser = userRepository.findById(user.getId());
     //then
@@ -66,7 +66,7 @@ class MybatisUserRepositoryTest {
   @Transactional
   void remove() {
     //given
-    UserEntity userEntity = UserEntityFixture.getBuilder().build();
+    UserEntity userEntity = TestUser.getBuilder().build();
     //when
     userRepository.delete(userEntity.getId());
     //then
