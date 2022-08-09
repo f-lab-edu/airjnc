@@ -39,7 +39,7 @@ class AuthServiceTest {
   void userShouldBeLoggedIn() {
     //given
     AuthLogInReq authLogInReq = AuthLogInReqFixture.getBuilder().build();
-    UserEntity userEntity = TestUser.getBuilder().deletedAt(null).build();
+    UserEntity userEntity = TestUser.getBuilder().build();
     UserResp userResp = UserRespFixture.getBuilder().build();
     given(userRepository.findWithDeletedByEmail(authLogInReq.getEmail())).willReturn(userEntity);
     given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
