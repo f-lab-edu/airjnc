@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  db:
+    image: mysql
+    container_name: airjnc-db
+    environment:
+      MYSQL_ROOT_PASSWORD: q1w2e3
+      MYSQL_USER: test
+      MYSQL_PASSWORD: q1w2e3
+      MYSQL_DATABASE: airjnc
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db-storage:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+  session:
+    image: redis
+    container_name: airjnc-session
+    environment:
+      REDIS_PASSWORD: q1w2e3
+    ports:
+      - 6379:6379
+
