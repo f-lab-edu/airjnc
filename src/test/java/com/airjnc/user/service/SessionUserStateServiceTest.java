@@ -26,7 +26,7 @@ class SessionUserStateServiceTest {
   @Test
   void sessionShouldBeRemoved() {
     //when
-    sessionStateService.remove();
+    sessionStateService.delete();
     //then
     then(httpSession).should(times(1)).removeAttribute(SessionKey.USER.name());
   }

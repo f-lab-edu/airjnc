@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.spy;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
+import com.airjnc.common.service.HashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserSaveDto;
@@ -35,24 +36,28 @@ class UserServiceTest {
   @Mock
   UserModelMapper userModelMapper;
 
+  @Mock
+  HashService hashService;
+
   @InjectMocks
   UserService userService;
 
   @Test()
   void userShouldBeCreated() {
     //given
-    UserCreateReq createDTO = spy(UserCreateReqFixture.getBuilder().build());
+    UserCreateReq userCreateReq = spy(UserCreateReqFixture.getBuilder().build());
     UserEntity userEntity = UserEntityFixture.getBuilder().build();
-    UserResp userDTO = UserRespFixture.getBuilder().build();
+    UserResp userResp = UserRespFixture.getBuilder().build();
     given(userRepository.save(any(UserSaveDto.class))).willReturn(userEntity);
-    given(userModelMapper.userEntityToUserDTO(userEntity)).willReturn(userDTO);
+    given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
     //when
-    UserResp result = userService.create(createDTO);
+    UserResp result = userService.create(userCreateReq);
     //then
-    then(userCheckService).should(times(1)).emailShouldNotBeDuplicated(createDTO.getEmail());
+    then(userCheckService).should(times(1)).emailShouldNotBeDuplicated(userCreateReq.getEmail());
+    then(hashService).should(times(1)).encrypt(userCreateReq.getPassword());
     then(userRepository).should(times(1)).save(any(UserSaveDto.class));
-    then(userModelMapper).should(times(1)).userEntityToUserDTO(userEntity);
-    assertThat(result.getId()).isEqualTo(userDTO.getId());
+    then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
+    assertThat(result.getId()).isEqualTo(userResp.getId());
   }
 
   @Test
@@ -60,9 +65,9 @@ class UserServiceTest {
     //given
     UserEntity userEntity = UserEntityFixture.getBuilder().build();
     //when
-    userService.remove(userEntity.getId());
+    userService.delete(userEntity.getId());
     //then
-    then(userRepository).should(times(1)).remove(userEntity.getId());
+    then(userRepository).should(times(1)).delete(userEntity.getId());
   }
 }
 
