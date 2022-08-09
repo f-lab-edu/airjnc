@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
-import com.airjnc.common.util.constant.SessionKey;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.testutil.annotation.UnitTest;
 import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
