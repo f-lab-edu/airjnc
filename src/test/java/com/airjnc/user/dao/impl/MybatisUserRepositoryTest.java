@@ -68,7 +68,7 @@ class MybatisUserRepositoryTest {
     //given
     UserEntity userEntity = UserEntityFixture.getBuilder().build();
     //when
-    userRepository.remove(userEntity.getId());
+    userRepository.delete(userEntity.getId());
     //then
     then(commonCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }

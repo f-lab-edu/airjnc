@@ -1,18 +1,26 @@
-package com.airjnc.common.util;
+package com.airjnc.common.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import com.testutil.annotation.UnitTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @UnitTest
-class BCryptHashEncrypterTest {
+class HashServiceTest {
+
+  HashService hashService;
+
+  @BeforeEach
+  void beforeEach() {
+    hashService = new HashService();
+  }
 
   @Test
   void plainShouldBeHashed() {
     //given
     String plain = "q1w2e3r4!";
     //when
-    String hash = BCryptHashEncrypter.encrypt(plain);
+    String hash = hashService.encrypt(plain);
     //then
     assertThat(plain).isNotEqualTo(hash);
   }
@@ -21,9 +29,9 @@ class BCryptHashEncrypterTest {
   void plainShouldBeMatchToB() {
     //given
     String plain = "q1w2e3r4!";
-    String hash = BCryptHashEncrypter.encrypt(plain);
+    String hash = hashService.encrypt(plain);
     //when
-    boolean match = BCryptHashEncrypter.isMatch(plain, hash);
+    boolean match = hashService.isMatch(plain, hash);
     //then
     assertThat(match).isTrue();
   }

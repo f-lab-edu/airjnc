@@ -6,5 +6,5 @@ public interface UserStateService {
 
   Long getUserId();
 
-  void remove();
+  void delete();
 }

@@ -1,6 +1,5 @@
 package com.airjnc.user.dto.request;
 
-import com.airjnc.common.util.BCryptHashEncrypter;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.util.UserRegex;
@@ -46,12 +45,12 @@ public class UserCreateReq {
     this.birthDate = birthDate;
   }
 
-  public UserSaveDto toSaveDTO() {
+  public UserSaveDto toSaveDTO(String hash) {
     return UserSaveDto.builder()
         .email(email)
         .name(name)
         .gender(gender)
-        .password(BCryptHashEncrypter.encrypt(this.password))
+        .password(hash)
         .birthDate(birthDate)
         .build();
   }
