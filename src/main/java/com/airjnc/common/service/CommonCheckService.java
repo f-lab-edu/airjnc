@@ -2,11 +2,12 @@ package com.airjnc.common.service;
 
 import com.airjnc.common.exception.DefaultException;
 import com.airjnc.common.util.factory.ErrorsFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
 
 @Service
-public class CommonInternalCheckService {
+@RequiredArgsConstructor
+public class CommonCheckService {
 
   public void shouldBeMatch(int actual, int expected) {
     if (actual == expected) {
@@ -16,8 +17,8 @@ public class CommonInternalCheckService {
     1. CommonCheckService.isNotMatch
     2. CommonCheckService
      */
-    Errors errors = ErrorsFactory.create("isNotMatch");
-    errors.reject(this.getClass().getSimpleName(), new Object[]{actual, expected}, null);
-    throw new DefaultException(errors);
+    throw new DefaultException(
+        ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "shouldBeMatch", new Object[]{actual, expected})
+    );
   }
 }

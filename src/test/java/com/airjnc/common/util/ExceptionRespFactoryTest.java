@@ -3,7 +3,7 @@ package com.airjnc.common.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import com.airjnc.common.dto.response.ExceptionResp;
 import com.airjnc.common.exception.DefaultException;
-import com.airjnc.common.service.CommonInternalCheckService;
+import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.util.factory.ExceptionRespFactory;
 import com.airjnc.common.util.factory.ErrorsFactory;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
@@ -22,13 +22,13 @@ class ExceptionRespFactoryTest {
   @Test
   void argumentsTest() {
     //given
-    CommonInternalCheckService commonInternalCheckService = new CommonInternalCheckService();
+    CommonCheckService commonCheckService = new CommonCheckService();
     ExceptionResp exceptionResp = null;
     int actual = 1;
     int expected = 2;
     //when
     try {
-      commonInternalCheckService.shouldBeMatch(actual, expected);
+      commonCheckService.shouldBeMatch(actual, expected);
     } catch (DefaultException ex) {
       exceptionResp = ExceptionRespFactory.create(ex, messageSource);
     }
