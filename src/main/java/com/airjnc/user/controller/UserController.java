@@ -2,8 +2,8 @@ package com.airjnc.user.controller;
 
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.annotation.CurrentUserId;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +27,10 @@ public class UserController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public UserDTO create(@RequestBody @Validated CreateDTO createDTO) {
-    UserDTO userDTO = userService.create(createDTO);
-    userStateService.create(userDTO.getId());
-    return userDTO;
+  public UserResp create(@RequestBody @Validated UserCreateReq userCreateReq) {
+    UserResp userResp = userService.create(userCreateReq);
+    userStateService.create(userResp.getId());
+    return userResp;
   }
 
   @DeleteMapping("/me")

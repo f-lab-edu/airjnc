@@ -1,7 +1,7 @@
 package com.airjnc.user.dao;
 
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.UserSaveDto;
 
 public interface UserRepository {
 
@@ -11,5 +11,5 @@ public interface UserRepository {
 
   void remove(Long id);
 
-  UserEntity save(CreateDTO createDTO);
+  UserEntity save(UserSaveDto userSaveDto);
 }

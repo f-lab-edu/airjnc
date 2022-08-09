@@ -2,8 +2,8 @@ package com.airjnc.user.service;
 
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,9 @@ public class UserService {
 
   private final UserCheckService userCheckService;
 
-  public UserDTO create(CreateDTO createDTO) {
-    userCheckService.emailShouldNotBeDuplicated(createDTO.getEmail());
-    createDTO.changePasswordToHash();
-    UserEntity userEntity = userRepository.save(createDTO);
+  public UserResp create(UserCreateReq userCreateReq) {
+    userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
+    UserEntity userEntity = userRepository.save(userCreateReq.toSaveDTO());
     return userModelMapper.userEntityToUserDTO(userEntity);
   }
 

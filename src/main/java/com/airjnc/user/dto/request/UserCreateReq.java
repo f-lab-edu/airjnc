@@ -2,45 +2,57 @@ package com.airjnc.user.dto.request;
 
 import com.airjnc.common.util.BCryptHashEncrypter;
 import com.airjnc.user.domain.Gender;
+import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.util.UserRegex;
+import java.time.LocalDate;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CreateDTO {
+public class UserCreateReq {
 
-  private Long id;
-
-  @NotNull
+  @NotBlank
   @Email
   private String email;
 
-  @NotNull
+  @NotBlank
   private String name;
 
   @NotNull
   private Gender gender;
 
-  @NotNull
+  @NotBlank
   @Pattern(regexp = UserRegex.PASSWORD)
   private String password;
 
+  @NotNull
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate birthDate;
+
   @Builder
-  public CreateDTO(Long id, String email, String password, String name, Gender gender) {
-    this.id = id;
+  public UserCreateReq(String email, String password, String name, Gender gender, LocalDate birthDate) {
     this.email = email;
     this.password = password;
     this.name = name;
     this.gender = gender;
+    this.birthDate = birthDate;
   }
 
-  public void changePasswordToHash() {
-    password = BCryptHashEncrypter.encrypt(this.password);
+  public UserSaveDto toSaveDTO() {
+    return UserSaveDto.builder()
+        .email(email)
+        .name(name)
+        .gender(gender)
+        .password(BCryptHashEncrypter.encrypt(this.password))
+        .birthDate(birthDate)
+        .build();
   }
 }
