@@ -21,13 +21,19 @@ public class MybatisUserRepository implements UserRepository {
   private final UserModelMapper userModelMapper;
 
   @Override
+  public UserEntity findByEmail(String email) {
+    return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
+  }
+
+  @Override
   public UserEntity findById(Long id) {
     return userMapper.findById(id).orElseThrow(NotFoundException::new);
   }
 
   @Override
-  public UserEntity findByEmail(String email) {
-    return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
+  public void remove(Long id) {
+    int affect = userMapper.remove(id);
+    commonInternalCheckService.shouldBeMatch(affect, 1);
   }
 
   @Override
@@ -35,11 +41,5 @@ public class MybatisUserRepository implements UserRepository {
     int affect = userMapper.save(createDTO);
     commonInternalCheckService.shouldBeMatch(affect, 1);
     return userModelMapper.createDTOToUserEntity(createDTO);
-  }
-
-  @Override
-  public void remove(Long id) {
-    int affect = userMapper.remove(id);
-    commonInternalCheckService.shouldBeMatch(affect, 1);
   }
 }

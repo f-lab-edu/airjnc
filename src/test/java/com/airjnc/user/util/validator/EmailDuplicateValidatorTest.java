@@ -37,16 +37,6 @@ class EmailDuplicateValidatorTest {
   }
 
   @Test
-  void whenEmailOfSignUpDTOisEmptyThenExceptionIsNotThrown() {
-    // given
-    given(userRepository.findByEmail(createDTO.getEmail())).willThrow(NotFoundException.class);
-    //when
-    userCheckService.emailShouldNotBeDuplicated(createDTO.getEmail());
-    //then
-    then(userRepository).should(times(1)).findByEmail(createDTO.getEmail());
-  }
-
-  @Test
   void whenEmailOfSignUpDTOisDuplicatedThenExceptionIsThrown() {
     // given
     given(userRepository.findByEmail(createDTO.getEmail())).willReturn(
@@ -56,6 +46,16 @@ class EmailDuplicateValidatorTest {
         EmailIsDuplicatedException.class,
         () -> userCheckService.emailShouldNotBeDuplicated(createDTO.getEmail())
     );
+    //then
+    then(userRepository).should(times(1)).findByEmail(createDTO.getEmail());
+  }
+
+  @Test
+  void whenEmailOfSignUpDTOisEmptyThenExceptionIsNotThrown() {
+    // given
+    given(userRepository.findByEmail(createDTO.getEmail())).willThrow(NotFoundException.class);
+    //when
+    userCheckService.emailShouldNotBeDuplicated(createDTO.getEmail());
     //then
     then(userRepository).should(times(1)).findByEmail(createDTO.getEmail());
   }

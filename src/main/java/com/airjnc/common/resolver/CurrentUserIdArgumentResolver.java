@@ -18,15 +18,15 @@ public class CurrentUserIdArgumentResolver implements HandlerMethodArgumentResol
   private final UserStateService userStateService;
 
   @Override
+  public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+      NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    return userStateService.getUserId();
+  }
+
+  @Override
   public boolean supportsParameter(MethodParameter parameter) {
     boolean hasCurrentUserAnnotation = parameter.hasParameterAnnotation(CurrentUserId.class);
     boolean hasLongType = Long.class.isAssignableFrom(parameter.getParameterType());
     return hasCurrentUserAnnotation && hasLongType;
-  }
-
-  @Override
-  public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-      NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-    return userStateService.getUserId();
   }
 }

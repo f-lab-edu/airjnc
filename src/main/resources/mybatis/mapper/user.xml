@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.airjnc.user.dao.mapper.UserMapper">
-    <select id="findById" resultType="UserEntity">
-        SELECT *
-        FROM user
-        WHERE id = #{id}
-          AND deleted_at IS NULL;
-    </select>
-    <select id="findByEmail" resultType="UserEntity">
-        SELECT *
-        FROM user
-        WHERE email = #{email};
-    </select>
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user (email, password, name, gender)
-        VALUES (#{email}, #{password}, #{name}, #{gender});
-    </insert>
-    <delete id="remove">
-        UPDATE user
-        set deleted_at = now()
-        WHERE id = #{id}
-          AND deleted_at IS NULL
-    </delete>
+  <delete id="remove">
+    UPDATE user
+    set deleted_at = now()
+    WHERE id = #{id}
+      AND deleted_at IS NULL
+  </delete>
+  <insert id="save" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO user (email, password, name, gender)
+    VALUES (#{email}, #{password}, #{name}, #{gender});
+  </insert>
+  <select id="findById" resultType="UserEntity">
+    SELECT *
+    FROM user
+    WHERE id = #{id}
+      AND deleted_at IS NULL;
+  </select>
+  <select id="findByEmail" resultType="UserEntity">
+    SELECT *
+    FROM user
+    WHERE email = #{email};
+  </select>
 </mapper>

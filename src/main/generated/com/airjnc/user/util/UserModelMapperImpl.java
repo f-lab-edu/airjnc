@@ -8,11 +8,28 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-26T18:22:14+0900",
+    date = "2022-08-09T22:30:52+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 11.0.10 (AdoptOpenJDK)"
 )
 @Component
 public class UserModelMapperImpl implements UserModelMapper {
+
+    @Override
+    public UserEntity createDTOToUserEntity(CreateDTO createDTO) {
+        if ( createDTO == null ) {
+            return null;
+        }
+
+        UserEntity.UserEntityBuilder userEntity = UserEntity.builder();
+
+        userEntity.id( createDTO.getId() );
+        userEntity.email( createDTO.getEmail() );
+        userEntity.password( createDTO.getPassword() );
+        userEntity.name( createDTO.getName() );
+        userEntity.gender( createDTO.getGender() );
+
+        return userEntity.build();
+    }
 
     @Override
     public UserDTO userEntityToUserDTO(UserEntity userEntity) {
@@ -31,22 +48,5 @@ public class UserModelMapperImpl implements UserModelMapper {
         userDTO.birthDate( userEntity.getBirthDate() );
 
         return userDTO.build();
-    }
-
-    @Override
-    public UserEntity createDTOToUserEntity(CreateDTO createDTO) {
-        if ( createDTO == null ) {
-            return null;
-        }
-
-        UserEntity.UserEntityBuilder userEntity = UserEntity.builder();
-
-        userEntity.id( createDTO.getId() );
-        userEntity.email( createDTO.getEmail() );
-        userEntity.password( createDTO.getPassword() );
-        userEntity.name( createDTO.getName() );
-        userEntity.gender( createDTO.getGender() );
-
-        return userEntity.build();
     }
 }

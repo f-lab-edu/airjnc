@@ -24,6 +24,16 @@ class UserEntityMapperTest {
   }
 
   @Test
+  void fromCreateDTO() {
+    //given
+    CreateDTO createDTO = CreateDTOFixture.getBuilder().build();
+    //when
+    UserEntity result = userModelMapper.createDTOToUserEntity(createDTO);
+    //then
+    assertThat(result.getEmail()).isEqualTo(createDTO.getEmail());
+  }
+
+  @Test
   void toUserDTO() {
     //given
     UserEntity userEntity = UserEntityFixture.getBuilder().build();
@@ -32,15 +42,5 @@ class UserEntityMapperTest {
     //then
     assertThat(result.getId()).isEqualTo(userEntity.getId());
     assertThat(result.getName()).isEqualTo(userEntity.getName());
-  }
-
-  @Test
-  void fromCreateDTO() {
-    //given
-    CreateDTO createDTO = CreateDTOFixture.getBuilder().build();
-    //when
-    UserEntity result = userModelMapper.createDTOToUserEntity(createDTO);
-    //then
-    assertThat(result.getEmail()).isEqualTo(createDTO.getEmail());
   }
 }

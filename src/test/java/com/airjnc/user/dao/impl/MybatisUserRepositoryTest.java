@@ -42,6 +42,17 @@ class MybatisUserRepositoryTest {
   }
 
   @Test
+  void findByEmail() {
+    //given
+    UserEntity user = UserEntityFixture.getBuilder().build();
+    //when
+    UserEntity findUser = userRepository.findByEmail(user.getEmail());
+    //then
+    assertThat(findUser.getId()).isSameAs(user.getId());
+    assertThat(findUser.getEmail()).isEqualTo(user.getEmail());
+  }
+
+  @Test
   void findById() {
     //given
     UserEntity user = UserEntityFixture.getBuilder().build();
@@ -52,14 +63,14 @@ class MybatisUserRepositoryTest {
   }
 
   @Test
-  void findByEmail() {
+  @Transactional
+  void remove() {
     //given
-    UserEntity user = UserEntityFixture.getBuilder().build();
+    UserEntity userEntity = UserEntityFixture.getBuilder().build();
     //when
-    UserEntity findUser = userRepository.findByEmail(user.getEmail());
+    userRepository.remove(userEntity.getId());
     //then
-    assertThat(findUser.getId()).isSameAs(user.getId());
-    assertThat(findUser.getEmail()).isEqualTo(user.getEmail());
+    then(commonInternalCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 
   @Test
@@ -76,17 +87,6 @@ class MybatisUserRepositoryTest {
     userRepository.save(createDTO);
     //then
     then(commonInternalCheckService).should(times(1)).shouldBeMatch(1, 1);
-  }
-
-  @Test
-  @Transactional
-  void remove() {
-    //given
-    UserEntity userEntity = UserEntityFixture.getBuilder().build();
-    //when
-    userRepository.remove(userEntity.getId());
-    //then
-    then(commonInternalCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
   }
 }
 

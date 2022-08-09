@@ -23,6 +23,13 @@ class SessionUserStateServiceTest {
   @InjectMocks
   SessionUserStateService sessionStateService;
 
+  @Test
+  void sessionShouldBeRemoved() {
+    //when
+    sessionStateService.remove();
+    //then
+    then(httpSession).should(times(1)).removeAttribute(SessionKey.USER.name());
+  }
 
   @Test
   void sessionShouldBeSaved() {
@@ -32,14 +39,6 @@ class SessionUserStateServiceTest {
     sessionStateService.create(userId);
     //then
     then(httpSession).should(times(1)).setAttribute(SessionKey.USER.name(), userId);
-  }
-
-  @Test
-  void sessionShouldBeRemoved() {
-    //when
-    sessionStateService.remove();
-    //then
-    then(httpSession).should(times(1)).removeAttribute(SessionKey.USER.name());
   }
 
   @Test

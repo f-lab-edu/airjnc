@@ -20,37 +20,30 @@ class ErrorResponseFactoryTest {
 
   ResourceBundleMessageSource messageSource;
 
+  // argument 학습 테스트
+  @Test
+  void argumentsTest() {
+    //given
+    CommonInternalCheckService commonInternalCheckService = new CommonInternalCheckService();
+    ErrorResponse errorResponse = null;
+    int actual = 1;
+    int expected = 2;
+    //when
+    try {
+      commonInternalCheckService.shouldBeMatch(actual, expected);
+    } catch (DefaultException ex) {
+      errorResponse = ErrorResponseFactory.create(ex, messageSource);
+    }
+    assertThat(errorResponse.getGlobal()).isNotNull();
+    assertThat(errorResponse.getGlobal().get(0))
+        .isEqualTo(String.format("actual: %d, but expected: %d", actual, expected));
+  }
+
   @BeforeEach
   void beforeEach() {
     messageSource = new ResourceBundleMessageSource();
     messageSource.setBasename("messages/errors"); // message 기본 경로 설정
     messageSource.setDefaultEncoding("UTF-8");
-  }
-
-  @Test
-  void whenCodeIsInPropertiesThenGetTheMessageInProperties() {
-    //given
-    DefaultException ex = new DefaultException();
-    //when
-    ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
-    //then
-    assertThat(errorResponse.getGlobal().size()).isSameAs(1);
-    assertThat(errorResponse.getGlobal().get(0)).isEqualTo("message from errors.properties");
-    assertThat(errorResponse.getField().size()).isSameAs(0);
-  }
-
-  @Test
-  void whenPassBindExceptionThenSuccessfullyResolveMessage() {
-    //given
-    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(new Target(), "target");
-    bindingResult.rejectValue("test", "required");
-    BindException ex = new BindException(bindingResult);
-    //when
-    ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
-    //then
-    assertThat(errorResponse.getGlobal().size()).isSameAs(0);
-    assertThat(errorResponse.getField().size()).isSameAs(1);
-    assertThat(errorResponse.getField().get("test")).isEqualTo("required message");
   }
 
   // 어떤 Code들이 나오는지 학습 테스트
@@ -82,25 +75,31 @@ class ErrorResponseFactoryTest {
      */
   }
 
-  // argument 학습 테스트
   @Test
-  void argumentsTest() {
+  void whenCodeIsInPropertiesThenGetTheMessageInProperties() {
     //given
-    CommonInternalCheckService commonInternalCheckService = new CommonInternalCheckService();
-    ErrorResponse errorResponse = null;
-    int actual = 1;
-    int expected = 2;
+    DefaultException ex = new DefaultException();
     //when
-    try {
-      commonInternalCheckService.shouldBeMatch(actual, expected);
-    } catch (DefaultException ex) {
-      errorResponse = ErrorResponseFactory.create(ex, messageSource);
-    }
-    assertThat(errorResponse.getGlobal()).isNotNull();
-    assertThat(errorResponse.getGlobal().get(0))
-        .isEqualTo(String.format("actual: %d, but expected: %d", actual, expected));
+    ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
+    //then
+    assertThat(errorResponse.getGlobal().size()).isSameAs(1);
+    assertThat(errorResponse.getGlobal().get(0)).isEqualTo("message from errors.properties");
+    assertThat(errorResponse.getField().size()).isSameAs(0);
   }
 
+  @Test
+  void whenPassBindExceptionThenSuccessfullyResolveMessage() {
+    //given
+    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(new Target(), "target");
+    bindingResult.rejectValue("test", "required");
+    BindException ex = new BindException(bindingResult);
+    //when
+    ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
+    //then
+    assertThat(errorResponse.getGlobal().size()).isSameAs(0);
+    assertThat(errorResponse.getField().size()).isSameAs(1);
+    assertThat(errorResponse.getField().get("test")).isEqualTo("required message");
+  }
 
   private static class Target {
 
@@ -108,12 +107,12 @@ class ErrorResponseFactoryTest {
 
     private String field;
 
-    public String getTest() {
-      return test;
-    }
-
     public String getField() {
       return field;
+    }
+
+    public String getTest() {
+      return test;
     }
   }
 }
