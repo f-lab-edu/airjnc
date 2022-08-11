@@ -4,9 +4,7 @@ import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.annotation.CurrentUserId;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
-import com.airjnc.user.dto.request.UserInquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
-import com.airjnc.user.dto.request.inquiryPasswordViaPhoneReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
@@ -52,19 +50,6 @@ public class UserController {
   @GetMapping("/inquiryEmail")
   public UserInquiryEmailResp inquiryEmail(@Validated @ModelAttribute UserInquiryEmailReq userInquiryEmailReq) {
     return userService.inquiryEmail(userInquiryEmailReq);
-  }
-
-  @GetMapping(value = "/inquiryPassword", params = "email")
-  public void inquiryPasswordViaEmail(
-      @Validated @ModelAttribute UserInquiryPasswordViaEmailReq userinquiryPasswordViaEmailReq) {
-    userService.inquiryPasswordViaEmail(userinquiryPasswordViaEmailReq);
-  }
-
-  // Naver에서 발신번호 등록이 계속해서 안되고 있어서, 일단 보류함
-//  @GetMapping(value = "/inquiryPassword", params = "phone")
-  public void inquiryPasswordViaPhone(
-      @Validated @ModelAttribute inquiryPasswordViaPhoneReq inquiryPasswordViaPhoneReq) {
-    userService.inquiryPasswordViaPhone(inquiryPasswordViaPhoneReq);
   }
 
   @PutMapping("/resetPassword")

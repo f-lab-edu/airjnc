@@ -12,5 +12,5 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConfigurationProperties(prefix = "spring.redis.session.ttl")
 public class SessionTtlProperties {
 
-  private final Duration resetPasswordCode;
+  private final Duration certificationCode;
 }
