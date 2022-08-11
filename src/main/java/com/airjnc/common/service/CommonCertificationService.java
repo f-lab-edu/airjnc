@@ -2,7 +2,6 @@ package com.airjnc.common.service;
 
 import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.exception.NotFoundException;
-import com.airjnc.common.properties.SessionTtlProperties;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,9 +12,7 @@ public class CommonCertificationService {
 
   private final RedisDao redisDao;
 
-  private final SessionTtlProperties sessionTtlProperties;
-
-  private String generateCode() {
+  public String generateCode() {
     Random random = new Random(System.nanoTime());
     String code = null;
     while (true) {
@@ -27,12 +24,6 @@ public class CommonCertificationService {
         break;
       }
     }
-    return code;
-  }
-
-  public String getCodeAndStoreToRedis(String key) {
-    String code = generateCode();
-    redisDao.store(code, key, sessionTtlProperties.getCertificationCode());
     return code;
   }
 }
