@@ -61,7 +61,7 @@ public class UserService {
   }
 
   public void resetPassword(UserResetPwdReq userResetPwdReq) {
-    String email = redisDao.getAndDeleteOrElseThrow(userResetPwdReq.getCode());
+    String email = redisDao.getAndDeleteOrElseThrow(userResetPwdReq.getCertificationCode());
     String hash = hashService.encrypt(userResetPwdReq.getPassword());
     userRepository.updatePasswordByEmail(email, hash);
   }

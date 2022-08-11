@@ -17,11 +17,11 @@ public class MailService {
 
   public void sendCertificationCodeToEmail(Long userId) {
     UserResp user = userService.getUserById(userId);
-    mailCommonService.sendCode(user.getEmail(), user.getName());
+    mailCommonService.sendCertificationCode(user.getEmail(), user.getName());
   }
 
   public void sendCertificationCodeToEmail(MailSendCertificationCodeToEmailReq req) {
     UserResp user = userService.getUserWithDeletedByEmail(req.getEmail());
-    mailCommonService.sendCode(user.getEmail(), user.getName());
+    mailCommonService.sendCertificationCode(user.getEmail(), user.getName());
   }
 }

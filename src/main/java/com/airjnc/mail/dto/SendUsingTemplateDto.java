@@ -8,11 +8,11 @@ public class SendUsingTemplateDto {
 
   private final String name;
 
-  private final String code;
+  private final String certificationCode;
 
   @Builder
-  public SendUsingTemplateDto(String name, String code) {
+  public SendUsingTemplateDto(String name, String certificationCode) {
     this.name = name;
-    this.code = code;
+    this.certificationCode = certificationCode;
   }
 }

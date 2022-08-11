@@ -1,8 +1,8 @@
 package com.airjnc.mail.service;
 
 import com.airjnc.common.service.CommonCheckService;
-import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.common.service.CommonNcpService;
+import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.mail.annotation.NcpMailRestTemplate;
 import com.airjnc.mail.dto.NcpMailSendReqDto;
 import com.airjnc.mail.dto.NcpMailSendReqDto.Recipient;
@@ -44,7 +44,7 @@ public class NcpMailProvider implements MailProvider {
         .type(Type.R)
         .parameters(Map.ofEntries(
             Map.entry("name", dto.getName()),
-            Map.entry("code", dto.getCode())
+            Map.entry("certificationCode", dto.getCertificationCode())
         ))
         .build();
     return NcpMailSendReqDto.builder()

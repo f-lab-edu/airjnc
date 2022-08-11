@@ -7,8 +7,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import com.airjnc.common.service.CommonCheckService;
-import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.common.service.CommonNcpService;
+import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.mail.dto.NcpMailSendReqDto;
 import com.airjnc.mail.dto.NcpMailSendReqDto.Recipient;
 import com.airjnc.mail.dto.NcpMailSendRespDto;
@@ -55,10 +55,10 @@ class NcpMailProviderTest {
   void createSendApiBody() {
     //given
     String name = "name";
-    String code = "code";
+    String certificationCode = "certificationCode";
     int resetPasswordTemplateSid = 123;
     SendUsingTemplateDto dto = SendUsingTemplateDto.builder()
-        .name(name).code(code).build();
+        .name(name).certificationCode(certificationCode).build();
     given(templateSid.getResetPassword()).willReturn(resetPasswordTemplateSid);
     //when
     NcpMailSendReqDto result = ncpMailService.createSendApiBody(dto);
@@ -66,7 +66,7 @@ class NcpMailProviderTest {
     assertThat(result.getTemplateSid()).isEqualTo(resetPasswordTemplateSid);
     Recipient recipients = result.getRecipients().get(0);
     assertThat(recipients.getParameters().get("name")).isEqualTo(name);
-    assertThat(recipients.getParameters().get("code")).isEqualTo(code);
+    assertThat(recipients.getParameters().get("certificationCode")).isEqualTo(certificationCode);
 
   }
 
@@ -83,7 +83,8 @@ class NcpMailProviderTest {
     given(commonUtilService.createHttpEntity(eq(headers), any(NcpMailSendReqDto.class))).willReturn(entity);
     given(restTemplate.postForObject(sendUri, entity, NcpMailSendRespDto.class)).willReturn(res);
     //when
-    SendUsingTemplateDto sendUsingTemplateDto = SendUsingTemplateDto.builder().name(TestUser.NAME).code("123456")
+    SendUsingTemplateDto sendUsingTemplateDto = SendUsingTemplateDto.builder().name(TestUser.NAME)
+        .certificationCode("123456")
         .build();
     ncpMailService.send(TestUser.EMAIL, sendUsingTemplateDto);
     //then

@@ -15,7 +15,7 @@ public class UserResetPwdReq {
 
   @NotBlank
   @Size(min = 6, max = 6)
-  private String code;
+  private String certificationCode;
 
   @NotBlank
   @Pattern(regexp = UserRegex.PASSWORD)
@@ -23,8 +23,8 @@ public class UserResetPwdReq {
 
 
   @Builder
-  public UserResetPwdReq(String code, String password) {
-    this.code = code;
+  public UserResetPwdReq(String certificationCode, String password) {
+    this.certificationCode = certificationCode;
     this.password = password;
   }
 }
