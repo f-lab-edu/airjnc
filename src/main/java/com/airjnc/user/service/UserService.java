@@ -5,7 +5,7 @@ import com.airjnc.common.properties.SessionTtlProperties;
 import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.common.service.HashService;
 import com.airjnc.mail.dto.SendUsingTemplateDto;
-import com.airjnc.mail.service.MailService;
+import com.airjnc.mail.service.MailProvider;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.UserCreateReq;
@@ -31,7 +31,7 @@ public class UserService {
 
   private final UserCheckService userCheckService;
 
-  private final MailService mailService;
+  private final MailProvider mailProvider;
 
   private final CommonUtilService commonUtilService;
 
@@ -67,7 +67,7 @@ public class UserService {
   public void inquiryPasswordViaEmail(UserInquiryPasswordViaEmailReq userInquiryPasswordViaEmailReq) {
     UserEntity user = userRepository.findByEmail(userInquiryPasswordViaEmailReq.getEmail());
     String code = generateAndRestoreCode(user.getEmail());
-    mailService.send(
+    mailProvider.send(
         userInquiryPasswordViaEmailReq.getEmail(),
         SendUsingTemplateDto.builder()
             .name(user.getName())

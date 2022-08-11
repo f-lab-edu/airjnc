@@ -13,7 +13,7 @@ import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.properties.SessionTtlProperties;
 import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.mail.dto.SendUsingTemplateDto;
-import com.airjnc.mail.service.MailService;
+import com.airjnc.mail.service.MailProvider;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserSaveDto;
@@ -59,7 +59,7 @@ class UserServiceTest {
   RedisDao redisDao;
 
   @Mock
-  MailService mailService;
+  MailProvider mailProvider;
 
   @Mock
   SessionTtlProperties sessionTtlProperties;
@@ -148,7 +148,7 @@ class UserServiceTest {
     then(userRepository).should(times(1)).findByEmail(userInquiryPasswordViaEmailReq.getEmail());
     then(commonUtilService).should(times(1)).generateCode();
     then(redisDao).should(times(1)).store(eq(code), eq(user.getEmail()), any(Duration.class));
-    then(mailService).should(times(1))
+    then(mailProvider).should(times(1))
         .send(eq(userInquiryPasswordViaEmailReq.getEmail()), any(SendUsingTemplateDto.class));
   }
 

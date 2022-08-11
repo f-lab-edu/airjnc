@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 // 특정 cloud에 종속
 @Service
 @RequiredArgsConstructor
-public class NcpMailService implements MailService {
+public class NcpMailProvider implements MailProvider {
 
   @NcpMailRestTemplate
   private final RestTemplate restTemplate;
