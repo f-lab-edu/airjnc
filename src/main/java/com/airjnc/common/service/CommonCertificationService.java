@@ -30,9 +30,9 @@ public class CommonCertificationService {
     return code;
   }
 
-  public String getCodeAndStoreToRedis(String email) {
+  public String getCodeAndStoreToRedis(String key) {
     String code = generateCode();
-    redisDao.store(code, email, sessionTtlProperties.getCertificationCode());
+    redisDao.store(code, key, sessionTtlProperties.getCertificationCode());
     return code;
   }
 }

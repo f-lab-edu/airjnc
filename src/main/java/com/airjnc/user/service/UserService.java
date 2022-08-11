@@ -27,6 +27,16 @@ public class UserService {
 
   private final RedisDao redisDao;
 
+  public UserResp getUserById(Long userId) {
+    UserEntity userEntity = userRepository.findById(userId);
+    return userModelMapper.userEntityToUserResp(userEntity);
+  }
+
+  public UserResp getUserWithDeletedByEmail(String email) {
+    UserEntity userEntity = userRepository.findWithDeletedByEmail(email);
+    return userModelMapper.userEntityToUserResp(userEntity);
+  }
+
   public UserResp create(UserCreateReq userCreateReq) {
     userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
     String hash = hashService.encrypt(userCreateReq.getPassword());
