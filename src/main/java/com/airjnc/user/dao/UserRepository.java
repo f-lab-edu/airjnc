@@ -2,6 +2,7 @@ package com.airjnc.user.dao;
 
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.UserUpdateDto;
 import java.time.LocalDate;
 
 public interface UserRepository {
@@ -25,4 +26,6 @@ public interface UserRepository {
   UserEntity save(UserSaveDto userSaveDTO);
 
   void updatePasswordByEmail(String email, String password);
+
+  void updateUserById(UserUpdateDto userUpdateDto);
 }

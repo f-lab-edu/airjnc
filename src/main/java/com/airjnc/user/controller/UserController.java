@@ -5,6 +5,7 @@ import com.airjnc.common.annotation.CurrentUserId;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
@@ -61,5 +62,11 @@ public class UserController {
   @CheckAuth
   public void restore(@CurrentUserId Long userId) {
     userService.restore(userId);
+  }
+
+  @PutMapping(value = "/me", params = "what=email")
+  @CheckAuth
+  public void updateMyEmail(@CurrentUserId Long userId, @Validated @RequestBody UserUpdateMyEmailReq updateMyEmailReq) {
+    userService.updateMyEmail(userId, updateMyEmailReq.getNewEmail());
   }
 }

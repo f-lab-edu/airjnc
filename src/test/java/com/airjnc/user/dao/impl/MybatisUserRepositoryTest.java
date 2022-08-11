@@ -4,17 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.anyInt;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
-import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.exception.NotFoundException;
+import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.UserUpdateDto;
+import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.testdata.TestUser;
-import com.airjnc.user.dto.request.UserCreateReq;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -174,6 +175,20 @@ class MybatisUserRepositoryTest {
     userRepository.updatePasswordByEmail(email, passwrod);
     //then
     then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
+  }
+
+  @Test
+  @Transactional
+  void updateUserById() {
+    // given
+    UserEntity testUser = TestUser.getBuilder().build();
+    String newEmail = "new@naver.com";
+    //when
+    userRepository.updateUserById(
+        UserUpdateDto.builder().id(testUser.getId()).email(newEmail).gender(Gender.FEMALE).build());
+    //then
+    UserEntity byId = userRepository.findById(testUser.getId());
+    assertThat(byId.getEmail()).endsWith(newEmail);
   }
 }
 

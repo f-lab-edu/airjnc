@@ -105,13 +105,12 @@ class UserServiceTest {
         .build();
     String email = "test@google.com";
     String hash = "hash";
-    given(redisDao.get(userResetPwdReq.getCode())).willReturn(email);
+    given(redisDao.getAndDeleteOrElseThrow(userResetPwdReq.getCode())).willReturn(email);
     given(hashService.encrypt(userResetPwdReq.getPassword())).willReturn(hash);
     //when
     userService.resetPassword(userResetPwdReq);
     //then
-    then(redisDao).should(times(1)).get(userResetPwdReq.getCode());
-    then(redisDao).should(times(1)).delete(userResetPwdReq.getCode());
+    then(redisDao).should().getAndDeleteOrElseThrow(userResetPwdReq.getCode());
     then(hashService).should(times(1)).encrypt(userResetPwdReq.getPassword());
     then(userRepository).should(times(1)).updatePasswordByEmail(email, hash);
   }

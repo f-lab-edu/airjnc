@@ -1,9 +1,11 @@
 package com.airjnc.user.service;
 
 import com.airjnc.common.dao.RedisDao;
+import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.service.HashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserUpdateDto;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
@@ -24,6 +26,8 @@ public class UserService {
   private final UserRepository userRepository;
 
   private final UserCheckService userCheckService;
+
+  private final CommonCheckService commonCheckService;
 
   private final RedisDao redisDao;
 
@@ -57,8 +61,7 @@ public class UserService {
   }
 
   public void resetPassword(UserResetPwdReq userResetPwdReq) {
-    String email = redisDao.get(userResetPwdReq.getCode());
-    redisDao.delete(userResetPwdReq.getCode());
+    String email = redisDao.getAndDeleteOrElseThrow(userResetPwdReq.getCode());
     String hash = hashService.encrypt(userResetPwdReq.getPassword());
     userRepository.updatePasswordByEmail(email, hash);
   }
@@ -67,5 +70,14 @@ public class UserService {
     UserEntity userEntity = userRepository.findOnlyDeletedById(userId);
     userCheckService.shouldBeDeleted(userEntity);
     userRepository.restore(userId);
+  }
+
+  public void updateMyEmail(Long userId, String newEmail) {
+    UserEntity userEntity = userRepository.findById(userId);
+    userCheckService.curEmailShouldNotEqualNewEmail(userEntity.getEmail(), newEmail);
+    String emailFromCertificationCode = redisDao.getAndDeleteOrElseThrow(userEntity.getEmail());
+    commonCheckService.shouldBeMatch(userEntity.getEmail(), emailFromCertificationCode);
+    UserUpdateDto newUser = UserUpdateDto.builder().id(userId).email(newEmail).build();
+    userRepository.updateUserById(newUser);
   }
 }

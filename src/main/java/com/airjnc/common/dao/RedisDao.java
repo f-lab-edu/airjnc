@@ -24,6 +24,12 @@ public class RedisDao {
     return value;
   }
 
+  public String getAndDeleteOrElseThrow(String key) {
+    String value = get(key);
+    redisTemplate.delete(key);
+    return value;
+  }
+
   public void store(String key, String value, Duration timeout) {
     redisTemplate.opsForValue().set(
         key,

@@ -114,4 +114,15 @@
     WHERE id = #{id}
       AND deleted_at IS NOT NULL;
   </update>
+  <update id="updateUserById">
+    UPDATE user
+    <set>
+      <if test="email!=null">email=#{email},</if>
+      <if test="name=null">name=#{name},</if>
+      <if test="gender!=null">gender=#{gender},</if>
+      <if test="phoneNumber!=null">phone_number=#{phoneNumber}</if>
+      <if test="address!=null">address=#{address}</if>
+    </set>
+    WHERE id = #{id}
+  </update>
 </mapper>

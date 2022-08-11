@@ -2,6 +2,7 @@ package com.airjnc.user.dao;
 
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.UserUpdateDto;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
@@ -32,4 +33,6 @@ public interface UserMapper {
   int save(UserSaveDto userSaveDTO);
 
   int updatePasswordByEmail(@Param("email") String email, @Param("password") String password);
+
+  int updateUserById(UserUpdateDto userUpdateDto);
 }

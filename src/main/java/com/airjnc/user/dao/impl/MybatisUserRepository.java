@@ -6,6 +6,7 @@ import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.UserUpdateDto;
 import com.airjnc.user.util.UserModelMapper;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,12 @@ public class MybatisUserRepository implements UserRepository {
   @Override
   public void updatePasswordByEmail(String email, String password) {
     int affect = userMapper.updatePasswordByEmail(email, password);
+    commonCheckService.shouldBeMatch(affect, 1);
+  }
+
+  @Override
+  public void updateUserById(UserUpdateDto userUpdateDto) {
+    int affect = userMapper.updateUserById(userUpdateDto);
     commonCheckService.shouldBeMatch(affect, 1);
   }
 }

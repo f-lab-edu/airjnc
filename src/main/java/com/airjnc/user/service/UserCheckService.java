@@ -5,6 +5,7 @@ import com.airjnc.common.service.HashService;
 import com.airjnc.common.util.factory.ErrorsFactory;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.exception.CurEmailEqualNewEmailException;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
 import com.airjnc.user.exception.PasswordIsNotMatchException;
 import com.airjnc.user.exception.UserIsNotDeletedException;
@@ -18,6 +19,15 @@ public class UserCheckService {
   private final UserRepository userRepository;
 
   private final HashService hashService;
+
+  public void curEmailShouldNotEqualNewEmail(String curEmail, String newEmail) {
+    if (!curEmail.equals(newEmail)) {
+      return;
+    }
+    throw new CurEmailEqualNewEmailException(
+        ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "curEmailEqualNewEmail", new Object[]{newEmail})
+    );
+  }
 
   public void emailShouldNotBeDuplicated(String email) {
     try {
