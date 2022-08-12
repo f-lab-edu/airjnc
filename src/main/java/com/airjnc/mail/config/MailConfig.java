@@ -16,7 +16,7 @@ public class MailConfig {
   private final RestTemplateBuilder restTemplateBuilder;
 
   @Value("${cloud.naver.mail.uri.root}")
-  private final String rootUri;
+  private String rootUri;
 
   @Bean
   @NcpMailRestTemplate // 여러 cloud를 사용할 경우에, 이를 나누기 위해 Qualifier 사용
