@@ -5,9 +5,10 @@ import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserDto;
+import com.airjnc.user.dto.UserDto.UserStatus;
 import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.util.UserModelMapper;
-import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -27,33 +28,13 @@ public class MybatisUserRepository implements UserRepository {
   }
 
   @Override
-  public UserEntity findByEmail(String email) {
-    return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
+  public UserEntity findById(Long userId, UserStatus status) {
+    return userMapper.findById(userId, status).orElseThrow(NotFoundException::new);
   }
 
   @Override
-  public UserEntity findById(Long id) {
-    return userMapper.findById(id).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public UserEntity findByPhoneNumber(String phoneNumber) {
-    return userMapper.findByPhoneNumber(phoneNumber).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public UserEntity findOnlyDeletedById(Long id) {
-    return userMapper.findOnlyDeletedById(id).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public UserEntity findWithDeletedByEmail(String email) {
-    return userMapper.findWithDeletedByEmail(email).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public UserEntity findWithDeletedByNameAndBirthDate(String name, LocalDate birthDate) {
-    return userMapper.findWithDeletedByNameAndBirthDate(name, birthDate).orElseThrow(NotFoundException::new);
+  public UserEntity findByWhere(UserDto userDto) {
+    return userMapper.findByWhere(userDto).orElseThrow(NotFoundException::new);
   }
 
   @Override

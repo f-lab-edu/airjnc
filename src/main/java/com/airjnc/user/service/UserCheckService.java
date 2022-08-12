@@ -5,6 +5,7 @@ import com.airjnc.common.service.HashService;
 import com.airjnc.common.util.factory.ErrorsFactory;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserDto;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
 import com.airjnc.user.exception.PasswordIsNotMatchException;
 import com.airjnc.user.exception.UserIsNotDeletedException;
@@ -21,7 +22,7 @@ public class UserCheckService {
 
   public void emailShouldNotBeDuplicated(String email) {
     try {
-      userRepository.findByEmail(email);
+      userRepository.findByWhere(UserDto.builder().email(email).build());
     } catch (NotFoundException e) {
       return;
     }

@@ -2,12 +2,14 @@ package com.airjnc.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import com.airjnc.common.exception.DefaultException;
 import com.airjnc.common.exception.NotFoundException;
 import com.airjnc.common.service.HashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserDto;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
 import com.airjnc.user.exception.PasswordIsNotMatchException;
 import com.airjnc.user.exception.UserIsNotDeletedException;
@@ -63,7 +65,7 @@ class UserCheckServiceTest {
     void whenEmailNotFoundThenSuccess() {
       //given
       String email = TestUser.EMAIL;
-      given(userRepository.findByEmail(email)).willThrow(NotFoundException.class);
+      given(userRepository.findByWhere(any(UserDto.class))).willThrow(NotFoundException.class);
       //when
       userCheckService.emailShouldNotBeDuplicated(email);
     }

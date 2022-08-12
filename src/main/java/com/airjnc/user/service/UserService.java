@@ -5,6 +5,8 @@ import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.service.HashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserDto;
+import com.airjnc.user.dto.UserDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
@@ -41,20 +43,19 @@ public class UserService {
     userRepository.delete(currentUserId);
   }
 
-  public UserResp getUserById(Long userId) {
-    UserEntity userEntity = userRepository.findById(userId);
+  public UserResp getUserById(Long userId, UserStatus userStatus) {
+    UserEntity userEntity = userRepository.findById(userId, userStatus);
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
-  public UserResp getUserWithDeletedByEmail(String email) {
-    UserEntity userEntity = userRepository.findWithDeletedByEmail(email);
+  public UserResp getUserByWhere(String email, UserStatus userStatus) {
+    UserEntity userEntity = userRepository.findByWhere(UserDto.builder().email(email).status(userStatus).build());
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
-  public UserInquiryEmailResp inquiryEmail(UserInquiryEmailReq userInquiryEmailReq) {
-    UserEntity userEntity = userRepository.findWithDeletedByNameAndBirthDate(
-        userInquiryEmailReq.getName(),
-        userInquiryEmailReq.getBirthDate()
+  public UserInquiryEmailResp inquiryEmail(UserInquiryEmailReq req) {
+    UserEntity userEntity = userRepository.findByWhere(
+        UserDto.builder().name(req.getName()).birthDate(req.getBirthDate()).status(UserStatus.ALL).build()
     );
     return userModelMapper.userEntityToUserInquiryEmailResp(userEntity);
   }
@@ -68,7 +69,7 @@ public class UserService {
   }
 
   public void restore(Long userId) {
-    UserEntity userEntity = userRepository.findOnlyDeletedById(userId);
+    UserEntity userEntity = userRepository.findById(userId, UserStatus.DELETED);
     userCheckService.shouldBeDeleted(userEntity);
     userRepository.restore(userId);
   }

@@ -3,100 +3,38 @@
 <mapper namespace="com.airjnc.user.dao.UserMapper">
   <delete id="delete">
     UPDATE user
-    set deleted_at = now()
+    SET deleted_at = now()
     WHERE id = #{id}
       AND deleted_at IS NULL;
   </delete>
-  <select id="findByEmail" resultType="UserEntity">
-    SELECT id,
-           email,
-           name,
-           gender,
-           phone_number,
-           address,
-           is_active,
-           birthdate,
-           created_at,
-           updated_at
-    FROM user
-    WHERE email = #{email}
-      AND deleted_at IS NULL;
-  </select>
   <select id="findById" resultType="UserEntity">
-    SELECT id,
-           email,
-           name,
-           gender,
-           phone_number,
-           address,
-           is_active,
-           birthdate,
-           created_at,
-           updated_at
+    SELECT id, email, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at, deleted_at
     FROM user
     WHERE id = #{id}
-      AND deleted_at IS NULL;
+    <if test='status != null and !status.name().equals("ALL")'>
+      AND deleted_at IS
+      <choose>
+        <when test='status.name().equals("ACTIVE")'>NULL</when>
+        <when test='status.name().equals("DELETED")'>NOT NULL</when>
+      </choose>
+    </if>
   </select>
-  <select id="findByPhoneNumber" resultType="UserEntity">
-    SELECT id,
-           email,
-           name,
-           gender,
-           phone_number,
-           address,
-           is_active,
-           birthdate,
-           created_at,
-           updated_at
+  <select id="findByWhere" resultType="UserEntity">
+    SELECT id, email, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at, deleted_at
     FROM user
-    WHERE phone_number = #{phoneNumber}
-      AND deleted_at IS NULL;
-  </select>
-  <select id="findOnlyDeletedById" resultType="UserEntity">
-    SELECT id,
-           email,
-           name,
-           gender,
-           phone_number,
-           address,
-           is_active,
-           birthdate,
-           created_at,
-           updated_at
-    FROM user
-    WHERE id = #{id}
-      AND deleted_at IS NOT NULL;
-  </select>
-  <select id="findWithDeletedByEmail" resultType="UserEntity">
-    SELECT id,
-           email,
-           name,
-           gender,
-           phone_number,
-           address,
-           is_active,
-           birthdate,
-           created_at,
-           updated_at,
-           deleted_at
-    FROM user
-    WHERE email = #{email};
-  </select>
-  <select id="findWithDeletedByNameAndBirthDate" resultType="UserEntity">
-    SELECT id,
-           email,
-           name,
-           gender,
-           phone_number,
-           address,
-           is_active,
-           birthdate,
-           created_at,
-           updated_at,
-           deleted_at
-    FROM user
-    WHERE name = #{name}
-      AND birthdate = #{birthDate};
+    <where>
+      <if test="email != null">AND email = #{email}</if>
+      <if test="phoneNumber != null">AND phone_number = #{phoneNumber}</if>
+      <if test="name != null">AND name = #{name}</if>
+      <if test="birthDate != null">AND birth_date = #{birthDate}</if>
+      <if test='status != null and !status.name().equals("ALL")'>
+        AND deleted_at IS
+        <choose>
+          <when test='status.name().equals("ACTIVE")'>NULL</when>
+          <when test='status.name().equals("DELETED")'>NOT NULL</when>
+        </choose>
+      </if>
+    </where>
   </select>
   <update id="restore">
     UPDATE user

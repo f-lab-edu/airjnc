@@ -12,6 +12,8 @@ import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.service.HashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserDto;
+import com.airjnc.user.dto.UserDto.UserStatus;
 import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
@@ -90,14 +92,14 @@ class UserServiceTest {
   @Test
   void inquiryEmail() {
     //given
-    UserInquiryEmailReq dto = UserInquiryEmailReqDTOFixture.getBuilder().build();
+    UserInquiryEmailReq userInquiryEmailReq = UserInquiryEmailReqDTOFixture.getBuilder().build();
     UserEntity userEntity = TestUser.getBuilder().build();
-    given(userRepository.findWithDeletedByNameAndBirthDate(dto.getName(), dto.getBirthDate())).willReturn(userEntity);
+    given(userRepository.findByWhere(any(UserDto.class))).willReturn(userEntity);
     //when
-    userService.inquiryEmail(dto);
+    userService.inquiryEmail(userInquiryEmailReq);
     //then
     then(userModelMapper).should(times(1)).userEntityToUserInquiryEmailResp(userEntity);
-    then(userRepository).should(times(1)).findWithDeletedByNameAndBirthDate(dto.getName(), dto.getBirthDate());
+    then(userRepository).should(times(1)).findByWhere(any(UserDto.class));
   }
 
   @Test
@@ -126,11 +128,12 @@ class UserServiceTest {
   void restore() {
     //given
     UserEntity user = TestUser.getBuilder().build();
-    given(userRepository.findOnlyDeletedById(user.getId())).willReturn(user);
+    UserStatus deleted = UserStatus.DELETED;
+    given(userRepository.findById(user.getId(), deleted)).willReturn(user);
     //when
     userService.restore(user.getId());
     //then
-    then(userRepository).should(times(1)).findOnlyDeletedById(user.getId());
+    then(userRepository).should(times(1)).findById(user.getId(), deleted);
     then(userCheckService).should(times(1)).shouldBeDeleted(user);
     then(userRepository).should(times(1)).restore(user.getId());
   }

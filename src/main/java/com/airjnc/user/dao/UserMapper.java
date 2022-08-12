@@ -1,8 +1,9 @@
 package com.airjnc.user.dao;
 
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserDto;
+import com.airjnc.user.dto.UserDto.UserStatus;
 import com.airjnc.user.dto.UserSaveDto;
-import java.time.LocalDate;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,18 +13,9 @@ public interface UserMapper {
 
   int delete(Long id);
 
-  Optional<UserEntity> findByEmail(String email);
+  Optional<UserEntity> findById(@Param("id") Long userId, @Param("status") UserStatus status);
 
-  Optional<UserEntity> findById(Long id);
-
-  Optional<UserEntity> findByPhoneNumber(String phoneNumber);
-
-  Optional<UserEntity> findOnlyDeletedById(Long id);
-
-  Optional<UserEntity> findWithDeletedByEmail(String email);
-
-  Optional<UserEntity> findWithDeletedByNameAndBirthDate(@Param("name") String name,
-      @Param("birthDate") LocalDate birthDate);
+  Optional<UserEntity> findByWhere(UserDto userDto);
 
   int restore(Long id);
 

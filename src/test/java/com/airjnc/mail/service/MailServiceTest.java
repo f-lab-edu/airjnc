@@ -4,6 +4,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
+import com.airjnc.user.dto.UserDto.UserStatus;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.testutil.annotation.UnitTest;
@@ -36,28 +37,28 @@ class MailServiceTest {
   }
 
   @Test
-  void sendCertificationCodeToEmail() {
+  void sendCertificationCodeToEmailWithUserId() {
     Long userId = 1L;
-    MailSendCertificationCodeToEmailReq req = MailSendCertificationCodeToEmailReq.builder().email("test@naver.com")
-        .build();
     //given
-    given(userService.getUserWithDeletedByEmail(req.getEmail())).willReturn(user);
+    given(userService.getUserById(userId, UserStatus.ACTIVE)).willReturn(user);
     //when
-    mailService.sendCertificationCodeToEmail(req);
+    mailService.sendCertificationCodeToEmail(userId);
     //then
-    then(userService).should(times(1)).getUserWithDeletedByEmail(user.getEmail());
+    then(userService).should(times(1)).getUserById(userId, UserStatus.ACTIVE);
     then(mailCommonService).should(times(1)).sendCode(user.getEmail(), user.getName());
   }
 
   @Test
-  void sendCertificationCodeToEmailWithUserId() {
+  void sendCertificationCodeToEmail_noUserId() {
     Long userId = 1L;
+    MailSendCertificationCodeToEmailReq req = MailSendCertificationCodeToEmailReq.builder().email("test@naver.com")
+        .build();
     //given
-    given(userService.getUserById(userId)).willReturn(user);
+    given(userService.getUserByWhere(req.getEmail(), UserStatus.ALL)).willReturn(user);
     //when
-    mailService.sendCertificationCodeToEmail(userId);
+    mailService.sendCertificationCodeToEmail(req);
     //then
-    then(userService).should(times(1)).getUserById(userId);
+    then(userService).should(times(1)).getUserByWhere(user.getEmail(), UserStatus.ALL);
     then(mailCommonService).should(times(1)).sendCode(user.getEmail(), user.getName());
   }
 }
