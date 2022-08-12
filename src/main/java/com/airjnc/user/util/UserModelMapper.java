@@ -14,9 +14,9 @@ import org.mapstruct.MappingConstants;
 )
 public interface UserModelMapper {
 
+  UserEntity userCreateReqToUserEntity(UserCreateReq userCreateReq);
+
   UserInquiryEmailResp userEntityToUserInquiryEmailResp(UserEntity userEntity);
 
   UserResp userEntityToUserResp(UserEntity userEntity);
-
-  UserEntity userCreateReqToUserEntity(UserCreateReq userCreateReq);
 }
