@@ -61,10 +61,7 @@ public class UserService {
   }
 
   public void resetPassword(UserResetPwdReq userResetPwdReq) {
-    String code = redisDao.get(userResetPwdReq.getEmail());
-    commonCheckService.shouldBeMatch(code, userResetPwdReq.getCode());
-    redisDao.delete(userResetPwdReq.getEmail());
-
+    commonCheckService.verifyCode(userResetPwdReq.getEmail(), userResetPwdReq.getCode());
     UserEntity userEntity = userRepository.findByWhere(
         UserDto.builder().email(userResetPwdReq.getEmail()).status(UserStatus.ALL).build()
     );

@@ -113,16 +113,12 @@ class UserServiceTest {
     String code = "code";
     String hash = "hash";
     UserEntity userEntity = TestUser.getBuilder().build();
-    given(redisDao.get(userResetPwdReq.getEmail())).willReturn(code);
-    given(hashService.encrypt(userResetPwdReq.getPassword())).willReturn(hash);
     given(userRepository.findByWhere(any(UserDto.class))).willReturn(userEntity);
+    given(hashService.encrypt(userResetPwdReq.getPassword())).willReturn(hash);
     //when
     userService.resetPassword(userResetPwdReq);
     //then
-    then(redisDao).should(times(1)).get(userResetPwdReq.getEmail());
-    then(commonCheckService).should(times(1)).shouldBeMatch(code, userResetPwdReq.getCode());
-    then(redisDao).should(times(1)).delete(userResetPwdReq.getEmail());
-
+    then(commonCheckService).should(times(1)).verifyCode(userResetPwdReq.getEmail(), userResetPwdReq.getCode());
     then(userRepository).should(times(1)).findByWhere(any(UserDto.class));
     then(hashService).should(times(1)).encrypt(userResetPwdReq.getPassword());
     assertThat(userEntity.getPassword()).isEqualTo(hash);

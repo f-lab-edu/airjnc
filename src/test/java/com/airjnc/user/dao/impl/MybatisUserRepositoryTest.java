@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +33,7 @@ class MybatisUserRepositoryTest {
   @Autowired
   UserMapper userMapper;
 
-  @Spy
+  @Mock
   CommonCheckService commonCheckService;
 
   @Mock
@@ -44,8 +43,7 @@ class MybatisUserRepositoryTest {
 
   @BeforeEach
   void beforeEach() {
-    userRepository = new MybatisUserRepository(userMapper, commonCheckService,
-        userModelMapper);
+    userRepository = new MybatisUserRepository(userMapper, commonCheckService, userModelMapper);
     testUser = TestUser.getBuilder().build();
   }
 
