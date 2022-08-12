@@ -85,7 +85,7 @@ class MybatisUserRepositoryTest {
   }
 
   @Test
-//  @Transactional
+  @Transactional
   void save() {
     //given
     String passwrod = "q1w2e3r4t5!@#";

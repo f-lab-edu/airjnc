@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-  private final AuthService authService;
-
   private final StateService stateService;
+
+  private final AuthService authService;
 
   @PostMapping("/logIn")
   public UserResp logIn(@Validated @RequestBody AuthLogInReq authLogInReq) {

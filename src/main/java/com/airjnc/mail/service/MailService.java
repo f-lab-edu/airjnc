@@ -14,7 +14,6 @@ public class MailService {
 
   private final UserService userService;
 
-
   private final MailCommonService mailCommonService;
 
   public void sendCertificationCodeToEmail(Long userId) {
