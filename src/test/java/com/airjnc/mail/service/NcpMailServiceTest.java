@@ -7,8 +7,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import com.airjnc.common.service.CommonCheckService;
-import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.common.service.CommonNcpService;
+import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.mail.dto.NcpMailSendReqDto;
 import com.airjnc.mail.dto.NcpMailSendReqDto.Recipient;
 import com.airjnc.mail.dto.NcpMailSendRespDto;
@@ -83,7 +83,8 @@ class NcpMailServiceTest {
     given(commonUtilService.createHttpEntity(eq(headers), any(NcpMailSendReqDto.class))).willReturn(entity);
     given(restTemplate.postForObject(sendUri, entity, NcpMailSendRespDto.class)).willReturn(res);
     //when
-    SendUsingTemplateDto sendUsingTemplateDto = SendUsingTemplateDto.builder().name(UserEntityFixture.NAME).code("123456")
+    SendUsingTemplateDto sendUsingTemplateDto = SendUsingTemplateDto.builder().name(UserEntityFixture.NAME)
+        .code("123456")
         .build();
     ncpMailService.send(UserEntityFixture.EMAIL, sendUsingTemplateDto);
     //then

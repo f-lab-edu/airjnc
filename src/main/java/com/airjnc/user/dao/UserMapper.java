@@ -22,10 +22,8 @@ public interface UserMapper {
 
   Optional<UserEntity> findWithDeletedByEmail(String email);
 
-  Optional<UserEntity> findWithDeletedByNameAndBirthDate(
-      @Param("name") String name,
-      @Param("birthDate") LocalDate birthDate
-  );
+  Optional<UserEntity> findWithDeletedByNameAndBirthDate(@Param("name") String name,
+      @Param("birthDate") LocalDate birthDate);
 
   int restore(Long id);
 
