@@ -22,9 +22,9 @@ public class UserWhereDto {
 
   private final String address;
 
-  private final LocalDate birthDate;
-
   private final boolean isActive;
+
+  private final LocalDate birthDate;
 
   private final UserStatus status;
 
