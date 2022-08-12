@@ -28,9 +28,9 @@ public class UserEntity {
 
   private String address;
 
-  private LocalDate birthDate;
-
   private boolean isActive;
+
+  private LocalDate birthDate;
 
   private LocalDateTime createdAt;
 

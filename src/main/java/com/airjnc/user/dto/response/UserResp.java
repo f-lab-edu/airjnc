@@ -13,11 +13,11 @@ public class UserResp {
 
   private final String email;
 
+  private final String phoneNumber;
+
   private final String name;
 
   private final Gender gender;
-
-  private final String phoneNumber;
 
   private final String address;
 
