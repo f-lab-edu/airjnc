@@ -1,4 +1,32 @@
 <code_scheme name="GoogleStyle" version="173">
+  <option name="OTHER_INDENT_OPTIONS">
+    <value>
+      <option name="INDENT_SIZE" value="2"/>
+      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
+      <option name="TAB_SIZE" value="2"/>
+    </value>
+  </option>
+  <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false"/>
+  <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0"/>
+  <option name="ALIGN_MULTILINE_PARAMETERS" value="false"/>
+  <option name="ALIGN_MULTILINE_FOR" value="false"/>
+  <option name="SPACE_BEFORE_ARRAY_INITIALIZER_LBRACE" value="true"/>
+  <option name="CALL_PARAMETERS_WRAP" value="1"/>
+  <option name="METHOD_PARAMETERS_WRAP" value="1"/>
+  <option name="EXTENDS_LIST_WRAP" value="1"/>
+  <option name="THROWS_KEYWORD_WRAP" value="1"/>
+  <option name="METHOD_CALL_CHAIN_WRAP" value="1"/>
+  <option name="BINARY_OPERATION_WRAP" value="1"/>
+  <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true"/>
+  <option name="TERNARY_OPERATION_WRAP" value="1"/>
+  <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true"/>
+  <option name="FOR_STATEMENT_WRAP" value="1"/>
+  <option name="ARRAY_INITIALIZER_WRAP" value="1"/>
+  <option name="WRAP_COMMENTS" value="true"/>
+  <option name="IF_BRACE_FORCE" value="3"/>
+  <option name="DOWHILE_BRACE_FORCE" value="3"/>
+  <option name="WHILE_BRACE_FORCE" value="3"/>
+  <option name="FOR_BRACE_FORCE" value="3"/>
   <AndroidXmlCodeStyleSettings>
     <option name="USE_CUSTOM_SETTINGS" value="true"/>
     <option name="LAYOUT_SETTINGS">
@@ -110,6 +138,37 @@
     </indentOptions>
   </codeStyleSettings>
   <codeStyleSettings language="JAVA">
+    <option name="RIGHT_MARGIN" value="120"/>
+    <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false"/>
+    <option name="KEEP_BLANK_LINES_IN_CODE" value="1"/>
+    <option name="BLANK_LINES_AROUND_FIELD" value="1"/>
+    <option name="BLANK_LINES_AROUND_FIELD_IN_INTERFACE" value="1"/>
+    <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1"/>
+    <option name="ALIGN_MULTILINE_PARAMETERS" value="false"/>
+    <option name="ALIGN_MULTILINE_RESOURCES" value="false"/>
+    <option name="ALIGN_MULTILINE_FOR" value="false"/>
+    <option name="CALL_PARAMETERS_WRAP" value="1"/>
+    <option name="METHOD_PARAMETERS_WRAP" value="1"/>
+    <option name="EXTENDS_LIST_WRAP" value="1"/>
+    <option name="THROWS_KEYWORD_WRAP" value="1"/>
+    <option name="METHOD_CALL_CHAIN_WRAP" value="1"/>
+    <option name="BINARY_OPERATION_WRAP" value="1"/>
+    <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true"/>
+    <option name="TERNARY_OPERATION_WRAP" value="1"/>
+    <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true"/>
+    <option name="FOR_STATEMENT_WRAP" value="1"/>
+    <option name="ARRAY_INITIALIZER_WRAP" value="1"/>
+    <option name="WRAP_COMMENTS" value="true"/>
+    <option name="IF_BRACE_FORCE" value="3"/>
+    <option name="DOWHILE_BRACE_FORCE" value="3"/>
+    <option name="WHILE_BRACE_FORCE" value="3"/>
+    <option name="FOR_BRACE_FORCE" value="3"/>
+    <option name="WRAP_ON_TYPING" value="0"/>
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2"/>
+      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
+      <option name="TAB_SIZE" value="2"/>
+    </indentOptions>
     <arrangement>
       <rules>
         <section>
@@ -370,37 +429,6 @@
         </section>
       </rules>
     </arrangement>
-    <indentOptions>
-      <option name="INDENT_SIZE" value="2"/>
-      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
-      <option name="TAB_SIZE" value="2"/>
-    </indentOptions>
-    <option name="RIGHT_MARGIN" value="120"/>
-    <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false"/>
-    <option name="KEEP_BLANK_LINES_IN_CODE" value="1"/>
-    <option name="BLANK_LINES_AROUND_FIELD" value="1"/>
-    <option name="BLANK_LINES_AROUND_FIELD_IN_INTERFACE" value="1"/>
-    <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1"/>
-    <option name="ALIGN_MULTILINE_PARAMETERS" value="false"/>
-    <option name="ALIGN_MULTILINE_RESOURCES" value="false"/>
-    <option name="ALIGN_MULTILINE_FOR" value="false"/>
-    <option name="CALL_PARAMETERS_WRAP" value="1"/>
-    <option name="METHOD_PARAMETERS_WRAP" value="1"/>
-    <option name="EXTENDS_LIST_WRAP" value="1"/>
-    <option name="THROWS_KEYWORD_WRAP" value="1"/>
-    <option name="METHOD_CALL_CHAIN_WRAP" value="1"/>
-    <option name="BINARY_OPERATION_WRAP" value="1"/>
-    <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true"/>
-    <option name="TERNARY_OPERATION_WRAP" value="1"/>
-    <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true"/>
-    <option name="FOR_STATEMENT_WRAP" value="1"/>
-    <option name="ARRAY_INITIALIZER_WRAP" value="1"/>
-    <option name="WRAP_COMMENTS" value="true"/>
-    <option name="IF_BRACE_FORCE" value="3"/>
-    <option name="DOWHILE_BRACE_FORCE" value="3"/>
-    <option name="WHILE_BRACE_FORCE" value="3"/>
-    <option name="FOR_BRACE_FORCE" value="3"/>
-    <option name="WRAP_ON_TYPING" value="0"/>
   </codeStyleSettings>
   <codeStyleSettings language="JSON">
     <indentOptions>
@@ -409,10 +437,6 @@
     </indentOptions>
   </codeStyleSettings>
   <codeStyleSettings language="JavaScript">
-    <indentOptions>
-      <option name="INDENT_SIZE" value="2"/>
-      <option name="TAB_SIZE" value="2"/>
-    </indentOptions>
     <option name="RIGHT_MARGIN" value="80"/>
     <option name="KEEP_BLANK_LINES_IN_CODE" value="1"/>
     <option name="ALIGN_MULTILINE_PARAMETERS" value="false"/>
@@ -429,6 +453,10 @@
     <option name="DOWHILE_BRACE_FORCE" value="3"/>
     <option name="WHILE_BRACE_FORCE" value="3"/>
     <option name="FOR_BRACE_FORCE" value="3"/>
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2"/>
+      <option name="TAB_SIZE" value="2"/>
+    </indentOptions>
   </codeStyleSettings>
   <codeStyleSettings language="ObjectiveC">
     <indentOptions>
@@ -485,6 +513,11 @@
     </indentOptions>
   </codeStyleSettings>
   <codeStyleSettings language="XML">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2"/>
+      <option name="CONTINUATION_INDENT_SIZE" value="2"/>
+      <option name="TAB_SIZE" value="2"/>
+    </indentOptions>
     <arrangement>
       <rules>
         <section>
@@ -796,49 +829,15 @@
                 <XML_NAMESPACE>.*</XML_NAMESPACE>
               </AND>
             </match>
-            <order>BY_NAME</order>
           </rule>
         </section>
       </rules>
     </arrangement>
-    <indentOptions>
-      <option name="INDENT_SIZE" value="2"/>
-      <option name="CONTINUATION_INDENT_SIZE" value="2"/>
-      <option name="TAB_SIZE" value="2"/>
-    </indentOptions>
   </codeStyleSettings>
   <codeStyleSettings language="protobuf">
+    <option name="RIGHT_MARGIN" value="80"/>
     <indentOptions>
       <option name="CONTINUATION_INDENT_SIZE" value="2"/>
     </indentOptions>
-    <option name="RIGHT_MARGIN" value="80"/>
   </codeStyleSettings>
-  <option name="OTHER_INDENT_OPTIONS">
-    <value>
-      <option name="INDENT_SIZE" value="2"/>
-      <option name="CONTINUATION_INDENT_SIZE" value="4"/>
-      <option name="TAB_SIZE" value="2"/>
-    </value>
-  </option>
-  <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false"/>
-  <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0"/>
-  <option name="ALIGN_MULTILINE_PARAMETERS" value="false"/>
-  <option name="ALIGN_MULTILINE_FOR" value="false"/>
-  <option name="SPACE_BEFORE_ARRAY_INITIALIZER_LBRACE" value="true"/>
-  <option name="CALL_PARAMETERS_WRAP" value="1"/>
-  <option name="METHOD_PARAMETERS_WRAP" value="1"/>
-  <option name="EXTENDS_LIST_WRAP" value="1"/>
-  <option name="THROWS_KEYWORD_WRAP" value="1"/>
-  <option name="METHOD_CALL_CHAIN_WRAP" value="1"/>
-  <option name="BINARY_OPERATION_WRAP" value="1"/>
-  <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true"/>
-  <option name="TERNARY_OPERATION_WRAP" value="1"/>
-  <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true"/>
-  <option name="FOR_STATEMENT_WRAP" value="1"/>
-  <option name="ARRAY_INITIALIZER_WRAP" value="1"/>
-  <option name="WRAP_COMMENTS" value="true"/>
-  <option name="IF_BRACE_FORCE" value="3"/>
-  <option name="DOWHILE_BRACE_FORCE" value="3"/>
-  <option name="WHILE_BRACE_FORCE" value="3"/>
-  <option name="FOR_BRACE_FORCE" value="3"/>
 </code_scheme>
