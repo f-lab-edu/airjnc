@@ -20,6 +20,7 @@ import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.testutil.annotation.IntegrationTest;
 import com.testutil.fixture.UserCreateReqFixture;
 import com.testutil.fixture.UserInquiryEmailReqDTOFixture;
 import com.testutil.fixture.UserInquiryEmailResDTOFixture;
@@ -36,6 +37,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(UserController.class)
+@IntegrationTest
 class UserControllerTest {
 
   @Autowired

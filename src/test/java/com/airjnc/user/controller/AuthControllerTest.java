@@ -15,6 +15,7 @@ import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.AuthService;
 import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.testutil.annotation.IntegrationTest;
 import com.testutil.fixture.AuthLogInReqFixture;
 import com.testutil.fixture.UserRespFixture;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AuthController.class)
+@IntegrationTest
 class AuthControllerTest {
 
   @Autowired
