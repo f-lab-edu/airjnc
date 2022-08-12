@@ -56,8 +56,7 @@ public class UserService {
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
-  public UserResp getUserByWhere(String email, UserStatus userStatus) {
-    UserWhereDto userWhereDto = UserWhereDto.builder().email(email).status(userStatus).build();
+  public UserResp getUserByWhere(UserWhereDto userWhereDto) {
     UserEntity userEntity = userRepository.findByWhere(userWhereDto);
     return userModelMapper.userEntityToUserResp(userEntity);
   }
