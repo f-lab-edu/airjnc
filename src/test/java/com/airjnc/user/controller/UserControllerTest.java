@@ -22,9 +22,9 @@ import com.airjnc.user.service.UserService;
 import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.fixture.UserCreateReqFixture;
-import com.testutil.fixture.UserRespFixture;
 import com.testutil.fixture.UserInquiryEmailReqDTOFixture;
 import com.testutil.fixture.UserInquiryEmailResDTOFixture;
+import com.testutil.fixture.UserRespFixture;
 import com.testutil.testdata.TestUser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -137,6 +137,7 @@ class UserControllerTest {
   void resetPassword() throws Exception {
     //given
     UserResetPwdReq userResetPwdReq = UserResetPwdReq.builder()
+        .email("test@naver.com")
         .code("123456")
         .password("q1w2e3r4t5!")
         .build();

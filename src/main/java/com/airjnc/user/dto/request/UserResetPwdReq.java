@@ -1,6 +1,7 @@
 package com.airjnc.user.dto.request;
 
 import com.airjnc.user.util.UserRegex;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -14,6 +15,10 @@ import lombok.NoArgsConstructor;
 public class UserResetPwdReq {
 
   @NotBlank
+  @Email
+  private String email;
+
+  @NotBlank
   @Size(min = 6, max = 6)
   private String code;
 
@@ -23,7 +28,8 @@ public class UserResetPwdReq {
 
 
   @Builder
-  public UserResetPwdReq(String code, String password) {
+  public UserResetPwdReq(String email, String code, String password) {
+    this.email = email;
     this.code = code;
     this.password = password;
   }
