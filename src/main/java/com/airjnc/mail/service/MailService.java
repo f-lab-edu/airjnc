@@ -1,6 +1,7 @@
 package com.airjnc.mail.service;
 
 import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
+import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
@@ -22,7 +23,8 @@ public class MailService {
   }
 
   public void sendCertificationCodeToEmail(MailSendCertificationCodeToEmailReq req) {
-    UserResp user = userService.getUserByWhere(req.getEmail(), UserStatus.ALL);
+    UserWhereDto userWhereDto = UserWhereDto.builder().email(req.getEmail()).status(UserStatus.ALL).build();
+    UserResp user = userService.getUserByWhere(userWhereDto);
     mailCommonService.sendCode(user.getEmail(), user.getName());
   }
 }
