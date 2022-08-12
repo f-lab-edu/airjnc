@@ -21,18 +21,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
-  private final HashService hashService;
-
   private final UserModelMapper userModelMapper;
 
   private final UserRepository userRepository;
 
+  private final StateService stateService;
+
+  private final HashService hashService;
+
   private final UserCheckService userCheckService;
 
-
   private final CommonCheckService commonCheckService;
-
-  private final StateService stateService;
 
   public UserResp create(UserCreateReq userCreateReq) {
     userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());

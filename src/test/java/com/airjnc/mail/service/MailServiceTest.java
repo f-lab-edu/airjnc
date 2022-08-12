@@ -1,9 +1,11 @@
 package com.airjnc.mail.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
+import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
@@ -50,15 +52,14 @@ class MailServiceTest {
 
   @Test
   void sendCertificationCodeToEmail_noUserId() {
-    Long userId = 1L;
-    MailSendCertificationCodeToEmailReq req = MailSendCertificationCodeToEmailReq.builder().email("test@naver.com")
-        .build();
+    MailSendCertificationCodeToEmailReq req = MailSendCertificationCodeToEmailReq.builder()
+        .email("test@naver.com").build();
     //given
-    given(userService.getUserByWhere(req.getEmail(), UserStatus.ALL)).willReturn(user);
+    given(userService.getUserByWhere(any(UserWhereDto.class))).willReturn(user);
     //when
     mailService.sendCertificationCodeToEmail(req);
     //then
-    then(userService).should(times(1)).getUserByWhere(user.getEmail(), UserStatus.ALL);
+    then(userService).should(times(1)).getUserByWhere(any(UserWhereDto.class));
     then(mailCommonService).should(times(1)).sendCode(user.getEmail(), user.getName());
   }
 }

@@ -19,9 +19,9 @@ public class AuthService {
 
   private final UserModelMapper userModelMapper;
 
-  private final UserCheckService userCheckService;
-
   private final StateService stateService;
+
+  private final UserCheckService userCheckService;
 
   public UserResp logIn(AuthLogInReq authLogInReq) {
     UserWhereDto userWhereDto = UserWhereDto.builder().email(authLogInReq.getEmail()).build();
