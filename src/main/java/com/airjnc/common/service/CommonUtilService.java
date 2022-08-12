@@ -1,7 +1,6 @@
 package com.airjnc.common.service;
 
 import com.airjnc.common.dao.RedisDao;
-import com.airjnc.common.exception.NotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Random;
@@ -30,16 +29,7 @@ public class CommonUtilService {
 
   public String generateCode() {
     Random random = new Random(System.nanoTime());
-    String code = null;
-    while (true) {
-      try {
-        int n = random.nextInt(999_999);
-        code = String.format("%06d", n);
-        redisDao.get(code);
-      } catch (NotFoundException e) {
-        break;
-      }
-    }
-    return code;
+    int n = random.nextInt(999_999);
+    return String.format("%06d", n);
   }
 }
