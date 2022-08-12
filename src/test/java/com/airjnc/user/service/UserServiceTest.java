@@ -53,6 +53,9 @@ class UserServiceTest {
   @Mock
   CommonCheckService commonCheckService;
 
+  @Mock
+  UserStateService userStateService;
+
   @InjectMocks
   UserService userService;
 
@@ -76,6 +79,7 @@ class UserServiceTest {
     then(userCreateReq).should(times(1)).toSaveDTO(hash);
     then(userRepository).should(times(1)).create(userSaveDTO);
     then(userModelMapper).should(times(1)).userEntityToUserResp(any(UserEntity.class));
+    then(userStateService).should(times(1)).create(userEntity.getId());
     assertThat(result.getId()).isEqualTo(userResp.getId());
   }
 
@@ -87,6 +91,7 @@ class UserServiceTest {
     userService.delete(userEntity.getId());
     //then
     then(userRepository).should(times(1)).delete(userEntity.getId());
+    then(userStateService).should(times(1)).delete();
   }
 
   @Test

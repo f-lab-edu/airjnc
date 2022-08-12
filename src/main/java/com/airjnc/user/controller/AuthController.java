@@ -24,9 +24,7 @@ public class AuthController {
 
   @PostMapping("/logIn")
   public UserResp logIn(@Validated @RequestBody AuthLogInReq authLogInReq) {
-    UserResp userResp = authService.logIn(authLogInReq);
-    userStateService.create(userResp.getId());
-    return userResp;
+    return authService.logIn(authLogInReq);
   }
 
   @GetMapping("/logOut")

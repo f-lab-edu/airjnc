@@ -81,7 +81,6 @@ class UserControllerTest {
         .andExpect(jsonPath("id").value(userResp.getId()));
     //then
     then(userService).should(times(1)).create(any(UserCreateReq.class));
-    then(userStateService).should(times(1)).create(userResp.getId());
   }
 
   @Test
@@ -97,7 +96,6 @@ class UserControllerTest {
     //then
     checkInterceptorAndArgumentResolver();
     then(userService).should(times(1)).delete(userId);
-    then(userStateService).should(times(1)).delete();
   }
 
   @Test

@@ -19,9 +19,12 @@ public class AuthService {
 
   private final UserCheckService userCheckService;
 
+  private final UserStateService userStateService;
+
   public UserResp logIn(AuthLogInReq authLogInReq) {
     UserEntity userEntity = userRepository.findByWhere(UserDto.builder().email(authLogInReq.getEmail()).build());
     userCheckService.passwordShouldBeMatch(authLogInReq.getPassword(), userEntity.getPassword());
+    userStateService.create(userEntity.getId());
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 }

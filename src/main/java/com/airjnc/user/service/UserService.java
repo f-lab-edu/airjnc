@@ -1,6 +1,5 @@
 package com.airjnc.user.service;
 
-import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.service.HashService;
 import com.airjnc.user.dao.UserRepository;
@@ -28,19 +27,22 @@ public class UserService {
 
   private final UserCheckService userCheckService;
 
-  private final RedisDao redisDao;
 
   private final CommonCheckService commonCheckService;
+
+  private final UserStateService userStateService;
 
   public UserResp create(UserCreateReq userCreateReq) {
     userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
     String hash = hashService.encrypt(userCreateReq.getPassword());
     UserEntity userEntity = userRepository.create(userCreateReq.toSaveDTO(hash));
+    userStateService.create(userEntity.getId());
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
   public void delete(Long currentUserId) {
     userRepository.delete(currentUserId);
+    userStateService.delete();
   }
 
   public UserResp getUserById(Long userId, UserStatus userStatus) {

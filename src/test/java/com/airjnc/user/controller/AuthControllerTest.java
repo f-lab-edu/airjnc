@@ -70,7 +70,6 @@ class AuthControllerTest {
     //then
     checkInterceptor(0);
     then(authService).should(times(1)).logIn(any(AuthLogInReq.class));
-    then(userStateService).should(times(1)).create(userResp.getId());
   }
 
   @Test

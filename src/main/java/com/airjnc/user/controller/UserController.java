@@ -8,7 +8,6 @@ import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
-import com.airjnc.user.service.UserStateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -29,14 +28,10 @@ public class UserController {
 
   private final UserService userService;
 
-  private final UserStateService userStateService;
-
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public UserResp create(@Validated @RequestBody UserCreateReq userCreateReq) {
-    UserResp userResp = userService.create(userCreateReq);
-    userStateService.create(userResp.getId());
-    return userResp;
+    return userService.create(userCreateReq);
   }
 
   @DeleteMapping("/me")
@@ -44,7 +39,6 @@ public class UserController {
   @CheckAuth
   public void delete(@CurrentUserId Long currentUserId) {
     userService.delete(currentUserId);
-    userStateService.delete();
   }
 
   @GetMapping("/inquiryEmail")

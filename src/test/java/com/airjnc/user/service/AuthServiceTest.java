@@ -34,6 +34,9 @@ class AuthServiceTest {
   @Mock
   UserCheckService userCheckService;
 
+  @Mock
+  UserStateService userStateService;
+
   @InjectMocks
   AuthService authService;
 
@@ -50,8 +53,8 @@ class AuthServiceTest {
     UserResp result = authService.logIn(authLogInReq);
     //then
     then(userRepository).should(times(1)).findByWhere(any(UserDto.class));
-    then(userCheckService).should(times(1))
-        .passwordShouldBeMatch(authLogInReq.getPassword(), userEntity.getPassword());
+    then(userCheckService).should(times(1)).passwordShouldBeMatch(authLogInReq.getPassword(), userEntity.getPassword());
+    then(userStateService).should(times(1)).create(userEntity.getId());
     then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
     assertThat(result).isSameAs(userResp);
   }
