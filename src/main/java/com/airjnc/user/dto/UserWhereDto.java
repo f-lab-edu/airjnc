@@ -4,12 +4,13 @@ import com.airjnc.common.exception.DefaultException;
 import com.airjnc.common.util.factory.ErrorsFactory;
 import com.airjnc.user.domain.Gender;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class UserDto {
+public class UserWhereDto {
+
+  private final Long id;
 
   private final String email;
 
@@ -17,30 +18,31 @@ public class UserDto {
 
   private final String name;
 
-  private final LocalDate birthDate;
-
   private final Gender gender;
 
   private final String address;
 
+  private final LocalDate birthDate;
+
+  private final boolean isActive;
+
   private final UserStatus status;
 
-  private final LocalDateTime deletedAt;
-
   @Builder
-  public UserDto(String email, String phoneNumber, String name, LocalDate birthDate, Gender gender, String address,
-      LocalDateTime deletedAt, UserStatus status) {
-    if (email == null && phoneNumber == null && name == null && birthDate == null) {
+  public UserWhereDto(Long id, String email, String phoneNumber, String name, Gender gender, String address,
+      LocalDate birthDate, boolean isActive, UserStatus status) {
+    if (id == null && email == null && phoneNumber == null && name == null && birthDate == null) {
       throw new DefaultException(ErrorsFactory.createAndReject("dangerousQuery"));
     }
+    this.id = id;
     this.email = email;
     this.phoneNumber = phoneNumber;
     this.name = name;
-    this.birthDate = birthDate;
     this.gender = gender;
     this.address = address;
+    this.birthDate = birthDate;
+    this.isActive = isActive;
     this.status = status;
-    this.deletedAt = deletedAt;
   }
 
   public enum UserStatus {ACTIVE, DELETED, ALL}

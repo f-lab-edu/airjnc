@@ -4,7 +4,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
-import com.airjnc.user.dto.UserDto.UserStatus;
+import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.testutil.annotation.UnitTest;

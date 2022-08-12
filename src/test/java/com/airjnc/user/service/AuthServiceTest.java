@@ -9,7 +9,7 @@ import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.UserDto;
+import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.request.AuthLogInReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
@@ -49,12 +49,12 @@ class AuthServiceTest {
     UserEntity userEntity = TestUser.getBuilder().build();
     UserResp userResp = UserRespFixture.getBuilder().build();
 
-    given(userRepository.findByWhere(any(UserDto.class))).willReturn(userEntity);
+    given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);
     given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
     //when
     UserResp result = authService.logIn(authLogInReq);
     //then
-    then(userRepository).should(times(1)).findByWhere(any(UserDto.class));
+    then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
     then(userCheckService).should(times(1)).passwordShouldBeMatch(authLogInReq.getPassword(), userEntity.getPassword());
     then(stateService).should(times(1)).create(SessionKey.USER, userEntity.getId());
     then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
