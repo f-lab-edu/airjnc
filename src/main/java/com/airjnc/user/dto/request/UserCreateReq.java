@@ -1,7 +1,6 @@
 package com.airjnc.user.dto.request;
 
 import com.airjnc.user.domain.Gender;
-import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.util.UserRegex;
 import java.time.LocalDate;
 import javax.validation.constraints.Email;
@@ -43,15 +42,5 @@ public class UserCreateReq {
     this.name = name;
     this.gender = gender;
     this.birthDate = birthDate;
-  }
-
-  public UserSaveDto toSaveDTO(String hash) {
-    return UserSaveDto.builder()
-        .email(email)
-        .name(name)
-        .gender(gender)
-        .password(hash)
-        .birthDate(birthDate)
-        .build();
   }
 }
