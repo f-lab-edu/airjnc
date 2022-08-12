@@ -1,4 +1,4 @@
-package com.airjnc.user.service;
+package com.airjnc.common.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -15,18 +15,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 @UnitTest
-class SessionUserStateServiceTest {
+class SessionStateServiceTest {
 
   @Mock
   HttpSession httpSession;
 
   @InjectMocks
-  SessionUserStateService sessionStateService;
+  SessionStateService sessionStateService;
 
   @Test
   void sessionShouldBeRemoved() {
     //when
-    sessionStateService.delete();
+    sessionStateService.delete(SessionKey.USER);
     //then
     then(httpSession).should(times(1)).removeAttribute(SessionKey.USER.name());
   }
@@ -36,7 +36,7 @@ class SessionUserStateServiceTest {
     //given
     Long userId = 1L;
     //when
-    sessionStateService.create(userId);
+    sessionStateService.create(SessionKey.USER, userId);
     //then
     then(httpSession).should(times(1)).setAttribute(SessionKey.USER.name(), userId);
   }
@@ -47,7 +47,7 @@ class SessionUserStateServiceTest {
     Long userId = 1L;
     given(httpSession.getAttribute(SessionKey.USER.name())).willReturn(userId);
     //when
-    Long returnUserId = sessionStateService.getUserId();
+    Long returnUserId = sessionStateService.get(SessionKey.USER);
     //then
     then(httpSession).should(times(1)).getAttribute(SessionKey.USER.name());
     assertThat(returnUserId).isEqualTo(userId);

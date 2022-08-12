@@ -12,13 +12,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
+import com.airjnc.common.service.StateService;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
-import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
 import com.testutil.fixture.UserCreateReqFixture;
@@ -50,7 +51,7 @@ class UserControllerTest {
   UserService userService;
 
   @MockBean
-  UserStateService userStateService;
+  StateService stateService;
 
   @SpyBean
   CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
@@ -87,7 +88,7 @@ class UserControllerTest {
   void delete() throws Exception {
     //given
     Long userId = 1L;
-    given(userStateService.getUserId()).willReturn(userId);
+    given(stateService.get(SessionKey.USER)).willReturn(userId);
     //when
     mockMvc.perform(
             MockMvcRequestBuilders.delete("/users/me")
@@ -140,7 +141,7 @@ class UserControllerTest {
   void restore() throws Exception {
     //given
     Long userId = 1L;
-    given(userStateService.getUserId()).willReturn(userId);
+    given(stateService.get(SessionKey.USER)).willReturn(userId);
     //when
     mockMvc.perform(
             put("/users/me")

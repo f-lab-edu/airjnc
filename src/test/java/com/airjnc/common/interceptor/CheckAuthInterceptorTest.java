@@ -7,7 +7,8 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.exception.UnauthorizedException;
-import com.airjnc.user.service.UserStateService;
+import com.airjnc.common.service.StateService;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.testutil.annotation.UnitTest;
 import java.lang.reflect.Method;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +28,7 @@ import org.springframework.web.method.HandlerMethod;
 class CheckAuthInterceptorTest {
 
   @Mock
-  UserStateService userStateService;
+  StateService stateService;
 
   @InjectMocks
   CheckAuthInterceptor checkAuthInterceptor;
@@ -90,7 +91,7 @@ class CheckAuthInterceptorTest {
     void givenHaveCheckAuthAndNotStoreUserIdToStateThenThrowException() throws Exception {
       //given
       HandlerMethod handler = getHaveCheckAuthHandler();
-      given(userStateService.getUserId()).willReturn(null);
+      given(stateService.get(SessionKey.USER)).willReturn(null);
       //when
       assertThrows(
           UnauthorizedException.class,
@@ -98,7 +99,7 @@ class CheckAuthInterceptorTest {
       );
       //then
       then(handler).should(times(1)).getMethodAnnotation(CheckAuth.class);
-      then(userStateService).should(times(1)).getUserId();
+      then(stateService).should(times(1)).get(SessionKey.USER);
     }
 
     @Test
@@ -106,12 +107,12 @@ class CheckAuthInterceptorTest {
       //given
       HandlerMethod handler = getHaveCheckAuthHandler();
       Long userId = 1L;
-      given(userStateService.getUserId()).willReturn(userId);
+      given(stateService.get(SessionKey.USER)).willReturn(userId);
       //when
       boolean result = checkAuthInterceptor.preHandle(req, resp, handler);
       //then
       then(handler).should(times(1)).getMethodAnnotation(CheckAuth.class);
-      then(userStateService).should(times(1)).getUserId();
+      then(stateService).should(times(1)).get(SessionKey.USER);
       assertThat(req.getAttribute(CheckAuthInterceptor.AUTH_KEY)).isEqualTo(userId);
       assertThat(result).isTrue();
     }

@@ -2,6 +2,8 @@ package com.airjnc.user.service;
 
 import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.service.HashService;
+import com.airjnc.common.service.StateService;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserDto;
@@ -30,19 +32,19 @@ public class UserService {
 
   private final CommonCheckService commonCheckService;
 
-  private final UserStateService userStateService;
+  private final StateService stateService;
 
   public UserResp create(UserCreateReq userCreateReq) {
     userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
     String hash = hashService.encrypt(userCreateReq.getPassword());
     UserEntity userEntity = userRepository.create(userCreateReq.toSaveDTO(hash));
-    userStateService.create(userEntity.getId());
+    stateService.create(SessionKey.USER, userEntity.getId());
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
   public void delete(Long currentUserId) {
     userRepository.delete(currentUserId);
-    userStateService.delete();
+    stateService.delete(SessionKey.USER);
   }
 
   public UserResp getUserById(Long userId, UserStatus userStatus) {
