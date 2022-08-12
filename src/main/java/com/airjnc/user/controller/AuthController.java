@@ -1,10 +1,11 @@
 package com.airjnc.user.controller;
 
 import com.airjnc.common.annotation.CheckAuth;
+import com.airjnc.common.service.StateService;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.request.AuthLogInReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.AuthService;
-import com.airjnc.user.service.UserStateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ public class AuthController {
 
   private final AuthService authService;
 
-  private final UserStateService userStateService;
+  private final StateService stateService;
 
   @PostMapping("/logIn")
   public UserResp logIn(@Validated @RequestBody AuthLogInReq authLogInReq) {
@@ -30,6 +31,6 @@ public class AuthController {
   @GetMapping("/logOut")
   @CheckAuth
   public void logOut() {
-    userStateService.delete();
+    stateService.delete(SessionKey.USER);
   }
 }

@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
+import com.airjnc.common.service.StateService;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserDto;
@@ -35,7 +37,7 @@ class AuthServiceTest {
   UserCheckService userCheckService;
 
   @Mock
-  UserStateService userStateService;
+  StateService stateService;
 
   @InjectMocks
   AuthService authService;
@@ -54,7 +56,7 @@ class AuthServiceTest {
     //then
     then(userRepository).should(times(1)).findByWhere(any(UserDto.class));
     then(userCheckService).should(times(1)).passwordShouldBeMatch(authLogInReq.getPassword(), userEntity.getPassword());
-    then(userStateService).should(times(1)).create(userEntity.getId());
+    then(stateService).should(times(1)).create(SessionKey.USER, userEntity.getId());
     then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
     assertThat(result).isSameAs(userResp);
   }

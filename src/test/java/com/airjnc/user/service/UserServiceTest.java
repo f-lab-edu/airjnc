@@ -10,6 +10,8 @@ import static org.mockito.Mockito.spy;
 import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.service.HashService;
+import com.airjnc.common.service.StateService;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserDto;
@@ -54,7 +56,7 @@ class UserServiceTest {
   CommonCheckService commonCheckService;
 
   @Mock
-  UserStateService userStateService;
+  StateService stateService;
 
   @InjectMocks
   UserService userService;
@@ -79,7 +81,7 @@ class UserServiceTest {
     then(userCreateReq).should(times(1)).toSaveDTO(hash);
     then(userRepository).should(times(1)).create(userSaveDTO);
     then(userModelMapper).should(times(1)).userEntityToUserResp(any(UserEntity.class));
-    then(userStateService).should(times(1)).create(userEntity.getId());
+    then(stateService).should(times(1)).create(SessionKey.USER, userEntity.getId());
     assertThat(result.getId()).isEqualTo(userResp.getId());
   }
 
@@ -91,7 +93,7 @@ class UserServiceTest {
     userService.delete(userEntity.getId());
     //then
     then(userRepository).should(times(1)).delete(userEntity.getId());
-    then(userStateService).should(times(1)).delete();
+    then(stateService).should(times(1)).delete(SessionKey.USER);
   }
 
   @Test

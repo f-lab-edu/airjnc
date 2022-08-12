@@ -10,10 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.airjnc.common.interceptor.CheckAuthInterceptor;
+import com.airjnc.common.service.StateService;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.request.AuthLogInReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.AuthService;
-import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
 import com.testutil.fixture.AuthLogInReqFixture;
@@ -42,7 +43,7 @@ class AuthControllerTest {
   AuthService authService;
 
   @MockBean
-  UserStateService userStateService;
+  StateService stateService;
 
   @SpyBean
   CheckAuthInterceptor checkAuthInterceptor;
@@ -50,7 +51,7 @@ class AuthControllerTest {
   private void checkInterceptor(int n) throws Exception {
     then(checkAuthInterceptor).should(times(1))
         .preHandle(any(HttpServletRequest.class), any(HttpServletResponse.class), any(Object.class));
-    then(userStateService).should(times(n)).getUserId();
+    then(stateService).should(times(n)).getUserId();
   }
 
   @Test
@@ -82,6 +83,6 @@ class AuthControllerTest {
         .andExpect(status().isOk());
     //then
     checkInterceptor(1);
-    then(userStateService).should(times(1)).delete();
+    then(stateService).should(times(1)).delete(SessionKey.USER);
   }
 }

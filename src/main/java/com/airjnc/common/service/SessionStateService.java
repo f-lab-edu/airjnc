@@ -1,4 +1,4 @@
-package com.airjnc.user.service;
+package com.airjnc.common.service;
 
 import com.airjnc.common.util.enumerate.SessionKey;
 import javax.servlet.http.HttpSession;
@@ -7,16 +7,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SessionUserStateService implements UserStateService {
+public class SessionStateService implements StateService {
 
   private final HttpSession httpSession;
 
-  public void create(Long userId) {
-    httpSession.setAttribute(SessionKey.USER.name(), userId);
+  public void create(SessionKey sessionKey, Long userId) {
+    httpSession.setAttribute(sessionKey.name(), userId);
   }
 
-  public void delete() {
-    httpSession.removeAttribute(SessionKey.USER.name());
+  public void delete(SessionKey sessionKey) {
+    httpSession.removeAttribute(sessionKey.name());
   }
 
   public Long getUserId() {
