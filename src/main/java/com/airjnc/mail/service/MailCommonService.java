@@ -2,7 +2,7 @@ package com.airjnc.mail.service;
 
 import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.properties.SessionTtlProperties;
-import com.airjnc.common.service.CommonCertificationService;
+import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.mail.dto.SendUsingTemplateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailCommonService {
 
-  private final CommonCertificationService commonCertificationService;
+  private final CommonUtilService commonUtilService;
 
   private final MailProvider mailProvider;
 
@@ -20,8 +20,8 @@ public class MailCommonService {
   private final RedisDao redisDao;
 
   public void sendCode(String email, String userName) {
-    String code = commonCertificationService.generateCode();
-    redisDao.store(code, email, sessionTtlProperties.getCertificationCode());
+    String code = commonUtilService.generateCode();
+    redisDao.store(email, code, sessionTtlProperties.getCertificationCode());
     mailProvider.send(email, SendUsingTemplateDto.builder().name(userName).code(code).build());
   }
 }

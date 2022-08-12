@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.times;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import com.airjnc.common.dao.RedisDao;
+import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.service.HashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
@@ -39,13 +40,16 @@ class UserServiceTest {
   UserRepository userRepository;
 
   @Mock
-  UserCheckService userCheckService;
-
-  @Mock
   UserModelMapper userModelMapper;
 
   @Mock
+  UserCheckService userCheckService;
+
+  @Mock
   RedisDao redisDao;
+
+  @Mock
+  CommonCheckService commonCheckService;
 
   @InjectMocks
   UserService userService;
@@ -100,20 +104,22 @@ class UserServiceTest {
   void resetPassword() {
     //given
     UserResetPwdReq userResetPwdReq = UserResetPwdReq.builder()
+        .email("test@naver.com")
         .password("123456")
         .code("code")
         .build();
-    String email = "test@google.com";
+    String code = "code";
     String hash = "hash";
-    given(redisDao.get(userResetPwdReq.getCode())).willReturn(email);
+    given(redisDao.get(userResetPwdReq.getEmail())).willReturn(code);
     given(hashService.encrypt(userResetPwdReq.getPassword())).willReturn(hash);
     //when
     userService.resetPassword(userResetPwdReq);
     //then
-    then(redisDao).should(times(1)).get(userResetPwdReq.getCode());
-    then(redisDao).should(times(1)).delete(userResetPwdReq.getCode());
+    then(redisDao).should(times(1)).get(userResetPwdReq.getEmail());
+    then(commonCheckService).should(times(1)).shouldBeMatch(code, userResetPwdReq.getCode());
+    then(redisDao).should(times(1)).delete(userResetPwdReq.getEmail());
     then(hashService).should(times(1)).encrypt(userResetPwdReq.getPassword());
-    then(userRepository).should(times(1)).updatePasswordByEmail(email, hash);
+    then(userRepository).should(times(1)).updatePasswordByEmail(userResetPwdReq.getEmail(), hash);
   }
 
   @Test

@@ -2,6 +2,7 @@ package com.airjnc.common.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,5 +22,11 @@ public class CommonUtilService {
       throw new RuntimeException(e);
     }
     return new HttpEntity<>(jsonBody, headers);
+  }
+
+  public String generateCode() {
+    Random random = new Random(System.nanoTime());
+    int n = random.nextInt(999_999);
+    return String.format("%06d", n);
   }
 }

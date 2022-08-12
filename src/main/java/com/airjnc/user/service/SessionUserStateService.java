@@ -15,11 +15,11 @@ public class SessionUserStateService implements UserStateService {
     httpSession.setAttribute(SessionKey.USER.name(), userId);
   }
 
-  public Long getUserId() {
-    return (Long) httpSession.getAttribute(SessionKey.USER.name());
-  }
-
   public void delete() {
     httpSession.removeAttribute(SessionKey.USER.name());
+  }
+
+  public Long getUserId() {
+    return (Long) httpSession.getAttribute(SessionKey.USER.name());
   }
 }

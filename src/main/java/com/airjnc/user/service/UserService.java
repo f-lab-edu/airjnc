@@ -1,6 +1,7 @@
 package com.airjnc.user.service;
 
 import com.airjnc.common.dao.RedisDao;
+import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.service.HashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
@@ -27,15 +28,7 @@ public class UserService {
 
   private final RedisDao redisDao;
 
-  public UserResp getUserById(Long userId) {
-    UserEntity userEntity = userRepository.findById(userId);
-    return userModelMapper.userEntityToUserResp(userEntity);
-  }
-
-  public UserResp getUserWithDeletedByEmail(String email) {
-    UserEntity userEntity = userRepository.findWithDeletedByEmail(email);
-    return userModelMapper.userEntityToUserResp(userEntity);
-  }
+  private final CommonCheckService commonCheckService;
 
   public UserResp create(UserCreateReq userCreateReq) {
     userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
@@ -48,6 +41,16 @@ public class UserService {
     userRepository.delete(currentUserId);
   }
 
+  public UserResp getUserById(Long userId) {
+    UserEntity userEntity = userRepository.findById(userId);
+    return userModelMapper.userEntityToUserResp(userEntity);
+  }
+
+  public UserResp getUserWithDeletedByEmail(String email) {
+    UserEntity userEntity = userRepository.findWithDeletedByEmail(email);
+    return userModelMapper.userEntityToUserResp(userEntity);
+  }
+
   public UserInquiryEmailResp inquiryEmail(UserInquiryEmailReq userInquiryEmailReq) {
     UserEntity userEntity = userRepository.findWithDeletedByNameAndBirthDate(
         userInquiryEmailReq.getName(),
@@ -57,10 +60,11 @@ public class UserService {
   }
 
   public void resetPassword(UserResetPwdReq userResetPwdReq) {
-    String email = redisDao.get(userResetPwdReq.getCode());
-    redisDao.delete(userResetPwdReq.getCode());
+    String code = redisDao.get(userResetPwdReq.getEmail());
+    commonCheckService.shouldBeMatch(code, userResetPwdReq.getCode());
+    redisDao.delete(userResetPwdReq.getEmail());
     String hash = hashService.encrypt(userResetPwdReq.getPassword());
-    userRepository.updatePasswordByEmail(email, hash);
+    userRepository.updatePasswordByEmail(userResetPwdReq.getEmail(), hash);
   }
 
   public void restore(Long userId) {

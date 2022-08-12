@@ -121,6 +121,7 @@ class UserControllerTest {
   void resetPassword() throws Exception {
     //given
     UserResetPwdReq userResetPwdReq = UserResetPwdReq.builder()
+        .email("test@naver.com")
         .code("123456")
         .password("q1w2e3r4t5!")
         .build();

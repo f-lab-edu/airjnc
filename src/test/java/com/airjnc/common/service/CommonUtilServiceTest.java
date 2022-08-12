@@ -42,4 +42,12 @@ class CommonUtilServiceTest {
     then(objectMapper).should(times(1)).writeValueAsString(body);
     assertThat(entity.getBody()).isEqualTo(jsonBody);
   }
+
+  @Test
+  void generateCode() {
+    //when
+    String code = commonUtilService.generateCode();
+    //then
+    assertThat(code.length()).isEqualTo(6);
+  }
 }

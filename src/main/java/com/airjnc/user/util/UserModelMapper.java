@@ -14,9 +14,9 @@ import org.mapstruct.MappingConstants;
 )
 public interface UserModelMapper {
 
-  UserEntity userSaveDtoToUserEntity(UserSaveDto userSaveDTO);
-
   UserInquiryEmailResp userEntityToUserInquiryEmailResp(UserEntity userEntity);
 
   UserResp userEntityToUserResp(UserEntity userEntity);
+
+  UserEntity userSaveDtoToUserEntity(UserSaveDto userSaveDTO);
 }
