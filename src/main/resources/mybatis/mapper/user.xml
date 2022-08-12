@@ -36,20 +36,23 @@
       </if>
     </where>
   </select>
-  <update id="restore">
-    UPDATE user
-    SET deleted_at = NULL
-    WHERE id = #{id}
-      AND deleted_at IS NOT NULL;
-  </update>
-  <insert id="save" keyProperty="id" useGeneratedKeys="true">
+  <insert id="create" keyProperty="id" useGeneratedKeys="true">
     INSERT INTO user (email, password, name, gender)
     VALUES (#{email}, #{password}, #{name}, #{gender});
   </insert>
-  <update id="updatePasswordByEmail">
+  <update id="save">
     UPDATE user
-    SET password = #{password}
-    WHERE email = #{email}
-      AND deleted_at IS NULL;
+    SET email=#{email},
+        phone_number=#{phoneNumber},
+        password=#{password},
+        name=#{name},
+        gender=#{gender},
+        address=#{address},
+        birthdate=#{birthDate},
+        is_active=#{isActive},
+        created_at=#{createdAt},
+        updated_at=#{updatedAt},
+        deleted_at=#{deletedAt}
+    WHERE id = #{id}
   </update>
 </mapper>

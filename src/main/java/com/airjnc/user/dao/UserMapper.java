@@ -17,9 +17,7 @@ public interface UserMapper {
 
   Optional<UserEntity> findByWhere(UserDto userDto);
 
-  int restore(Long id);
+  int create(UserSaveDto userSaveDTO);
 
-  int save(UserSaveDto userSaveDTO);
-
-  int updatePasswordByEmail(@Param("email") String email, @Param("password") String password);
+  int save(UserEntity userEntity);
 }

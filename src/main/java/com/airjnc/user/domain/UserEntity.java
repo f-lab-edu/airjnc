@@ -6,8 +6,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserEntity {
 
@@ -55,5 +57,13 @@ public class UserEntity {
 
   public boolean isDeleted() {
     return deletedAt != null;
+  }
+
+  public void delete() {
+    this.deletedAt = LocalDateTime.now();
+  }
+
+  public void restore() {
+    this.deletedAt = null;
   }
 }

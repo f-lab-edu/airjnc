@@ -66,7 +66,7 @@ class UserServiceTest {
     UserResp userResp = UserRespFixture.getBuilder().build();
     given(hashService.encrypt(userCreateReq.getPassword())).willReturn(hash);
     given(userCreateReq.toSaveDTO(hash)).willReturn(userSaveDTO);
-    given(userRepository.save(any(UserSaveDto.class))).willReturn(userEntity);
+    given(userRepository.create(any(UserSaveDto.class))).willReturn(userEntity);
     given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
     //when
     UserResp result = userService.create(userCreateReq);
@@ -74,7 +74,7 @@ class UserServiceTest {
     then(userCheckService).should(times(1)).emailShouldNotBeDuplicated(userCreateReq.getEmail());
     then(hashService).should(times(1)).encrypt(userCreateReq.getPassword());
     then(userCreateReq).should(times(1)).toSaveDTO(hash);
-    then(userRepository).should(times(1)).save(userSaveDTO);
+    then(userRepository).should(times(1)).create(userSaveDTO);
     then(userModelMapper).should(times(1)).userEntityToUserResp(any(UserEntity.class));
     assertThat(result.getId()).isEqualTo(userResp.getId());
   }
@@ -112,30 +112,36 @@ class UserServiceTest {
         .build();
     String code = "code";
     String hash = "hash";
+    UserEntity userEntity = TestUser.getBuilder().build();
     given(redisDao.get(userResetPwdReq.getEmail())).willReturn(code);
     given(hashService.encrypt(userResetPwdReq.getPassword())).willReturn(hash);
+    given(userRepository.findByWhere(any(UserDto.class))).willReturn(userEntity);
     //when
     userService.resetPassword(userResetPwdReq);
     //then
     then(redisDao).should(times(1)).get(userResetPwdReq.getEmail());
     then(commonCheckService).should(times(1)).shouldBeMatch(code, userResetPwdReq.getCode());
     then(redisDao).should(times(1)).delete(userResetPwdReq.getEmail());
+
+    then(userRepository).should(times(1)).findByWhere(any(UserDto.class));
     then(hashService).should(times(1)).encrypt(userResetPwdReq.getPassword());
-    then(userRepository).should(times(1)).updatePasswordByEmail(userResetPwdReq.getEmail(), hash);
+    assertThat(userEntity.getPassword()).isEqualTo(hash);
+    then(userRepository).should(times(1)).save(userEntity);
   }
 
   @Test
   void restore() {
     //given
-    UserEntity user = TestUser.getBuilder().build();
+    UserEntity userEntity = TestUser.getBuilder().build();
     UserStatus deleted = UserStatus.DELETED;
-    given(userRepository.findById(user.getId(), deleted)).willReturn(user);
+    given(userRepository.findById(userEntity.getId(), deleted)).willReturn(userEntity);
     //when
-    userService.restore(user.getId());
+    userService.restore(userEntity.getId());
     //then
-    then(userRepository).should(times(1)).findById(user.getId(), deleted);
-    then(userCheckService).should(times(1)).shouldBeDeleted(user);
-    then(userRepository).should(times(1)).restore(user.getId());
+    then(userRepository).should(times(1)).findById(userEntity.getId(), deleted);
+    then(userCheckService).should(times(1)).shouldBeDeleted(userEntity);
+    assertThat(userEntity.isDeleted()).isFalse();
+    then(userRepository).should(times(1)).save(userEntity);
   }
 }
 

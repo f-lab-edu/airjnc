@@ -38,21 +38,16 @@ public class MybatisUserRepository implements UserRepository {
   }
 
   @Override
-  public void restore(Long id) {
-    int affect = userMapper.restore(id);
-    commonCheckService.shouldBeMatch(affect, 1);
-  }
-
-  @Override
-  public UserEntity save(UserSaveDto userSaveDTO) {
-    int affect = userMapper.save(userSaveDTO);
+  public UserEntity create(UserSaveDto userSaveDTO) {
+    int affect = userMapper.create(userSaveDTO);
     commonCheckService.shouldBeMatch(affect, 1);
     return userModelMapper.userSaveDtoToUserEntity(userSaveDTO);
   }
 
   @Override
-  public void updatePasswordByEmail(String email, String password) {
-    int affect = userMapper.updatePasswordByEmail(email, password);
+  public UserEntity save(UserEntity userEntity) {
+    int affect = userMapper.save(userEntity);
     commonCheckService.shouldBeMatch(affect, 1);
+    return userEntity;
   }
 }

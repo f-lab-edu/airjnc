@@ -73,23 +73,6 @@ class MybatisUserRepositoryTest {
 
   @Test
   @Transactional
-  void restore() {
-    //given
-    userMapper.delete(testUser.getId());
-    UserEntity deletedUser = userRepository.findByWhere(
-        UserDto.builder().email(testUser.getEmail()).status(UserStatus.ALL).build());
-    System.out.println(deletedUser.getEmail());
-    //when
-    userRepository.restore(testUser.getId());
-    UserEntity restoredUser = userRepository.findByWhere(
-        UserDto.builder().email(testUser.getEmail()).status(UserStatus.ALL).build());
-    //then
-    assertThat(deletedUser.isDeleted()).isTrue();
-    assertThat(restoredUser.isDeleted()).isFalse();
-  }
-
-  @Test
-  @Transactional
   void save() {
     //given
     UserSaveDto userSaveDTO = UserCreateReq.builder()
@@ -100,7 +83,7 @@ class MybatisUserRepositoryTest {
         .build()
         .toSaveDTO("hash");
     //when
-    userRepository.save(userSaveDTO);
+    userRepository.create(userSaveDTO);
     //then
     UserEntity byEmail = userRepository.findByWhere(
         UserDto.builder().email(userSaveDTO.getEmail()).status(UserStatus.ALL).build());
@@ -110,12 +93,13 @@ class MybatisUserRepositoryTest {
 
   @Test
   @Transactional
-  void updatePasswordByEmail() {
+  void update() {
     //given
-    String email = TestUser.EMAIL;
     String passwrod = "q1w2e3r4t5!@#";
+    UserEntity userEntity = userRepository.findById(TestUser.ID, UserStatus.ALL);
+    userEntity.setPassword(passwrod);
     //when
-    userRepository.updatePasswordByEmail(email, passwrod);
+    userRepository.save(userEntity);
     //then
     then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
   }

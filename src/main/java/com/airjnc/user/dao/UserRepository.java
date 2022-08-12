@@ -13,9 +13,7 @@ public interface UserRepository {
 
   UserEntity findByWhere(UserDto userDto);
 
-  void restore(Long id);
+  UserEntity create(UserSaveDto userSaveDTO);
 
-  UserEntity save(UserSaveDto userSaveDTO);
-
-  void updatePasswordByEmail(String email, String password);
+  UserEntity save(UserEntity userEntity);
 }

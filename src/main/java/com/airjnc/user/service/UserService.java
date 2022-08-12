@@ -35,7 +35,7 @@ public class UserService {
   public UserResp create(UserCreateReq userCreateReq) {
     userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
     String hash = hashService.encrypt(userCreateReq.getPassword());
-    UserEntity userEntity = userRepository.save(userCreateReq.toSaveDTO(hash));
+    UserEntity userEntity = userRepository.create(userCreateReq.toSaveDTO(hash));
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
@@ -64,13 +64,19 @@ public class UserService {
     String code = redisDao.get(userResetPwdReq.getEmail());
     commonCheckService.shouldBeMatch(code, userResetPwdReq.getCode());
     redisDao.delete(userResetPwdReq.getEmail());
+
+    UserEntity userEntity = userRepository.findByWhere(
+        UserDto.builder().email(userResetPwdReq.getEmail()).status(UserStatus.ALL).build()
+    );
     String hash = hashService.encrypt(userResetPwdReq.getPassword());
-    userRepository.updatePasswordByEmail(userResetPwdReq.getEmail(), hash);
+    userEntity.setPassword(hash);
+    userRepository.save(userEntity);
   }
 
   public void restore(Long userId) {
     UserEntity userEntity = userRepository.findById(userId, UserStatus.DELETED);
     userCheckService.shouldBeDeleted(userEntity);
-    userRepository.restore(userId);
+    userEntity.restore();
+    userRepository.save(userEntity);
   }
 }
