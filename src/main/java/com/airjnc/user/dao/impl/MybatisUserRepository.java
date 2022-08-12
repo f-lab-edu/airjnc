@@ -5,10 +5,8 @@ import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.UserDto;
-import com.airjnc.user.dto.UserDto.UserStatus;
-import com.airjnc.user.dto.UserSaveDto;
-import com.airjnc.user.util.UserModelMapper;
+import com.airjnc.user.dto.UserWhereDto;
+import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -20,11 +18,16 @@ public class MybatisUserRepository implements UserRepository {
 
   private final CommonCheckService commonCheckService;
 
-  private final UserModelMapper userModelMapper;
-
-  public void delete(Long id) {
-    int affect = userMapper.delete(id);
+  @Override
+  public UserEntity create(UserEntity userEntity) {
+    int affect = userMapper.create(userEntity);
     commonCheckService.shouldBeMatch(affect, 1);
+    return userEntity;
+  }
+
+  @Override
+  public boolean exists(UserWhereDto userWhereDto) {
+    return userMapper.exists(userWhereDto);
   }
 
   @Override
@@ -33,15 +36,8 @@ public class MybatisUserRepository implements UserRepository {
   }
 
   @Override
-  public UserEntity findByWhere(UserDto userDto) {
-    return userMapper.findByWhere(userDto).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public UserEntity create(UserSaveDto userSaveDTO) {
-    int affect = userMapper.create(userSaveDTO);
-    commonCheckService.shouldBeMatch(affect, 1);
-    return userModelMapper.userSaveDtoToUserEntity(userSaveDTO);
+  public UserEntity findByWhere(UserWhereDto userWhereDto) {
+    return userMapper.findByWhere(userWhereDto).orElseThrow(NotFoundException::new);
   }
 
   @Override

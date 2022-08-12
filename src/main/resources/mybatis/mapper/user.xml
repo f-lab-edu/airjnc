@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.airjnc.user.dao.UserMapper">
-  <delete id="delete">
-    UPDATE user
-    SET deleted_at = now()
-    WHERE id = #{id}
-      AND deleted_at IS NULL;
-  </delete>
-  <select id="findById" resultType="UserEntity">
-    SELECT id, email, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at, deleted_at
-    FROM user
-    WHERE id = #{id}
+  <sql id="checkStatus">
     <if test='status != null and !status.name().equals("ALL")'>
       AND deleted_at IS
       <choose>
@@ -18,28 +9,38 @@
         <when test='status.name().equals("DELETED")'>NOT NULL</when>
       </choose>
     </if>
+  </sql>
+  <sql id="where">
+    <where>
+      <if test="id != null">AND id = #{id}</if>
+      <if test="email != null">AND email = #{email}</if>
+      <if test="phoneNumber != null">AND phone_number = #{phoneNumber}</if>
+      <if test="name != null">AND name = #{name}</if>
+      <if test="gender != null">AND gender = #{gender}</if>
+      <if test="address != null">AND address = #{address}</if>
+      <if test="birthDate != null">AND birthdate = #{birthDate}</if>
+      <include refid="checkStatus"/>
+    </where>
+  </sql>
+
+  <insert id="create" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO user (email, phone_number, password, name, gender, address, birthdate)
+    VALUES (#{email}, #{phoneNumber}, #{password}, #{name}, #{gender}, #{address}, #{birthDate})
+  </insert>
+  <select id="exists" resultType="boolean">
+    SELECT EXISTS(SELECT 1 FROM user<include refid="where"/>)
+  </select>
+  <select id="findById" resultType="UserEntity">
+    SELECT id, email, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at, deleted_at
+    FROM user
+    WHERE id = #{id}
+    <include refid="checkStatus"/>
   </select>
   <select id="findByWhere" resultType="UserEntity">
     SELECT id, email, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at, deleted_at
     FROM user
-    <where>
-      <if test="email != null">AND email = #{email}</if>
-      <if test="phoneNumber != null">AND phone_number = #{phoneNumber}</if>
-      <if test="name != null">AND name = #{name}</if>
-      <if test="birthDate != null">AND birth_date = #{birthDate}</if>
-      <if test='status != null and !status.name().equals("ALL")'>
-        AND deleted_at IS
-        <choose>
-          <when test='status.name().equals("ACTIVE")'>NULL</when>
-          <when test='status.name().equals("DELETED")'>NOT NULL</when>
-        </choose>
-      </if>
-    </where>
+    <include refid="where"/>
   </select>
-  <insert id="create" keyProperty="id" useGeneratedKeys="true">
-    INSERT INTO user (email, password, name, gender)
-    VALUES (#{email}, #{password}, #{name}, #{gender});
-  </insert>
   <update id="save">
     UPDATE user
     SET email=#{email},
@@ -50,8 +51,6 @@
         address=#{address},
         birthdate=#{birthDate},
         is_active=#{isActive},
-        created_at=#{createdAt},
-        updated_at=#{updatedAt},
         deleted_at=#{deletedAt}
     WHERE id = #{id}
   </update>

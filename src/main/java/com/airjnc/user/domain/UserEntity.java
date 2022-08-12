@@ -1,5 +1,6 @@
 package com.airjnc.user.domain;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -39,8 +40,7 @@ public class UserEntity {
 
   @Builder
   public UserEntity(Long id, String email, String password, String name, Gender gender, String phoneNumber,
-      String address, boolean isActive, LocalDate birthDate, LocalDateTime createdAt, LocalDateTime updatedAt,
-      LocalDateTime deletedAt) {
+      String address, LocalDate birthDate) {
     this.id = id;
     this.email = email;
     this.password = password;
@@ -48,19 +48,16 @@ public class UserEntity {
     this.gender = gender;
     this.phoneNumber = phoneNumber;
     this.address = address;
-    this.isActive = isActive;
     this.birthDate = birthDate;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.deletedAt = deletedAt;
+    this.isActive = true;
+  }
+
+  public void delete() {
+    this.deletedAt = LocalDateTime.now(Clock.systemUTC());
   }
 
   public boolean isDeleted() {
     return deletedAt != null;
-  }
-
-  public void delete() {
-    this.deletedAt = LocalDateTime.now();
   }
 
   public void restore() {
