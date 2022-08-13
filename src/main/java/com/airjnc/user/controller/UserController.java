@@ -33,7 +33,6 @@ public class UserController {
     return userDTO;
   }
 
-
   @DeleteMapping("/me")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @CheckAuth
