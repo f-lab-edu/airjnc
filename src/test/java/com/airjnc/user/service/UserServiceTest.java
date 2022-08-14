@@ -21,9 +21,9 @@ import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
-import com.testutil.fixture.UserCreateReqFixture;
-import com.testutil.fixture.UserInquiryEmailReqDTOFixture;
-import com.testutil.fixture.UserRespFixture;
+import com.testutil.fixture.user.UserCreateReqFixture;
+import com.testutil.fixture.user.UserInquiryEmailReqDTOFixture;
+import com.testutil.fixture.user.UserRespFixture;
 import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -92,6 +92,25 @@ class UserServiceTest {
     assertThat(userEntity.isDeleted()).isTrue();
     then(userRepository).should(times(1)).save(userEntity);
     then(stateService).should(times(1)).delete(SessionKey.USER);
+  }
+
+  @Test
+  void getUserByAuth() {
+    //given
+    String email = TestUser.EMAIL;
+    String password = TestUser.PASSWORD;
+    UserEntity userEntity = TestUser.getBuilder().build();
+    UserResp userResp = UserResp.builder().build();
+
+    given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);
+    given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
+    //when
+    UserResp result = userService.getUserByEmailAndPassword(email, password);
+    //then
+    then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
+    then(userCheckService).should(times(1)).passwordShouldBeMatch(password, userEntity.getPassword());
+    then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
+    assertThat(result).isSameAs(userResp);
   }
 
   @Test

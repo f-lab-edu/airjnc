@@ -10,7 +10,7 @@ import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.testutil.annotation.UnitTest;
-import com.testutil.fixture.UserRespFixture;
+import com.testutil.fixture.user.UserRespFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

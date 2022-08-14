@@ -60,6 +60,13 @@ public class UserService {
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
+  public UserResp getUserByEmailAndPassword(String email, String password) {
+    UserWhereDto userWhereDto = UserWhereDto.builder().email(email).build();
+    UserEntity userEntity = userRepository.findByWhere(userWhereDto);
+    userCheckService.passwordShouldBeMatch(password, userEntity.getPassword());
+    return userModelMapper.userEntityToUserResp(userEntity);
+  }
+
   public UserInquiryEmailResp inquiryEmail(UserInquiryEmailReq req) {
     UserWhereDto userWhereDto = UserWhereDto.builder()
         .name(req.getName()).birthDate(req.getBirthDate()).status(UserStatus.ALL).build();

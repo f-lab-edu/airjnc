@@ -1,4 +1,4 @@
-package com.airjnc.user.controller;
+package com.airjnc.auth.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -12,13 +12,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
-import com.airjnc.user.dto.request.AuthLogInReq;
+import com.airjnc.auth.dto.request.AuthLogInReq;
 import com.airjnc.user.dto.response.UserResp;
-import com.airjnc.user.service.AuthService;
+import com.airjnc.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
-import com.testutil.fixture.AuthLogInReqFixture;
-import com.testutil.fixture.UserRespFixture;
+import com.testutil.fixture.auth.AuthLogInReqFixture;
+import com.testutil.fixture.user.UserRespFixture;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -40,10 +40,10 @@ class AuthControllerTest {
   ObjectMapper objectMapper;
 
   @MockBean
-  AuthService authService;
+  StateService stateService;
 
   @MockBean
-  StateService stateService;
+  UserService userService;
 
   @SpyBean
   CheckAuthInterceptor checkAuthInterceptor;
@@ -59,7 +59,7 @@ class AuthControllerTest {
     //given
     AuthLogInReq authLogInReq = AuthLogInReqFixture.getBuilder().build();
     UserResp userResp = UserRespFixture.getBuilder().build();
-    given(authService.logIn(any(AuthLogInReq.class))).willReturn(userResp);
+    given(userService.getUserByEmailAndPassword(authLogInReq.getEmail(), authLogInReq.getPassword())).willReturn(userResp);
     //when
     mockMvc.perform(
             post("/auth/logIn")
@@ -70,7 +70,8 @@ class AuthControllerTest {
         .andExpect(jsonPath("id").value(userResp.getId()));
     //then
     checkInterceptor(0);
-    then(authService).should(times(1)).logIn(any(AuthLogInReq.class));
+    then(userService).should().getUserByEmailAndPassword(authLogInReq.getEmail(), authLogInReq.getPassword());
+    then(stateService).should().create(SessionKey.USER, userResp.getId());
   }
 
   @Test

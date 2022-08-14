@@ -1,4 +1,4 @@
-package com.testutil.fixture;
+package com.testutil.fixture.user;
 
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.testutil.testdata.TestUser;
