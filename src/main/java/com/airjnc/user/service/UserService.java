@@ -55,7 +55,7 @@ public class UserService {
   public UserResp getUserByEmailAndPassword(String email, String password) {
     UserWhereDto userWhereDto = UserWhereDto.builder().email(email).build();
     UserEntity userEntity = userRepository.findByWhere(userWhereDto);
-    userValidateService.passwordShouldBeMatch(password, userEntity.getPassword());
+    userValidateService.plainAndHashShouldMatch(password, userEntity.getPassword());
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
@@ -85,7 +85,7 @@ public class UserService {
 
   public UserResp updateMyPassword(Long userId, UserUpdateMyPasswordReq userUpdateMyPasswordReq) {
     UserEntity userEntity = userRepository.findById(userId, UserStatus.ACTIVE);
-    userValidateService.passwordShouldBeMatch(userUpdateMyPasswordReq.getPassword(), userEntity.getPassword());
+    userValidateService.plainAndHashShouldMatch(userUpdateMyPasswordReq.getPassword(), userEntity.getPassword());
     String newHash = commonHashService.encrypt(userUpdateMyPasswordReq.getNewPassword());
     userEntity.setPassword(newHash);
     userRepository.save(userEntity);

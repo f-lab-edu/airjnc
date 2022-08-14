@@ -73,7 +73,7 @@ class UserValidateServiceTest {
       String plain = "plain";
       String hash = commonHashService.encrypt(plain);
       //when
-      userValidateService.passwordShouldBeMatch(plain, hash);
+      userValidateService.plainAndHashShouldMatch(plain, hash);
     }
 
     @Test
@@ -82,7 +82,7 @@ class UserValidateServiceTest {
       String hash = commonHashService.encrypt("plain2");
       try {
         //when
-        userValidateService.passwordShouldBeMatch(plain, hash);
+        userValidateService.plainAndHashShouldMatch(plain, hash);
       } catch (PasswordIsNotMatchException e) {
         //then
         assertObjectNameOfGlobalError(e, "passwordIsNotMatch");

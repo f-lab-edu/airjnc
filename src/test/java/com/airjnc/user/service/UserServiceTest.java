@@ -97,9 +97,9 @@ class UserServiceTest {
     //when
     UserResp result = userService.getUserByEmailAndPassword(email, password);
     //then
-    then(userRepository).should().findByWhere(any(UserWhereDto.class));
-    then(userValidateService).should().passwordShouldBeMatch(password, userEntity.getPassword());
-    then(userModelMapper).should().userEntityToUserResp(userEntity);
+    then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
+    then(userValidateService).should(times(1)).plainAndHashShouldMatch(password, userEntity.getPassword());
+    then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
     assertThat(result).isSameAs(userResp);
   }
 
