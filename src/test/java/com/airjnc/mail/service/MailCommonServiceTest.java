@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import com.airjnc.common.dao.RedisDao;
+import com.airjnc.common.dao.CommonRedisDao;
 import com.airjnc.common.properties.SessionTtlProperties;
 import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.mail.dto.SendUsingTemplateDto;
@@ -32,7 +32,7 @@ class MailCommonServiceTest {
   SessionTtlProperties sessionTtlProperties;
 
   @Mock
-  RedisDao redisDao;
+  CommonRedisDao commonRedisDao;
 
   @InjectMocks
   MailCommonService mailCommonService;
@@ -50,7 +50,7 @@ class MailCommonServiceTest {
     mailCommonService.sendCode(email, userName);
     //then
     then(commonUtilService).should(times(1)).generateCode();
-    then(redisDao).should().store(email, code, ttl);
+    then(commonRedisDao).should().store(email, code, ttl);
     then(mailProvider).should().send(eq(email), any(SendUsingTemplateDto.class));
   }
 }

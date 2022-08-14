@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class RedisDao {
+public class CommonRedisDao {
 
   private final RedisTemplate<String, String> redisTemplate;
 

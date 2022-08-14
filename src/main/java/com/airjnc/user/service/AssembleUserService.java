@@ -1,7 +1,7 @@
 package com.airjnc.user.service;
 
 import com.airjnc.common.service.CommonCheckService;
-import com.airjnc.common.service.HashService;
+import com.airjnc.common.service.CommonHashService;
 import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dao.UserRepository;
@@ -27,15 +27,15 @@ public class AssembleUserService {
 
   private final StateService stateService;
 
-  private final HashService hashService;
-
-  private final UserCheckService userCheckService;
+  private final CommonHashService commonHashService;
 
   private final CommonCheckService commonCheckService;
 
+  private final UserCheckService userCheckService;
+
   public UserResp create(UserCreateReq userCreateReq) {
     userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
-    String hash = hashService.encrypt(userCreateReq.getPassword());
+    String hash = commonHashService.encrypt(userCreateReq.getPassword());
     UserEntity userEntity = userModelMapper.userCreateReqToUserEntity(userCreateReq);
     userEntity.setPassword(hash);
     userRepository.create(userEntity);
@@ -71,7 +71,7 @@ public class AssembleUserService {
     commonCheckService.verifyCode(userResetPwdReq.getEmail(), userResetPwdReq.getCode());
     UserWhereDto userWhereDto = UserWhereDto.builder().email(userResetPwdReq.getEmail()).status(UserStatus.ALL).build();
     UserEntity userEntity = userRepository.findByWhere(userWhereDto);
-    String hash = hashService.encrypt(userResetPwdReq.getPassword());
+    String hash = commonHashService.encrypt(userResetPwdReq.getPassword());
     userEntity.setPassword(hash);
     userRepository.save(userEntity);
   }

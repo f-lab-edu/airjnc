@@ -1,6 +1,6 @@
 package com.airjnc.mail.service;
 
-import com.airjnc.common.dao.RedisDao;
+import com.airjnc.common.dao.CommonRedisDao;
 import com.airjnc.common.properties.SessionTtlProperties;
 import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.mail.dto.SendUsingTemplateDto;
@@ -15,13 +15,13 @@ public class MailCommonService {
 
   private final CommonUtilService commonUtilService;
 
-  private final SessionTtlProperties sessionTtlProperties;
+  private final CommonRedisDao commonRedisDao;
 
-  private final RedisDao redisDao;
+  private final SessionTtlProperties sessionTtlProperties;
 
   public void sendCode(String email, String userName) {
     String code = commonUtilService.generateCode();
-    redisDao.store(email, code, sessionTtlProperties.getCertificationCode());
+    commonRedisDao.store(email, code, sessionTtlProperties.getCertificationCode());
     mailProvider.send(email, SendUsingTemplateDto.builder().name(userName).code(code).build());
   }
 }

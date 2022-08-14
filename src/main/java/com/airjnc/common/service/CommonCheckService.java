@@ -1,6 +1,6 @@
 package com.airjnc.common.service;
 
-import com.airjnc.common.dao.RedisDao;
+import com.airjnc.common.dao.CommonRedisDao;
 import com.airjnc.common.exception.BadRequestException;
 import com.airjnc.common.exception.DefaultException;
 import com.airjnc.common.util.factory.ErrorsFactory;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CommonCheckService {
 
-  private final RedisDao redisDao;
+  private final CommonRedisDao commonRedisDao;
 
   public void shouldBeMatch(int actual, int expected) {
     if (actual == expected) {
@@ -40,8 +40,8 @@ public class CommonCheckService {
   }
 
   public void verifyCode(String key, String code) {
-    String codeFromRedis = redisDao.get(key);
+    String codeFromRedis = commonRedisDao.get(key);
     shouldBeMatch(code, codeFromRedis);
-    redisDao.delete(key);
+    commonRedisDao.delete(key);
   }
 }
