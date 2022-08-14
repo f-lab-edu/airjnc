@@ -13,12 +13,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.common.service.StateService;
+import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
+import com.airjnc.user.service.UserAssembleService;
 import com.airjnc.user.service.UserService;
+import com.airjnc.user.util.UserModelMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
 import com.testutil.fixture.user.UserCreateReqFixture;
@@ -40,6 +43,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @IntegrationTest
 class UserControllerTest {
 
+  @MockBean
+  StateService stateService;
+
+  @MockBean
+  UserModelMapper userModelMapper;
+
   @Autowired
   MockMvc mockMvc;
 
@@ -50,7 +59,7 @@ class UserControllerTest {
   UserService userService;
 
   @MockBean
-  StateService stateService;
+  UserAssembleService userAssembleService;
 
   @SpyBean
   CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
@@ -70,7 +79,7 @@ class UserControllerTest {
     //given
     UserCreateReq userCreateReq = UserCreateReqFixture.getBuilder().build();
     UserResp userResp = UserRespFixture.getBuilder().build();
-    given(userService.create(any(UserCreateReq.class))).willReturn(userResp);
+    given(userAssembleService.create(any(UserCreateReq.class))).willReturn(userResp);
     //when
     mockMvc.perform(
             post("/users")
@@ -80,7 +89,7 @@ class UserControllerTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("id").value(userResp.getId()));
     //then
-    then(userService).should(times(1)).create(any(UserCreateReq.class));
+    then(userAssembleService).should(times(1)).create(any(UserCreateReq.class));
   }
 
   @Test
@@ -95,26 +104,29 @@ class UserControllerTest {
         .andExpect(status().isNoContent());
     //then
     checkInterceptorAndArgumentResolver();
-    then(userService).should(times(1)).delete(userId);
+    then(userAssembleService).should(times(1)).delete(userId);
   }
 
   @Test
   void inquiryEmail() throws Exception {
     //given
-    UserInquiryEmailReq userInquiryEmailReq = UserInquiryEmailReqDTOFixture.getBuilder().build();
-    UserInquiryEmailResp userInquiryEmailResp = UserInquiryEmailResDTOFixture.getBuilder().build();
-    given(userService.inquiryEmail(any(UserInquiryEmailReq.class))).willReturn(userInquiryEmailResp);
+    UserInquiryEmailReq req = UserInquiryEmailReqDTOFixture.getBuilder().build();
+    UserInquiryEmailResp resp = UserInquiryEmailResDTOFixture.getBuilder().build();
+    UserResp userResp = UserRespFixture.getBuilder().build();
+    given(userService.getUserByWhere(any(UserWhereDto.class))).willReturn(userResp);
+    given(userModelMapper.userRespToUserInquiryEmailResp(userResp)).willReturn(resp);
     //when
     mockMvc.perform(
             get("/users/inquiryEmail")
-                .param("name", userInquiryEmailReq.getName())
-                .param("birthDate", userInquiryEmailReq.getBirthDate().toString())
+                .param("name", req.getName())
+                .param("birthDate", req.getBirthDate().toString())
         ).andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("id").value(userInquiryEmailResp.getId()))
-        .andExpect(jsonPath("email").value(userInquiryEmailResp.getEmail()));
+        .andExpect(jsonPath("id").value(resp.getId()))
+        .andExpect(jsonPath("email").value(resp.getEmail()));
     //then
-    then(userService).should(times(1)).inquiryEmail(any(UserInquiryEmailReq.class));
+    then(userService).should().getUserByWhere(any(UserWhereDto.class));
+    then(userModelMapper).should().userRespToUserInquiryEmailResp(userResp);
   }
 
   @Test

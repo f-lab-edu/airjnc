@@ -16,7 +16,7 @@ public interface UserModelMapper {
 
   UserEntity userCreateReqToUserEntity(UserCreateReq userCreateReq);
 
-  UserInquiryEmailResp userEntityToUserInquiryEmailResp(UserEntity userEntity);
-
   UserResp userEntityToUserResp(UserEntity userEntity);
+
+  UserInquiryEmailResp userRespToUserInquiryEmailResp(UserResp userResp);
 }

@@ -8,21 +8,17 @@ import static org.mockito.BDDMockito.times;
 import static org.mockito.Mockito.spy;
 import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.service.CommonCheckService;
-import com.airjnc.common.service.HashService;
-import com.airjnc.common.service.StateService;
-import com.airjnc.common.util.enumerate.SessionKey;
+import com.airjnc.common.service.CommonHashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
-import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.user.UserCreateReqFixture;
-import com.testutil.fixture.user.UserInquiryEmailReqDTOFixture;
 import com.testutil.fixture.user.UserRespFixture;
 import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.Test;
@@ -36,7 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class UserServiceTest {
 
   @Mock
-  HashService hashService;
+  CommonHashService commonHashService;
 
   @Mock
   UserRepository userRepository;
@@ -53,9 +49,6 @@ class UserServiceTest {
   @Mock
   CommonCheckService commonCheckService;
 
-  @Mock
-  StateService stateService;
-
   @InjectMocks
   UserService userService;
 
@@ -66,18 +59,17 @@ class UserServiceTest {
     String hash = "hash";
     UserEntity userEntity = TestUser.getBuilder().build();
     UserResp userResp = UserRespFixture.getBuilder().build();
-    given(hashService.encrypt(userCreateReq.getPassword())).willReturn(hash);
+    given(commonHashService.encrypt(userCreateReq.getPassword())).willReturn(hash);
     given(userModelMapper.userCreateReqToUserEntity(userCreateReq)).willReturn(userEntity);
     given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
     //when
     UserResp result = userService.create(userCreateReq);
     //then
     then(userCheckService).should(times(1)).emailShouldNotBeDuplicated(userCreateReq.getEmail());
-    then(hashService).should(times(1)).encrypt(userCreateReq.getPassword());
+    then(commonHashService).should(times(1)).encrypt(userCreateReq.getPassword());
     then(userModelMapper).should(times(1)).userEntityToUserResp(any(UserEntity.class));
     assertThat(userEntity.getPassword()).isEqualTo(hash);
     then(userRepository).should(times(1)).create(userEntity);
-    then(stateService).should(times(1)).create(SessionKey.USER, userEntity.getId());
     assertThat(result.getId()).isEqualTo(userResp.getId());
   }
 
@@ -91,7 +83,6 @@ class UserServiceTest {
     //then
     assertThat(userEntity.isDeleted()).isTrue();
     then(userRepository).should(times(1)).save(userEntity);
-    then(stateService).should(times(1)).delete(SessionKey.USER);
   }
 
   @Test
@@ -114,19 +105,6 @@ class UserServiceTest {
   }
 
   @Test
-  void inquiryEmail() {
-    //given
-    UserInquiryEmailReq userInquiryEmailReq = UserInquiryEmailReqDTOFixture.getBuilder().build();
-    UserEntity userEntity = TestUser.getBuilder().build();
-    given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);
-    //when
-    userService.inquiryEmail(userInquiryEmailReq);
-    //then
-    then(userModelMapper).should(times(1)).userEntityToUserInquiryEmailResp(userEntity);
-    then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
-  }
-
-  @Test
   void resetPassword() {
     //given
     UserResetPwdReq userResetPwdReq = UserResetPwdReq.builder()
@@ -135,13 +113,13 @@ class UserServiceTest {
     String hash = "hash";
     UserEntity userEntity = TestUser.getBuilder().build();
     given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);
-    given(hashService.encrypt(userResetPwdReq.getPassword())).willReturn(hash);
+    given(commonHashService.encrypt(userResetPwdReq.getPassword())).willReturn(hash);
     //when
     userService.resetPassword(userResetPwdReq);
     //then
     then(commonCheckService).should(times(1)).verifyCode(userResetPwdReq.getEmail(), userResetPwdReq.getCode());
     then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
-    then(hashService).should(times(1)).encrypt(userResetPwdReq.getPassword());
+    then(commonHashService).should(times(1)).encrypt(userResetPwdReq.getPassword());
     assertThat(userEntity.getPassword()).isEqualTo(hash);
     then(userRepository).should(times(1)).save(userEntity);
   }
