@@ -34,4 +34,8 @@ public class UserResp {
     this.birthDate = birthDate;
     this.deletedAt = deletedAt;
   }
+
+  public boolean isDeleted() {
+    return deletedAt != null;
+  }
 }
