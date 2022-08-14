@@ -25,6 +25,7 @@ import com.testutil.fixture.UserCreateReqFixture;
 import com.testutil.fixture.UserInquiryEmailReqDTOFixture;
 import com.testutil.fixture.UserInquiryEmailResDTOFixture;
 import com.testutil.fixture.UserRespFixture;
+import com.testutil.testdata.TestUser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -86,7 +87,7 @@ class UserControllerTest {
   @Test
   void delete() throws Exception {
     //given
-    Long userId = 1L;
+    Long userId = TestUser.ID;
     given(stateService.getUserId()).willReturn(userId);
     //when
     mockMvc.perform(
@@ -139,7 +140,7 @@ class UserControllerTest {
   @Test
   void restore() throws Exception {
     //given
-    Long userId = 1L;
+    Long userId = TestUser.ID;
     given(stateService.getUserId()).willReturn(userId);
     //when
     mockMvc.perform(

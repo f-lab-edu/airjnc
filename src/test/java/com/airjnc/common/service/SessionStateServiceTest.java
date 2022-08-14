@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import com.airjnc.common.util.enumerate.SessionKey;
 import com.testutil.annotation.UnitTest;
+import com.testutil.testdata.TestUser;
 import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +35,7 @@ class SessionStateServiceTest {
   @Test
   void sessionShouldBeSaved() {
     //given
-    Long userId = 1L;
+    Long userId = TestUser.ID;
     //when
     sessionStateService.create(SessionKey.USER, userId);
     //then
@@ -44,7 +45,7 @@ class SessionStateServiceTest {
   @Test
   void shouldReturnUserId() {
     //given
-    Long userId = 1L;
+    Long userId = TestUser.ID;
     given(httpSession.getAttribute(SessionKey.USER.name())).willReturn(userId);
     //when
     Long returnUserId = sessionStateService.getUserId();

@@ -88,9 +88,9 @@ class MybatisUserRepositoryTest {
   @Transactional
   void save() {
     //given
-    String passwrod = "q1w2e3r4t5!@#";
+    String password = "q1w2e3r4t5!@#";
     UserEntity userEntity = userRepository.findById(TestUser.ID, UserStatus.ALL);
-    userEntity.setPassword(passwrod);
+    userEntity.setPassword(password);
     userEntity.delete();
     //when
     userRepository.save(userEntity);
