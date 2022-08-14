@@ -52,6 +52,12 @@ public class UserController {
     userAssembleService.delete(userId);
   }
 
+  @GetMapping("/me")
+  @CheckAuth
+  public UserResp getMyInfo(@CurrentUserId Long userId) {
+    return userService.getUserById(userId, UserStatus.ACTIVE);
+  }
+
   @GetMapping("/inquiryEmail")
   public UserInquiryEmailResp inquiryEmail(@Validated @ModelAttribute UserInquiryEmailReq req) {
     UserWhereDto userWhereDto = UserWhereDto.builder()

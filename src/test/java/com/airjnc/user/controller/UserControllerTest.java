@@ -15,6 +15,7 @@ import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.UserWhereDto;
+import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
@@ -105,6 +106,25 @@ class UserControllerTest {
     //then
     checkInterceptorAndArgumentResolver();
     then(userAssembleService).should().delete(userId);
+  }
+
+  @Test
+  void getMyInfo() throws Exception {
+    //given
+    Long userId = 1L;
+    UserResp userResp = UserRespFixture.getBuilder().id(userId).email(TestUser.EMAIL).build();
+    given(stateService.get(SessionKey.USER)).willReturn(userId);
+    given(userService.getUserById(userId, UserStatus.ACTIVE)).willReturn(userResp);
+    //when
+    mockMvc.perform(
+            get("/users/me")
+        ).andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("id").value(userId))
+        .andExpect(jsonPath("email").value(TestUser.EMAIL));
+    //then
+    then(userService).should(times(1)).getUserById(userId, UserStatus.ACTIVE);
+    checkInterceptorAndArgumentResolver();
   }
 
   @Test
