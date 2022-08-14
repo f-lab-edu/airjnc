@@ -4,6 +4,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,4 +19,10 @@ public class UserUpdateMyEmailReq {
   @NotBlank
   @Size(min = 6, max = 6)
   private String code;
+
+  @Builder
+  public UserUpdateMyEmailReq(String newEmail, String code) {
+    this.newEmail = newEmail;
+    this.code = code;
+  }
 }

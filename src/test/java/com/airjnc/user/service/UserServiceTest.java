@@ -2,6 +2,8 @@ package com.airjnc.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.spy;
@@ -15,6 +17,7 @@ import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
+import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
@@ -42,9 +45,6 @@ class UserServiceTest {
 
   @Mock
   UserValidateService userValidateService;
-
-  @Mock
-  RedisDao redisDao;
 
   @Mock
   CommonValidateService commonValidateService;
@@ -136,5 +136,22 @@ class UserServiceTest {
     then(userRepository).should().findById(userEntity.getId(), deleted);
     assertThat(userEntity.isDeleted()).isFalse();
     then(userRepository).should().save(userEntity);
+  }
+
+  @Test
+  void updateMyEmail() {
+    //given
+    UserUpdateMyEmailReq userUpdateMyEmailReq = UserUpdateMyEmailReq.builder()
+        .newEmail("new@google.com").code("123456").build();
+    UserEntity userEntity = TestUser.getBuilder().build();
+    given(userRepository.findById(TestUser.ID, UserStatus.ACTIVE)).willReturn(userEntity);
+    //when
+    userService.updateMyEmail(TestUser.ID, userUpdateMyEmailReq);
+    //then
+    then(userRepository).should(times(1)).findById(TestUser.ID, UserStatus.ACTIVE);
+    then(commonValidateService).should(times(1)).verifyCertificationCode(anyString(), eq(userUpdateMyEmailReq.getCode()));
+    assertThat(userEntity.getEmail()).isEqualTo(userUpdateMyEmailReq.getNewEmail());
+    then(userRepository).should(times(1)).save(userEntity);
+    then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
   }
 }
