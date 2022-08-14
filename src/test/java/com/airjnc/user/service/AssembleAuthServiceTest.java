@@ -25,7 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 @UnitTest
-class AuthServiceTest {
+class AssembleAuthServiceTest {
 
   @Mock
   UserModelMapper userModelMapper;
@@ -40,7 +40,7 @@ class AuthServiceTest {
   StateService stateService;
 
   @InjectMocks
-  AuthService authService;
+  AssembleAuthService assembleAuthService;
 
   @Test
   void userShouldBeLoggedIn() {
@@ -52,7 +52,7 @@ class AuthServiceTest {
     given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);
     given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
     //when
-    UserResp result = authService.logIn(authLogInReq);
+    UserResp result = assembleAuthService.logIn(authLogInReq);
     //then
     then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
     then(userCheckService).should(times(1)).passwordShouldBeMatch(authLogInReq.getPassword(), userEntity.getPassword());

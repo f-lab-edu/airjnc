@@ -18,7 +18,7 @@ import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
-import com.airjnc.user.service.UserService;
+import com.airjnc.user.service.AssembleUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
 import com.testutil.fixture.UserCreateReqFixture;
@@ -47,7 +47,7 @@ class UserControllerTest {
   ObjectMapper objectMapper;
 
   @MockBean
-  UserService userService;
+  AssembleUserService assembleUserService;
 
   @MockBean
   StateService stateService;
@@ -70,7 +70,7 @@ class UserControllerTest {
     //given
     UserCreateReq userCreateReq = UserCreateReqFixture.getBuilder().build();
     UserResp userResp = UserRespFixture.getBuilder().build();
-    given(userService.create(any(UserCreateReq.class))).willReturn(userResp);
+    given(assembleUserService.create(any(UserCreateReq.class))).willReturn(userResp);
     //when
     mockMvc.perform(
             post("/users")
@@ -80,7 +80,7 @@ class UserControllerTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("id").value(userResp.getId()));
     //then
-    then(userService).should(times(1)).create(any(UserCreateReq.class));
+    then(assembleUserService).should(times(1)).create(any(UserCreateReq.class));
   }
 
   @Test
@@ -95,7 +95,7 @@ class UserControllerTest {
         .andExpect(status().isNoContent());
     //then
     checkInterceptorAndArgumentResolver();
-    then(userService).should(times(1)).delete(userId);
+    then(assembleUserService).should(times(1)).delete(userId);
   }
 
   @Test
@@ -103,7 +103,7 @@ class UserControllerTest {
     //given
     UserInquiryEmailReq userInquiryEmailReq = UserInquiryEmailReqDTOFixture.getBuilder().build();
     UserInquiryEmailResp userInquiryEmailResp = UserInquiryEmailResDTOFixture.getBuilder().build();
-    given(userService.inquiryEmail(any(UserInquiryEmailReq.class))).willReturn(userInquiryEmailResp);
+    given(assembleUserService.inquiryEmail(any(UserInquiryEmailReq.class))).willReturn(userInquiryEmailResp);
     //when
     mockMvc.perform(
             get("/users/inquiryEmail")
@@ -114,7 +114,7 @@ class UserControllerTest {
         .andExpect(jsonPath("id").value(userInquiryEmailResp.getId()))
         .andExpect(jsonPath("email").value(userInquiryEmailResp.getEmail()));
     //then
-    then(userService).should(times(1)).inquiryEmail(any(UserInquiryEmailReq.class));
+    then(assembleUserService).should(times(1)).inquiryEmail(any(UserInquiryEmailReq.class));
   }
 
   @Test
@@ -133,7 +133,7 @@ class UserControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should(times(1)).resetPassword(any(UserResetPwdReq.class));
+    then(assembleUserService).should(times(1)).resetPassword(any(UserResetPwdReq.class));
   }
 
   @Test
@@ -148,7 +148,7 @@ class UserControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should(times(1)).restore(userId);
+    then(assembleUserService).should(times(1)).restore(userId);
     checkInterceptorAndArgumentResolver();
   }
 }

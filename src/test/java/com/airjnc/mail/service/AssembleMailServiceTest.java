@@ -8,7 +8,7 @@ import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
 import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.response.UserResp;
-import com.airjnc.user.service.UserService;
+import com.airjnc.user.service.AssembleUserService;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.UserRespFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,16 +20,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @UnitTest
 @ExtendWith(MockitoExtension.class)
-class MailServiceTest {
+class AssembleMailServiceTest {
 
   @Mock
-  UserService userService;
+  AssembleUserService assembleUserService;
 
   @Mock
   MailCommonService mailCommonService;
 
   @InjectMocks
-  MailService mailService;
+  AssembleMailService assembleMailService;
 
   UserResp user;
 
@@ -42,11 +42,11 @@ class MailServiceTest {
   void sendCertificationCodeToEmailWithUserId() {
     Long userId = 1L;
     //given
-    given(userService.getUserById(userId, UserStatus.ACTIVE)).willReturn(user);
+    given(assembleUserService.getUserById(userId, UserStatus.ACTIVE)).willReturn(user);
     //when
-    mailService.sendCertificationCodeToEmail(userId);
+    assembleMailService.sendCertificationCodeToEmail(userId);
     //then
-    then(userService).should(times(1)).getUserById(userId, UserStatus.ACTIVE);
+    then(assembleUserService).should(times(1)).getUserById(userId, UserStatus.ACTIVE);
     then(mailCommonService).should(times(1)).sendCode(user.getEmail(), user.getName());
   }
 
@@ -55,11 +55,11 @@ class MailServiceTest {
     MailSendCertificationCodeToEmailReq req = MailSendCertificationCodeToEmailReq.builder()
         .email("test@naver.com").build();
     //given
-    given(userService.getUserByWhere(any(UserWhereDto.class))).willReturn(user);
+    given(assembleUserService.getUserByWhere(any(UserWhereDto.class))).willReturn(user);
     //when
-    mailService.sendCertificationCodeToEmail(req);
+    assembleMailService.sendCertificationCodeToEmail(req);
     //then
-    then(userService).should(times(1)).getUserByWhere(any(UserWhereDto.class));
+    then(assembleUserService).should(times(1)).getUserByWhere(any(UserWhereDto.class));
     then(mailCommonService).should(times(1)).sendCode(user.getEmail(), user.getName());
   }
 }

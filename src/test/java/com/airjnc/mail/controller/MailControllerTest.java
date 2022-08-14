@@ -11,7 +11,7 @@ import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.common.service.StateService;
 import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
-import com.airjnc.mail.service.MailService;
+import com.airjnc.mail.service.AssembleMailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +35,7 @@ class MailControllerTest {
   ObjectMapper objectMapper;
 
   @MockBean
-  MailService mailService;
+  AssembleMailService assembleMailService;
 
   @SpyBean
   CheckAuthInterceptor checkAuthInterceptor;
@@ -67,7 +67,7 @@ class MailControllerTest {
         .andExpect(status().isOk());
     //then
     checkInterceptorAndArgumentResolver();
-    then(mailService).should().sendCertificationCodeToEmail(userId);
+    then(assembleMailService).should().sendCertificationCodeToEmail(userId);
   }
 
   @Test
@@ -85,6 +85,6 @@ class MailControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(mailService).should().sendCertificationCodeToEmail(any(MailSendCertificationCodeToEmailReq.class));
+    then(assembleMailService).should().sendCertificationCodeToEmail(any(MailSendCertificationCodeToEmailReq.class));
   }
 }

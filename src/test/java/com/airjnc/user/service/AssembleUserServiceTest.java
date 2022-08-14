@@ -33,7 +33,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 @UnitTest
-class UserServiceTest {
+class AssembleUserServiceTest {
 
   @Mock
   HashService hashService;
@@ -57,7 +57,7 @@ class UserServiceTest {
   StateService stateService;
 
   @InjectMocks
-  UserService userService;
+  AssembleUserService assembleUserService;
 
   @Test()
   void create() {
@@ -70,7 +70,7 @@ class UserServiceTest {
     given(userModelMapper.userCreateReqToUserEntity(userCreateReq)).willReturn(userEntity);
     given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
     //when
-    UserResp result = userService.create(userCreateReq);
+    UserResp result = assembleUserService.create(userCreateReq);
     //then
     then(userCheckService).should(times(1)).emailShouldNotBeDuplicated(userCreateReq.getEmail());
     then(hashService).should(times(1)).encrypt(userCreateReq.getPassword());
@@ -87,7 +87,7 @@ class UserServiceTest {
     UserEntity userEntity = TestUser.getBuilder().build();
     given(userRepository.findById(userEntity.getId(), UserStatus.ACTIVE)).willReturn(userEntity);
     //when
-    userService.delete(userEntity.getId());
+    assembleUserService.delete(userEntity.getId());
     //then
     assertThat(userEntity.isDeleted()).isTrue();
     then(userRepository).should(times(1)).save(userEntity);
@@ -101,7 +101,7 @@ class UserServiceTest {
     UserEntity userEntity = TestUser.getBuilder().build();
     given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);
     //when
-    userService.inquiryEmail(userInquiryEmailReq);
+    assembleUserService.inquiryEmail(userInquiryEmailReq);
     //then
     then(userModelMapper).should(times(1)).userEntityToUserInquiryEmailResp(userEntity);
     then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
@@ -118,7 +118,7 @@ class UserServiceTest {
     given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);
     given(hashService.encrypt(userResetPwdReq.getPassword())).willReturn(hash);
     //when
-    userService.resetPassword(userResetPwdReq);
+    assembleUserService.resetPassword(userResetPwdReq);
     //then
     then(commonCheckService).should(times(1)).verifyCode(userResetPwdReq.getEmail(), userResetPwdReq.getCode());
     then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
@@ -134,7 +134,7 @@ class UserServiceTest {
     UserStatus deleted = UserStatus.DELETED;
     given(userRepository.findById(userEntity.getId(), deleted)).willReturn(userEntity);
     //when
-    userService.restore(userEntity.getId());
+    assembleUserService.restore(userEntity.getId());
     //then
     then(userRepository).should(times(1)).findById(userEntity.getId(), deleted);
     assertThat(userEntity.isDeleted()).isFalse();

@@ -7,7 +7,7 @@ import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
-import com.airjnc.user.service.UserService;
+import com.airjnc.user.service.AssembleUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -26,34 +26,34 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-  private final UserService userService;
+  private final AssembleUserService assembleUserService;
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public UserResp create(@Validated @RequestBody UserCreateReq userCreateReq) {
-    return userService.create(userCreateReq);
+    return assembleUserService.create(userCreateReq);
   }
 
   @DeleteMapping("/me")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @CheckAuth
   public void delete(@CurrentUserId Long currentUserId) {
-    userService.delete(currentUserId);
+    assembleUserService.delete(currentUserId);
   }
 
   @GetMapping("/inquiryEmail")
   public UserInquiryEmailResp inquiryEmail(@Validated @ModelAttribute UserInquiryEmailReq userInquiryEmailReq) {
-    return userService.inquiryEmail(userInquiryEmailReq);
+    return assembleUserService.inquiryEmail(userInquiryEmailReq);
   }
 
   @PutMapping("/resetPassword")
   public void resetPassword(@Validated @RequestBody UserResetPwdReq userResetPwdReq) {
-    userService.resetPassword(userResetPwdReq);
+    assembleUserService.resetPassword(userResetPwdReq);
   }
 
   @PutMapping(value = "/me", params = "type=restore")
   @CheckAuth
   public void restore(@CurrentUserId Long userId) {
-    userService.restore(userId);
+    assembleUserService.restore(userId);
   }
 }

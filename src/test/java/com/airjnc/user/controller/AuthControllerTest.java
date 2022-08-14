@@ -14,7 +14,7 @@ import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.request.AuthLogInReq;
 import com.airjnc.user.dto.response.UserResp;
-import com.airjnc.user.service.AuthService;
+import com.airjnc.user.service.AssembleAuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
 import com.testutil.fixture.AuthLogInReqFixture;
@@ -40,7 +40,7 @@ class AuthControllerTest {
   ObjectMapper objectMapper;
 
   @MockBean
-  AuthService authService;
+  AssembleAuthService assembleAuthService;
 
   @MockBean
   StateService stateService;
@@ -59,7 +59,7 @@ class AuthControllerTest {
     //given
     AuthLogInReq authLogInReq = AuthLogInReqFixture.getBuilder().build();
     UserResp userResp = UserRespFixture.getBuilder().build();
-    given(authService.logIn(any(AuthLogInReq.class))).willReturn(userResp);
+    given(assembleAuthService.logIn(any(AuthLogInReq.class))).willReturn(userResp);
     //when
     mockMvc.perform(
             post("/auth/logIn")
@@ -70,7 +70,7 @@ class AuthControllerTest {
         .andExpect(jsonPath("id").value(userResp.getId()));
     //then
     checkInterceptor(0);
-    then(authService).should(times(1)).logIn(any(AuthLogInReq.class));
+    then(assembleAuthService).should(times(1)).logIn(any(AuthLogInReq.class));
   }
 
   @Test

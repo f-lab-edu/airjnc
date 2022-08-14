@@ -3,7 +3,7 @@ package com.airjnc.mail.controller;
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.annotation.CurrentUserId;
 import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
-import com.airjnc.mail.service.MailService;
+import com.airjnc.mail.service.AssembleMailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/mail")
 public class MailController {
 
-  private final MailService mailService;
+  private final AssembleMailService assembleMailService;
 
   @PostMapping(value = "/certificationCode", params = {"to=email", "isAuth=1"})
   @CheckAuth
   public void sendCertificationCodeToEmail(@CurrentUserId Long userId) {
-    mailService.sendCertificationCodeToEmail(userId);
+    assembleMailService.sendCertificationCodeToEmail(userId);
   }
 
   @PostMapping(value = "/certificationCode", params = {"to=email", "isAuth=0"})
   public void sendCertificationCodeToEmail(@Validated @RequestBody MailSendCertificationCodeToEmailReq req) {
-    mailService.sendCertificationCodeToEmail(req);
+    assembleMailService.sendCertificationCodeToEmail(req);
   }
 }
