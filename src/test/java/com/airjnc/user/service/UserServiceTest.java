@@ -7,8 +7,8 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.Mockito.spy;
 import com.airjnc.common.dao.RedisDao;
-import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.common.service.CommonHashService;
+import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserWhereDto;
@@ -65,11 +65,11 @@ class UserServiceTest {
     //when
     UserResp result = userService.create(userCreateReq);
     //then
-    then(userValidateService).should(times(1)).emailShouldNotBeDuplicated(userCreateReq.getEmail());
-    then(commonHashService).should(times(1)).encrypt(userCreateReq.getPassword());
-    then(userModelMapper).should(times(1)).userEntityToUserResp(any(UserEntity.class));
+    then(userValidateService).should().emailShouldNotBeDuplicated(userCreateReq.getEmail());
+    then(commonHashService).should().encrypt(userCreateReq.getPassword());
+    then(userModelMapper).should().userEntityToUserResp(any(UserEntity.class));
     assertThat(userEntity.getPassword()).isEqualTo(hash);
-    then(userRepository).should(times(1)).create(userEntity);
+    then(userRepository).should().create(userEntity);
     assertThat(result.getId()).isEqualTo(userResp.getId());
   }
 
@@ -82,7 +82,7 @@ class UserServiceTest {
     userService.delete(userEntity.getId());
     //then
     assertThat(userEntity.isDeleted()).isTrue();
-    then(userRepository).should(times(1)).save(userEntity);
+    then(userRepository).should().save(userEntity);
   }
 
   @Test
@@ -98,9 +98,9 @@ class UserServiceTest {
     //when
     UserResp result = userService.getUserByEmailAndPassword(email, password);
     //then
-    then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
-    then(userValidateService).should(times(1)).passwordShouldBeMatch(password, userEntity.getPassword());
-    then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
+    then(userRepository).should().findByWhere(any(UserWhereDto.class));
+    then(userValidateService).should().passwordShouldBeMatch(password, userEntity.getPassword());
+    then(userModelMapper).should().userEntityToUserResp(userEntity);
     assertThat(result).isSameAs(userResp);
   }
 
@@ -114,13 +114,13 @@ class UserServiceTest {
     given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);
     given(commonHashService.encrypt(userResetPwdReq.getPassword())).willReturn(hash);
     //when
-    userService.resetPassword(userResetPwdReq);
+    userService.updatePassword(userResetPwdReq);
     //then
-    then(commonValidateService).should(times(1)).verifyCertificationCode(userResetPwdReq.getEmail(), userResetPwdReq.getCertificationCode());
-    then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
-    then(commonHashService).should(times(1)).encrypt(userResetPwdReq.getPassword());
+    then(commonValidateService).should().verifyCertificationCode(userResetPwdReq.getEmail(), userResetPwdReq.getCertificationCode());
+    then(userRepository).should().findByWhere(any(UserWhereDto.class));
+    then(commonHashService).should().encrypt(userResetPwdReq.getPassword());
     assertThat(userEntity.getPassword()).isEqualTo(hash);
-    then(userRepository).should(times(1)).save(userEntity);
+    then(userRepository).should().save(userEntity);
   }
 
   @Test
@@ -132,8 +132,8 @@ class UserServiceTest {
     //when
     userService.restore(userEntity.getId());
     //then
-    then(userRepository).should(times(1)).findById(userEntity.getId(), deleted);
+    then(userRepository).should().findById(userEntity.getId(), deleted);
     assertThat(userEntity.isDeleted()).isFalse();
-    then(userRepository).should(times(1)).save(userEntity);
+    then(userRepository).should().save(userEntity);
   }
 }

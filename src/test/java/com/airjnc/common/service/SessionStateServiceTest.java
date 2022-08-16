@@ -29,7 +29,7 @@ class SessionStateServiceTest {
     //when
     sessionStateService.delete(SessionKey.USER);
     //then
-    then(httpSession).should(times(1)).removeAttribute(SessionKey.USER.name());
+    then(httpSession).should().removeAttribute(SessionKey.USER.name());
   }
 
   @Test
@@ -39,7 +39,7 @@ class SessionStateServiceTest {
     //when
     sessionStateService.create(SessionKey.USER, userId);
     //then
-    then(httpSession).should(times(1)).setAttribute(SessionKey.USER.name(), userId);
+    then(httpSession).should().setAttribute(SessionKey.USER.name(), userId);
   }
 
   @Test
@@ -50,7 +50,7 @@ class SessionStateServiceTest {
     //when
     Long returnUserId = sessionStateService.get(SessionKey.USER);
     //then
-    then(httpSession).should(times(1)).getAttribute(SessionKey.USER.name());
+    then(httpSession).should().getAttribute(SessionKey.USER.name());
     assertThat(returnUserId).isEqualTo(userId);
   }
 }

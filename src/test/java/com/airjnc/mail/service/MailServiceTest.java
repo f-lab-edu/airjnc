@@ -47,8 +47,8 @@ class MailServiceTest {
     //when
     mailService.sendCertificationCodeToEmail(userId);
     //then
-    then(userService).should(times(1)).getUserById(userId, UserStatus.ACTIVE);
-    then(mailCommonService).should(times(1)).sendCode(user.getEmail(), user.getName());
+    then(userService).should().getUserById(userId, UserStatus.ACTIVE);
+    then(mailCommonService).should().sendCode(user.getEmail(), user.getName());
   }
 
   @Test
@@ -60,7 +60,7 @@ class MailServiceTest {
     //when
     mailService.sendCertificationCodeToEmail(req);
     //then
-    then(userService).should(times(1)).getUserByWhere(any(UserWhereDto.class));
-    then(mailCommonService).should(times(1)).sendCode(user.getEmail(), user.getName());
+    then(userService).should().getUserByWhere(any(UserWhereDto.class));
+    then(mailCommonService).should().sendCode(user.getEmail(), user.getName());
   }
 }

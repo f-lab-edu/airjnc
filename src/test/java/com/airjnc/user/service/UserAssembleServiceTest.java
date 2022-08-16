@@ -40,7 +40,7 @@ class UserAssembleServiceTest {
     //when
     UserResp result = userAssembleService.create(req);
     //then
-    then(userService).should(times(1)).create(req);
+    then(userService).should().create(req);
     then(stateService).should().create(SessionKey.USER, userResp.getId());
     assertThat(result.getId()).isEqualTo(userResp.getId());
   }
@@ -52,7 +52,7 @@ class UserAssembleServiceTest {
     //when
     userAssembleService.delete(userId);
     //then
-    then(userService).should(times(1)).delete(userId);
-    then(stateService).should(times(1)).delete(SessionKey.USER);
+    then(userService).should().delete(userId);
+    then(stateService).should().delete(SessionKey.USER);
   }
 }

@@ -50,7 +50,7 @@ class MailCommonServiceTest {
     //when
     mailCommonService.sendCode(email, userName);
     //then
-    then(commonUtilService).should(times(1)).generateCertificationCode();
+    then(commonUtilService).should().generateCertificationCode();
     then(redisDao).should().store(email, code, ttl);
     then(mailProvider).should().send(eq(email), any(SendUsingTemplateDto.class));
   }

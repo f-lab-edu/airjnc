@@ -18,8 +18,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -60,14 +60,14 @@ public class UserController {
     return userModelMapper.userRespToUserInquiryEmailResp(userResp);
   }
 
-  @PutMapping("/resetPassword")
-  public void resetPassword(@Validated @RequestBody UserResetPwdReq userResetPwdReq) {
-    userService.resetPassword(userResetPwdReq);
-  }
-
-  @PutMapping(value = "/me", params = "type=restore")
+  @PatchMapping(value = "/me", params = "type=restore")
   @CheckAuth
   public void restore(@CurrentUserId Long userId) {
     userService.restore(userId);
+  }
+
+  @PatchMapping(params = {"type=info", "what=password"})
+  public void updatePassword(@Validated @RequestBody UserResetPwdReq userResetPwdReq) {
+    userService.updatePassword(userResetPwdReq);
   }
 }

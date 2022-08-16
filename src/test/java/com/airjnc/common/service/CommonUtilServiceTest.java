@@ -35,7 +35,7 @@ class CommonUtilServiceTest {
     //when
     HttpEntity<String> entity = commonUtilService.createHttpEntity(headers, body);
     //then
-    then(objectMapper).should(times(1)).writeValueAsString(body);
+    then(objectMapper).should().writeValueAsString(body);
     assertThat(entity.getBody()).isEqualTo(jsonBody);
   }
 

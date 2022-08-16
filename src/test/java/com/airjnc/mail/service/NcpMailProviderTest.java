@@ -87,9 +87,9 @@ class NcpMailProviderTest {
         .build();
     ncpMailService.send(TestUser.EMAIL, sendUsingTemplateDto);
     //then
-    then(commonNcpService).should(times(1)).createHeaders(sendUri);
-    then(commonUtilService).should(times(1)).createHttpEntity(eq(headers), any(NcpMailSendReqDto.class));
-    then(restTemplate).should(times(1)).postForObject(sendUri, entity, NcpMailSendRespDto.class);
-    then(commonValidateService).should(times(1)).shouldBeMatch(res.getCount(), 1);
+    then(commonNcpService).should().createHeaders(sendUri);
+    then(commonUtilService).should().createHttpEntity(eq(headers), any(NcpMailSendReqDto.class));
+    then(restTemplate).should().postForObject(sendUri, entity, NcpMailSendRespDto.class);
+    then(commonValidateService).should().shouldBeMatch(res.getCount(), 1);
   }
 }

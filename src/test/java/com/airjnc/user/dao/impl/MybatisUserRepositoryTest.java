@@ -50,7 +50,7 @@ class MybatisUserRepositoryTest {
     UserEntity byEmail = userRepository.findByWhere(
         UserWhereDto.builder().email(newUserEntity.getEmail()).status(UserStatus.ALL).build());
     assertThat(byEmail.getName()).isEqualTo(newUserEntity.getName());
-    then(commonValidateService).should(times(1)).shouldBeMatch(1, 1);
+    then(commonValidateService).should().shouldBeMatch(1, 1);
     assertThat(userEntity.getId()).isNotNull();
   }
 
@@ -95,6 +95,6 @@ class MybatisUserRepositoryTest {
     //when
     userRepository.save(userEntity);
     //then
-    then(commonValidateService).should(times(1)).shouldBeMatch(1, 1);
+    then(commonValidateService).should().shouldBeMatch(1, 1);
   }
 }

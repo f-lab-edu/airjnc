@@ -99,8 +99,8 @@ class CheckAuthInterceptorTest {
           () -> checkAuthInterceptor.preHandle(req, resp, handler)
       );
       //then
-      then(handler).should(times(1)).getMethodAnnotation(CheckAuth.class);
-      then(stateService).should(times(1)).get(SessionKey.USER);
+      then(handler).should().getMethodAnnotation(CheckAuth.class);
+      then(stateService).should().get(SessionKey.USER);
     }
 
     @Test
@@ -112,8 +112,8 @@ class CheckAuthInterceptorTest {
       //when
       boolean result = checkAuthInterceptor.preHandle(req, resp, handler);
       //then
-      then(handler).should(times(1)).getMethodAnnotation(CheckAuth.class);
-      then(stateService).should(times(1)).get(SessionKey.USER);
+      then(handler).should().getMethodAnnotation(CheckAuth.class);
+      then(stateService).should().get(SessionKey.USER);
       assertThat(req.getAttribute(CheckAuthInterceptor.AUTH_KEY)).isEqualTo(userId);
       assertThat(result).isTrue();
     }
@@ -125,7 +125,7 @@ class CheckAuthInterceptorTest {
       //when
       boolean result = checkAuthInterceptor.preHandle(req, resp, handler);
       //then
-      then(handler).should(times(1)).getMethodAnnotation(CheckAuth.class);
+      then(handler).should().getMethodAnnotation(CheckAuth.class);
       assertThat(result).isTrue();
     }
   }

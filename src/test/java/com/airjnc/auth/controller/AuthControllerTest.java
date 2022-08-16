@@ -49,7 +49,7 @@ class AuthControllerTest {
   CheckAuthInterceptor checkAuthInterceptor;
 
   private void checkInterceptor(int n) throws Exception {
-    then(checkAuthInterceptor).should(times(1))
+    then(checkAuthInterceptor).should()
         .preHandle(any(HttpServletRequest.class), any(HttpServletResponse.class), any(Object.class));
     then(stateService).should(times(n)).get(SessionKey.USER);
   }
@@ -70,7 +70,7 @@ class AuthControllerTest {
         .andExpect(jsonPath("id").value(userResp.getId()));
     //then
     checkInterceptor(0);
-    then(authAssembleService).should(times(1)).logIn(any(AuthLogInReq.class));
+    then(authAssembleService).should().logIn(any(AuthLogInReq.class));
   }
 
   @Test
@@ -83,6 +83,6 @@ class AuthControllerTest {
         .andExpect(status().isOk());
     //then
     checkInterceptor(1);
-    then(stateService).should(times(1)).delete(SessionKey.USER);
+    then(stateService).should().delete(SessionKey.USER);
   }
 }

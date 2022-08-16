@@ -5,8 +5,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -68,9 +68,9 @@ class UserControllerTest {
   CheckAuthInterceptor checkAuthInterceptor;
 
   private void checkInterceptorAndArgumentResolver() throws Exception {
-    then(checkAuthInterceptor).should(times(1))
+    then(checkAuthInterceptor).should()
         .preHandle(any(HttpServletRequest.class), any(HttpServletResponse.class), any(Object.class));
-    then(currentUserIdArgumentResolver).should(times(1))
+    then(currentUserIdArgumentResolver).should()
         .resolveArgument(any(), any(), any(), any());
   }
 
@@ -89,7 +89,7 @@ class UserControllerTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("id").value(userResp.getId()));
     //then
-    then(userAssembleService).should(times(1)).create(any(UserCreateReq.class));
+    then(userAssembleService).should().create(any(UserCreateReq.class));
   }
 
   @Test
@@ -104,7 +104,7 @@ class UserControllerTest {
         .andExpect(status().isNoContent());
     //then
     checkInterceptorAndArgumentResolver();
-    then(userAssembleService).should(times(1)).delete(userId);
+    then(userAssembleService).should().delete(userId);
   }
 
   @Test
@@ -131,7 +131,23 @@ class UserControllerTest {
   }
 
   @Test
-  void resetPassword() throws Exception {
+  void restore() throws Exception {
+    //given
+    Long userId = 1L;
+    given(stateService.get(SessionKey.USER)).willReturn(userId);
+    //when
+    mockMvc.perform(
+            patch("/users/me")
+                .param("type", "restore")
+        ).andDo(print())
+        .andExpect(status().isOk());
+    //then
+    then(userService).should().restore(userId);
+    checkInterceptorAndArgumentResolver();
+  }
+
+  @Test
+  void updatePassword() throws Exception {
     //given
     UserResetPwdReq userResetPwdReq = UserResetPwdReq.builder()
         .email("test@naver.com")
@@ -140,28 +156,14 @@ class UserControllerTest {
         .build();
     //when
     mockMvc.perform(
-            put("/users/resetPassword")
+            patch("/users")
+                .param("type", "info")
+                .param("what", "password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userResetPwdReq))
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should(times(1)).resetPassword(any(UserResetPwdReq.class));
-  }
-
-  @Test
-  void restore() throws Exception {
-    //given
-    Long userId = 1L;
-    given(stateService.get(SessionKey.USER)).willReturn(userId);
-    //when
-    mockMvc.perform(
-            put("/users/me")
-                .param("type", "restore")
-        ).andDo(print())
-        .andExpect(status().isOk());
-    //then
-    then(userService).should(times(1)).restore(userId);
-    checkInterceptorAndArgumentResolver();
+    then(userService).should().updatePassword(any(UserResetPwdReq.class));
   }
 }

@@ -48,9 +48,9 @@ class MailControllerTest {
   StateService stateService;
 
   private void checkInterceptorAndArgumentResolver() throws Exception {
-    then(checkAuthInterceptor).should(times(1))
+    then(checkAuthInterceptor).should()
         .preHandle(any(HttpServletRequest.class), any(HttpServletResponse.class), any(Object.class));
-    then(currentUserIdArgumentResolver).should(times(1))
+    then(currentUserIdArgumentResolver).should()
         .resolveArgument(any(), any(), any(), any());
   }
 

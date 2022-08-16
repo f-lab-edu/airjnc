@@ -33,8 +33,8 @@ class CommonValidateServiceTest {
     //when
     commonValidateService.verifyCertificationCode(key, code);
     //then
-    then(redisDao).should(times(1)).get(key);
-    then(redisDao).should(times(1)).delete(key);
+    then(redisDao).should().get(key);
+    then(redisDao).should().delete(key);
   }
 
   @Test

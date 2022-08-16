@@ -1,7 +1,7 @@
 package com.airjnc.user.service;
 
-import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.common.service.CommonHashService;
+import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserWhereDto;
@@ -67,7 +67,7 @@ public class UserService {
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
-  public void resetPassword(UserResetPwdReq userResetPwdReq) {
+  public void updatePassword(UserResetPwdReq userResetPwdReq) {
     commonValidateService.verifyCertificationCode(userResetPwdReq.getEmail(), userResetPwdReq.getCertificationCode());
     UserWhereDto userWhereDto = UserWhereDto.builder().email(userResetPwdReq.getEmail()).status(UserStatus.ALL).build();
     UserEntity userEntity = userRepository.findByWhere(userWhereDto);
