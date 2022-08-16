@@ -1,4 +1,4 @@
-package com.airjnc.user.controller;
+package com.airjnc.auth.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -9,16 +9,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.airjnc.auth.dto.request.AuthLogInReq;
+import com.airjnc.auth.service.AuthAssembleService;
 import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
-import com.airjnc.user.dto.request.AuthLogInReq;
 import com.airjnc.user.dto.response.UserResp;
-import com.airjnc.user.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
-import com.testutil.fixture.AuthLogInReqFixture;
-import com.testutil.fixture.UserRespFixture;
+import com.testutil.fixture.auth.AuthLogInReqFixture;
+import com.testutil.fixture.user.UserRespFixture;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ class AuthControllerTest {
   ObjectMapper objectMapper;
 
   @MockBean
-  AuthService authService;
+  AuthAssembleService authAssembleService;
 
   @MockBean
   StateService stateService;
@@ -57,20 +57,20 @@ class AuthControllerTest {
   @Test
   void logIn() throws Exception {
     //given
-    AuthLogInReq authLogInReq = AuthLogInReqFixture.getBuilder().build();
+    AuthLogInReq req = AuthLogInReqFixture.getBuilder().build();
     UserResp userResp = UserRespFixture.getBuilder().build();
-    given(authService.logIn(any(AuthLogInReq.class))).willReturn(userResp);
+    given(authAssembleService.logIn(any(AuthLogInReq.class))).willReturn(userResp);
     //when
     mockMvc.perform(
             post("/auth/logIn")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(authLogInReq))
+                .content(objectMapper.writeValueAsString(req))
         ).andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("id").value(userResp.getId()));
     //then
     checkInterceptor(0);
-    then(authService).should(times(1)).logIn(any(AuthLogInReq.class));
+    then(authAssembleService).should(times(1)).logIn(any(AuthLogInReq.class));
   }
 
   @Test

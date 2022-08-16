@@ -1,11 +1,11 @@
-package com.airjnc.user.controller;
+package com.airjnc.auth.controller;
 
+import com.airjnc.auth.dto.request.AuthLogInReq;
+import com.airjnc.auth.service.AuthAssembleService;
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
-import com.airjnc.user.dto.request.AuthLogInReq;
 import com.airjnc.user.dto.response.UserResp;
-import com.airjnc.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +21,11 @@ public class AuthController {
 
   private final StateService stateService;
 
-  private final AuthService authService;
+  private final AuthAssembleService authAssembleService;
 
   @PostMapping("/logIn")
-  public UserResp logIn(@Validated @RequestBody AuthLogInReq authLogInReq) {
-    return authService.logIn(authLogInReq);
+  public UserResp logIn(@Validated @RequestBody AuthLogInReq req) {
+    return authAssembleService.logIn(req);
   }
 
   @GetMapping("/logOut")

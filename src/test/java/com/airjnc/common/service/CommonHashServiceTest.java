@@ -6,13 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @UnitTest
-class HashServiceTest {
+class CommonHashServiceTest {
 
-  HashService hashService;
+  CommonHashService commonHashService;
 
   @BeforeEach
   void beforeEach() {
-    hashService = new HashService();
+    commonHashService = new CommonHashService();
   }
 
   @Test
@@ -20,7 +20,7 @@ class HashServiceTest {
     //given
     String plain = "q1w2e3r4!";
     //when
-    String hash = hashService.encrypt(plain);
+    String hash = commonHashService.encrypt(plain);
     //then
     assertThat(plain).isNotEqualTo(hash);
   }
@@ -29,9 +29,9 @@ class HashServiceTest {
   void plainShouldBeMatchToB() {
     //given
     String plain = "q1w2e3r4!";
-    String hash = hashService.encrypt(plain);
+    String hash = commonHashService.encrypt(plain);
     //when
-    boolean match = hashService.isMatch(plain, hash);
+    boolean match = commonHashService.isMatch(plain, hash);
     //then
     assertThat(match).isTrue();
   }

@@ -1,6 +1,6 @@
 package com.airjnc.user.service;
 
-import com.airjnc.common.service.HashService;
+import com.airjnc.common.service.CommonHashService;
 import com.airjnc.common.util.factory.ErrorsFactory;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dto.UserWhereDto;
@@ -15,7 +15,7 @@ public class UserCheckService {
 
   private final UserRepository userRepository;
 
-  private final HashService hashService;
+  private final CommonHashService commonHashService;
 
   public void emailShouldNotBeDuplicated(String email) {
     boolean exists = userRepository.exists(UserWhereDto.builder().email(email).build());
@@ -31,7 +31,7 @@ public class UserCheckService {
   }
 
   public void passwordShouldBeMatch(String plain, String hash) {
-    boolean isMatch = hashService.isMatch(plain, hash);
+    boolean isMatch = commonHashService.isMatch(plain, hash);
     if (isMatch) {
       return;
     }

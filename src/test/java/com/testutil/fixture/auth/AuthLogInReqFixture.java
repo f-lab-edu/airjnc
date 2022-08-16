@@ -1,6 +1,6 @@
-package com.testutil.fixture;
+package com.testutil.fixture.auth;
 
-import com.airjnc.user.dto.request.AuthLogInReq;
+import com.airjnc.auth.dto.request.AuthLogInReq;
 import com.testutil.testdata.TestUser;
 
 public class AuthLogInReqFixture {

@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import com.airjnc.common.exception.DefaultException;
-import com.airjnc.common.service.HashService;
+import com.airjnc.common.service.CommonHashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
@@ -28,7 +28,7 @@ class UserCheckServiceTest {
   UserRepository userRepository;
 
   @Spy
-  HashService hashService;
+  CommonHashService commonHashService;
 
   @InjectMocks
   UserCheckService userCheckService;
@@ -70,7 +70,7 @@ class UserCheckServiceTest {
     @Test
     void whenPasswordIsMatchThenSuccess() {
       String plain = "plain";
-      String hash = hashService.encrypt(plain);
+      String hash = commonHashService.encrypt(plain);
       //when
       userCheckService.passwordShouldBeMatch(plain, hash);
     }
@@ -78,7 +78,7 @@ class UserCheckServiceTest {
     @Test
     void whenPasswordIsNotMatchThenThrow() {
       String plain = "plain";
-      String hash = hashService.encrypt("plain2");
+      String hash = commonHashService.encrypt("plain2");
       try {
         //when
         userCheckService.passwordShouldBeMatch(plain, hash);

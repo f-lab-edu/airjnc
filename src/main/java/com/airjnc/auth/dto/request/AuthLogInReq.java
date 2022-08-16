@@ -1,4 +1,4 @@
-package com.airjnc.user.dto.request;
+package com.airjnc.auth.dto.request;
 
 import com.airjnc.user.util.UserRegex;
 import javax.validation.constraints.Email;
