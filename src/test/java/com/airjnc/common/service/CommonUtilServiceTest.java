@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import com.airjnc.common.dao.RedisDao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.UnitTest;
@@ -19,9 +18,6 @@ import org.springframework.http.HttpHeaders;
 @ExtendWith(MockitoExtension.class)
 @UnitTest
 class CommonUtilServiceTest {
-
-  @Mock
-  RedisDao redisDao;
 
   @Mock
   ObjectMapper objectMapper;

@@ -141,4 +141,3 @@ class UserServiceTest {
     then(userRepository).should(times(1)).save(userEntity);
   }
 }
-
