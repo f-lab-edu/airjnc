@@ -1,20 +1,22 @@
 package com.airjnc.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.spy;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
-import static org.mockito.BDDMockito.willDoNothing;
+import com.airjnc.common.service.HashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.CreateDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.UserSaveDto;
+import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
-import com.testutil.fixture.CreateDTOFixture;
-import com.testutil.fixture.UserDTOFixture;
+import com.testutil.fixture.UserCreateReqFixture;
 import com.testutil.fixture.UserEntityFixture;
+import com.testutil.fixture.UserRespFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,26 +36,28 @@ class UserServiceTest {
   @Mock
   UserModelMapper userModelMapper;
 
+  @Mock
+  HashService hashService;
+
   @InjectMocks
   UserService userService;
 
   @Test()
   void userShouldBeCreated() {
     //given
-    CreateDTO createDTO = spy(CreateDTOFixture.getBuilder().build());
+    UserCreateReq userCreateReq = spy(UserCreateReqFixture.getBuilder().build());
     UserEntity userEntity = UserEntityFixture.getBuilder().build();
-    UserDTO userDTO = UserDTOFixture.getBuilder().build();
-    willDoNothing().given(createDTO).changePasswordToHash();
-    given(userRepository.save(createDTO)).willReturn(userEntity);
-    given(userModelMapper.userEntityToUserDTO(userEntity)).willReturn(userDTO);
+    UserResp userResp = UserRespFixture.getBuilder().build();
+    given(userRepository.save(any(UserSaveDto.class))).willReturn(userEntity);
+    given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
     //when
-    UserDTO result = userService.create(createDTO);
+    UserResp result = userService.create(userCreateReq);
     //then
-    then(userCheckService).should(times(1)).emailShouldNotBeDuplicated(createDTO.getEmail());
-    then(createDTO).should(times(1)).changePasswordToHash();
-    then(userRepository).should(times(1)).save(createDTO);
-    then(userModelMapper).should(times(1)).userEntityToUserDTO(userEntity);
-    assertThat(result.getId()).isEqualTo(userDTO.getId());
+    then(userCheckService).should(times(1)).emailShouldNotBeDuplicated(userCreateReq.getEmail());
+    then(hashService).should(times(1)).encrypt(userCreateReq.getPassword());
+    then(userRepository).should(times(1)).save(any(UserSaveDto.class));
+    then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
+    assertThat(result.getId()).isEqualTo(userResp.getId());
   }
 
   @Test
@@ -61,9 +65,9 @@ class UserServiceTest {
     //given
     UserEntity userEntity = UserEntityFixture.getBuilder().build();
     //when
-    userService.remove(userEntity.getId());
+    userService.delete(userEntity.getId());
     //then
-    then(userRepository).should(times(1)).remove(userEntity.getId());
+    then(userRepository).should(times(1)).delete(userEntity.getId());
   }
 }
 

@@ -1,9 +1,10 @@
 package com.testutil.fixture;
 
 import com.airjnc.user.domain.Gender;
-import com.airjnc.user.dto.request.CreateDTO;
+import com.airjnc.user.dto.request.UserCreateReq;
+import java.time.LocalDate;
 
-public class CreateDTOFixture {
+public class UserCreateReqFixture {
 
   public static final String EMAIL = "test@naver.com";
 
@@ -13,11 +14,14 @@ public class CreateDTOFixture {
 
   public static final Gender GENDER = Gender.MALE;
 
-  public static CreateDTO.CreateDTOBuilder getBuilder() {
-    return CreateDTO.builder()
+  public static final LocalDate BIRTHDATE = LocalDate.now();
+
+  public static UserCreateReq.UserCreateReqBuilder getBuilder() {
+    return UserCreateReq.builder()
         .email(EMAIL)
         .password(PASSWORD)
         .name(NAME)
-        .gender(GENDER);
+        .gender(GENDER)
+        .birthDate(BIRTHDATE);
   }
 }

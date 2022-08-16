@@ -6,13 +6,13 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.request.LogInDTO;
-import com.airjnc.user.dto.response.UserDTO;
+import com.airjnc.user.dto.request.AuthLogInReq;
+import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
-import com.testutil.fixture.LogInDTOFixture;
-import com.testutil.fixture.UserDTOFixture;
+import com.testutil.fixture.AuthLogInReqFixture;
 import com.testutil.fixture.UserEntityFixture;
+import com.testutil.fixture.UserRespFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,18 +38,18 @@ class AuthServiceTest {
   @Test
   void userShouldBeLoggedIn() {
     //given
-    LogInDTO logInDTO = LogInDTOFixture.getBuilder().build();
-    UserEntity userEntity = UserEntityFixture.getBuilder().build();
-    UserDTO userDTO = UserDTOFixture.getBuilder().build();
-    given(userRepository.findByEmail(logInDTO.getEmail())).willReturn(userEntity);
-    given(userModelMapper.userEntityToUserDTO(userEntity)).willReturn(userDTO);
+    AuthLogInReq authLogInReq = AuthLogInReqFixture.getBuilder().build();
+    UserEntity userEntity = UserEntityFixture.getBuilder().deletedAt(null).build();
+    UserResp userResp = UserRespFixture.getBuilder().build();
+    given(userRepository.findWithDeletedByEmail(authLogInReq.getEmail())).willReturn(userEntity);
+    given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
     //when
-    UserDTO result = authService.logIn(logInDTO);
+    UserResp result = authService.logIn(authLogInReq);
     //then
-    then(userRepository).should(times(1)).findByEmail(logInDTO.getEmail());
+    then(userRepository).should(times(1)).findWithDeletedByEmail(authLogInReq.getEmail());
     then(userCheckService).should(times(1))
-        .passwordShouldBeMatch(logInDTO.getPassword(), userEntity.getPassword());
-    then(userModelMapper).should(times(1)).userEntityToUserDTO(userEntity);
-    assertThat(result).isSameAs(userDTO);
+        .passwordShouldBeMatch(authLogInReq.getPassword(), userEntity.getPassword());
+    then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
+    assertThat(result).isSameAs(userResp);
   }
 }

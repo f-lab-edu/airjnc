@@ -1,26 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.airjnc.user.dao.UserMapper">
-  <delete id="remove">
+  <delete id="delete">
     UPDATE user
     set deleted_at = now()
     WHERE id = #{id}
-      AND deleted_at IS NULL
+      AND deleted_at IS NULL;
   </delete>
-  <insert id="save" keyProperty="id" useGeneratedKeys="true">
-    INSERT INTO user (email, password, name, gender)
-    VALUES (#{email}, #{password}, #{name}, #{gender});
-  </insert>
+  <select id="findByEmail" resultType="UserEntity">
+    SELECT id,
+           email,
+           name,
+           gender,
+           phone_number,
+           address,
+           is_active,
+           birthdate,
+           created_at,
+           updated_at
+    FROM user
+    WHERE email = #{email}
+      AND deleted_at IS NULL;
+  </select>
   <select id="findById" resultType="UserEntity">
-    SELECT *
+    SELECT id,
+           email,
+           name,
+           gender,
+           phone_number,
+           address,
+           is_active,
+           birthdate,
+           created_at,
+           updated_at
     FROM user
     WHERE id = #{id}
       AND deleted_at IS NULL;
   </select>
-  <select id="findByEmail" resultType="UserEntity">
-    SELECT *
+  <select id="findByPhoneNumber" resultType="UserEntity">
+    SELECT id,
+           email,
+           name,
+           gender,
+           phone_number,
+           address,
+           is_active,
+           birthdate,
+           created_at,
+           updated_at
+    FROM user
+    WHERE phone_number = #{phoneNumber}
+      AND deleted_at IS NULL;
+  </select>
+  <select id="findOnlyDeletedById" resultType="UserEntity">
+    SELECT id,
+           email,
+           name,
+           gender,
+           phone_number,
+           address,
+           is_active,
+           birthdate,
+           created_at,
+           updated_at
+    FROM user
+    WHERE id = #{id}
+      AND deleted_at IS NOT NULL;
+  </select>
+  <select id="findWithDeletedByEmail" resultType="UserEntity">
+    SELECT id,
+           email,
+           name,
+           gender,
+           phone_number,
+           address,
+           is_active,
+           birthdate,
+           created_at,
+           updated_at,
+           deleted_at
     FROM user
     WHERE email = #{email};
   </select>
+  <select id="findWithDeletedByNameAndBirthDate" resultType="UserEntity">
+    SELECT id,
+           email,
+           name,
+           gender,
+           phone_number,
+           address,
+           is_active,
+           birthdate,
+           created_at,
+           updated_at,
+           deleted_at
+    FROM user
+    WHERE name = #{name}
+      AND birthdate = #{birthDate};
+  </select>
+  <update id="restore">
+    UPDATE user
+    SET deleted_at = NULL
+    WHERE id = #{id}
+      AND deleted_at IS NOT NULL;
+  </update>
+  <insert id="save" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO user (email, password, name, gender)
+    VALUES (#{email}, #{password}, #{name}, #{gender});
+  </insert>
+  <update id="updatePasswordByEmail">
+    UPDATE user
+    SET password = #{password}
+    WHERE email = #{email}
+      AND deleted_at IS NULL;
+  </update>
 </mapper>
