@@ -18,6 +18,8 @@ public class UserRespFixture {
 
   public static final String ADDRESS = "서울 강남구";
 
+  public static final Boolean IS_ACTIVE = true;
+
   public static final LocalDate BIRTH_DATE = LocalDate.of(2000, 5, 15);
 
   public static UserResp.UserRespBuilder getBuilder() {
@@ -28,6 +30,7 @@ public class UserRespFixture {
         .gender(GENDER)
         .phoneNumber(PHONE_NUMBER)
         .address(ADDRESS)
+        .isActive(IS_ACTIVE)
         .birthDate(BIRTH_DATE);
   }
 }

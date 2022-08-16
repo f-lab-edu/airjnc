@@ -21,7 +21,7 @@ public class TestUser {
 
   public static final String ADDRESS = "서울 강남구";
 
-  public static final Boolean isActive = true;
+  public static final Boolean IS_ACTIVE = true;
 
   public static final LocalDate BIRTH_DATE = LocalDate.of(2020, 1, 1);
 
