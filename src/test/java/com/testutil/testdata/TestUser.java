@@ -21,14 +21,11 @@ public class TestUser {
 
   public static final String ADDRESS = "서울 강남구";
 
-  public static final boolean isActive = true;
-
+  public static final Boolean isActive = true;
 
   public static final LocalDate BIRTH_DATE = LocalDate.of(2020, 1, 1);
 
   public static final LocalDateTime CREATED_AT = LocalDateTime.of(2022, 1, 1, 9, 0);
-
-  public static final LocalDateTime UPDATED_AT = LocalDateTime.of(2022, 1, 1, 9, 0);
 
   public static UserEntity.UserEntityBuilder getBuilder() {
     return UserEntity.builder()

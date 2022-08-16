@@ -11,7 +11,7 @@ public class UserInquiryEmailResp {
 
   private final String email;
 
-  private final boolean isActive;
+  private final Boolean isActive;
 
   private final LocalDateTime deletedAt;
 

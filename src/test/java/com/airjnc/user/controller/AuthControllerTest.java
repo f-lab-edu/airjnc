@@ -51,7 +51,7 @@ class AuthControllerTest {
   private void checkInterceptor(int n) throws Exception {
     then(checkAuthInterceptor).should(times(1))
         .preHandle(any(HttpServletRequest.class), any(HttpServletResponse.class), any(Object.class));
-    then(stateService).should(times(n)).getUserId();
+    then(stateService).should(times(n)).get(SessionKey.USER);
   }
 
   @Test

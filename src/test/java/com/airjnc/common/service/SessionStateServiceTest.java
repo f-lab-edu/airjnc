@@ -48,7 +48,7 @@ class SessionStateServiceTest {
     Long userId = TestUser.ID;
     given(httpSession.getAttribute(SessionKey.USER.name())).willReturn(userId);
     //when
-    Long returnUserId = sessionStateService.getUserId();
+    Long returnUserId = sessionStateService.get(SessionKey.USER);
     //then
     then(httpSession).should(times(1)).getAttribute(SessionKey.USER.name());
     assertThat(returnUserId).isEqualTo(userId);

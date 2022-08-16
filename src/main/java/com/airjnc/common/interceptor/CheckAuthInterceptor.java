@@ -3,6 +3,7 @@ package com.airjnc.common.interceptor;
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.exception.UnauthorizedException;
 import com.airjnc.common.service.StateService;
+import com.airjnc.common.util.enumerate.SessionKey;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class CheckAuthInterceptor implements HandlerInterceptor {
     if (checkAuth == null) {
       return true;
     }
-    Long userId = stateService.getUserId();
+    Long userId = stateService.get(SessionKey.USER);
     if (userId == null) {
       throw new UnauthorizedException();
     }

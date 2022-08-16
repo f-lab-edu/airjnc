@@ -8,5 +8,5 @@ public interface StateService {
 
   void delete(SessionKey sessionKey);
 
-  Long getUserId();
+  Long get(SessionKey sessionKey);
 }

@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.common.service.StateService;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
@@ -25,7 +26,6 @@ import com.testutil.fixture.UserCreateReqFixture;
 import com.testutil.fixture.UserInquiryEmailReqDTOFixture;
 import com.testutil.fixture.UserInquiryEmailResDTOFixture;
 import com.testutil.fixture.UserRespFixture;
-import com.testutil.testdata.TestUser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -87,8 +87,8 @@ class UserControllerTest {
   @Test
   void delete() throws Exception {
     //given
-    Long userId = TestUser.ID;
-    given(stateService.getUserId()).willReturn(userId);
+    Long userId = 1L;
+    given(stateService.get(SessionKey.USER)).willReturn(userId);
     //when
     mockMvc.perform(
             MockMvcRequestBuilders.delete("/users/me")
@@ -140,8 +140,8 @@ class UserControllerTest {
   @Test
   void restore() throws Exception {
     //given
-    Long userId = TestUser.ID;
-    given(stateService.getUserId()).willReturn(userId);
+    Long userId = 1L;
+    given(stateService.get(SessionKey.USER)).willReturn(userId);
     //when
     mockMvc.perform(
             put("/users/me")
