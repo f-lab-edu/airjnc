@@ -135,4 +135,3 @@ class UserServiceTest {
     then(userRepository).should(times(1)).restore(user.getId());
   }
 }
-
