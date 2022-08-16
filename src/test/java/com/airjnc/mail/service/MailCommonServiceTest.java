@@ -4,7 +4,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
 import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.properties.SessionTtlProperties;
 import com.airjnc.common.service.CommonUtilService;

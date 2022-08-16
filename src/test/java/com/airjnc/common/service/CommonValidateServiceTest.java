@@ -3,7 +3,6 @@ package com.airjnc.common.service;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
 import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.exception.DefaultException;
 import com.testutil.annotation.UnitTest;

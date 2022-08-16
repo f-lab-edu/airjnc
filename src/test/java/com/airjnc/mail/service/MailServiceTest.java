@@ -3,7 +3,6 @@ package com.airjnc.mail.service;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
 import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
 import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
