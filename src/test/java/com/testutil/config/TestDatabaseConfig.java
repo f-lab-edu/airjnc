@@ -52,7 +52,7 @@ public class TestDatabaseConfig {
         user.getGender().name(),
         user.getPhoneNumber(),
         user.getAddress(),
-        user.isActive(),
+        user.getIsActive(),
         user.getBirthDate(),
         user.getCreatedAt(),
         user.getUpdatedAt()

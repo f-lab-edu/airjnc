@@ -8,10 +8,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString
 public class UserEntity {
 
   private Long id;
@@ -28,7 +30,7 @@ public class UserEntity {
 
   private String address;
 
-  private boolean isActive;
+  private Boolean isActive;
 
   private LocalDate birthDate;
 
@@ -48,8 +50,8 @@ public class UserEntity {
     this.gender = gender;
     this.phoneNumber = phoneNumber;
     this.address = address;
-    this.birthDate = birthDate;
     this.isActive = true;
+    this.birthDate = birthDate;
   }
 
   public void delete() {
