@@ -24,7 +24,7 @@ public class CommonUtilService {
     return new HttpEntity<>(jsonBody, headers);
   }
 
-  public String generateCode() {
+  public String generateCertificationCode() {
     Random random = new Random(System.nanoTime());
     int n = random.nextInt(999_999);
     return String.format("%06d", n);

@@ -68,7 +68,7 @@ public class UserService {
   }
 
   public void resetPassword(UserResetPwdReq userResetPwdReq) {
-    commonCheckService.verifyCode(userResetPwdReq.getEmail(), userResetPwdReq.getCode());
+    commonCheckService.verifyCertificationCode(userResetPwdReq.getEmail(), userResetPwdReq.getCertificationCode());
     UserWhereDto userWhereDto = UserWhereDto.builder().email(userResetPwdReq.getEmail()).status(UserStatus.ALL).build();
     UserEntity userEntity = userRepository.findByWhere(userWhereDto);
     String hash = commonHashService.encrypt(userResetPwdReq.getPassword());

@@ -58,7 +58,7 @@ class NcpMailProviderTest {
     String code = "code";
     int resetPasswordTemplateSid = 123;
     SendUsingTemplateDto dto = SendUsingTemplateDto.builder()
-        .name(name).code(code).build();
+        .name(name).certificationCode(code).build();
     given(templateSid.getResetPassword()).willReturn(resetPasswordTemplateSid);
     //when
     NcpMailSendReqDto result = ncpMailService.createSendApiBody(dto);
@@ -83,7 +83,7 @@ class NcpMailProviderTest {
     given(commonUtilService.createHttpEntity(eq(headers), any(NcpMailSendReqDto.class))).willReturn(entity);
     given(restTemplate.postForObject(sendUri, entity, NcpMailSendRespDto.class)).willReturn(res);
     //when
-    SendUsingTemplateDto sendUsingTemplateDto = SendUsingTemplateDto.builder().name(TestUser.NAME).code("123456")
+    SendUsingTemplateDto sendUsingTemplateDto = SendUsingTemplateDto.builder().name(TestUser.NAME).certificationCode("123456")
         .build();
     ncpMailService.send(TestUser.EMAIL, sendUsingTemplateDto);
     //then

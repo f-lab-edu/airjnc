@@ -42,7 +42,7 @@ class CommonUtilServiceTest {
   @Test
   void generateCode() {
     //when
-    String code = commonUtilService.generateCode();
+    String code = commonUtilService.generateCertificationCode();
     //then
     assertThat(code.length()).isEqualTo(6);
   }

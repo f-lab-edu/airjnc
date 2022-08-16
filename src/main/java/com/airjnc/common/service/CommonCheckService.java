@@ -39,7 +39,7 @@ public class CommonCheckService {
     );
   }
 
-  public void verifyCode(String key, String code) {
+  public void verifyCertificationCode(String key, String code) {
     String codeFromRedis = redisDao.get(key);
     shouldBeMatch(code, codeFromRedis);
     redisDao.delete(key);

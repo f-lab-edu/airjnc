@@ -45,12 +45,12 @@ class MailCommonServiceTest {
     String userName = TestUser.NAME;
     String code = "code";
     Duration ttl = Duration.of(3, ChronoUnit.MINUTES);
-    given(commonUtilService.generateCode()).willReturn(code);
+    given(commonUtilService.generateCertificationCode()).willReturn(code);
     given(sessionTtlProperties.getCertificationCode()).willReturn(ttl);
     //when
     mailCommonService.sendCode(email, userName);
     //then
-    then(commonUtilService).should(times(1)).generateCode();
+    then(commonUtilService).should(times(1)).generateCertificationCode();
     then(redisDao).should().store(email, code, ttl);
     then(mailProvider).should().send(eq(email), any(SendUsingTemplateDto.class));
   }

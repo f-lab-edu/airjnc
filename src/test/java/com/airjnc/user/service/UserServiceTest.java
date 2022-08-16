@@ -108,7 +108,7 @@ class UserServiceTest {
   void resetPassword() {
     //given
     UserResetPwdReq userResetPwdReq = UserResetPwdReq.builder()
-        .email("test@naver.com").password("123456").code("code").build();
+        .email("test@naver.com").password("123456").certificationCode("code").build();
     String hash = "hash";
     UserEntity userEntity = TestUser.getBuilder().build();
     given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);
@@ -116,7 +116,7 @@ class UserServiceTest {
     //when
     userService.resetPassword(userResetPwdReq);
     //then
-    then(commonCheckService).should(times(1)).verifyCode(userResetPwdReq.getEmail(), userResetPwdReq.getCode());
+    then(commonCheckService).should(times(1)).verifyCertificationCode(userResetPwdReq.getEmail(), userResetPwdReq.getCertificationCode());
     then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
     then(commonHashService).should(times(1)).encrypt(userResetPwdReq.getPassword());
     assertThat(userEntity.getPassword()).isEqualTo(hash);

@@ -44,7 +44,7 @@ public class NcpMailProvider implements MailProvider {
         .type(Type.R)
         .parameters(Map.ofEntries(
             Map.entry("name", dto.getName()),
-            Map.entry("code", dto.getCode())
+            Map.entry("code", dto.getCertificationCode())
         ))
         .build();
     return NcpMailSendReqDto.builder()

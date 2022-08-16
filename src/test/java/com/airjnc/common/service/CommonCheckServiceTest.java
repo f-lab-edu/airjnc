@@ -31,7 +31,7 @@ class CommonCheckServiceTest {
     String codeFromRedis = "code";
     given(redisDao.get(key)).willReturn(codeFromRedis);
     //when
-    commonCheckService.verifyCode(key, code);
+    commonCheckService.verifyCertificationCode(key, code);
     //then
     then(redisDao).should(times(1)).get(key);
     then(redisDao).should(times(1)).delete(key);
