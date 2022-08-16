@@ -19,6 +19,7 @@ import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserUpdateMyInfoReq;
 import com.airjnc.user.dto.request.UserUpdateMyPasswordReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
@@ -73,8 +74,7 @@ class UserControllerTest {
   private void checkInterceptorAndArgumentResolver() throws Exception {
     then(checkAuthInterceptor).should()
         .preHandle(any(HttpServletRequest.class), any(HttpServletResponse.class), any(Object.class));
-    then(currentUserIdArgumentResolver).should()
-        .resolveArgument(any(), any(), any(), any());
+    then(currentUserIdArgumentResolver).should().resolveArgument(any(), any(), any(), any());
   }
 
   @Test
@@ -165,6 +165,28 @@ class UserControllerTest {
         .andExpect(status().isOk());
     //then
     then(userService).should().restore(userId);
+    checkInterceptorAndArgumentResolver();
+  }
+
+  @Test
+  void updateMyInfo() throws Exception {
+    //given
+    Long userId = TestUser.ID;
+    UserUpdateMyInfoReq req = UserUpdateMyInfoReq.builder().build();
+    UserResp userResp = UserRespFixture.getBuilder().build();
+    given(stateService.get(SessionKey.USER)).willReturn(userId);
+    given(userService.update(eq(userId), any(UserUpdateMyInfoReq.class))).willReturn(userResp);
+    //when
+    mockMvc.perform(
+            patch("/users/me")
+                .param("type", "info")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req))
+        ).andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("id").value(userResp.getId()));
+    //then
+    then(userService).should().update(eq(userId), any(UserUpdateMyInfoReq.class));
     checkInterceptorAndArgumentResolver();
   }
 

@@ -11,11 +11,13 @@ import static org.mockito.Mockito.spy;
 import com.airjnc.common.service.CommonHashService;
 import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.user.dao.UserRepository;
+import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
+import com.airjnc.user.dto.request.UserUpdateMyInfoReq;
 import com.airjnc.user.dto.request.UserUpdateMyPasswordReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserResp;
@@ -24,6 +26,9 @@ import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.user.UserCreateReqFixture;
 import com.testutil.fixture.user.UserRespFixture;
 import com.testutil.testdata.TestUser;
+import java.time.LocalDate;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,6 +56,7 @@ class UserServiceTest {
 
   @InjectMocks
   UserService userService;
+
 
   @Test()
   void create() {
@@ -172,5 +178,52 @@ class UserServiceTest {
     then(commonHashService).should().encrypt(userUpdateMyPasswordReq.getNewPassword());
     then(userRepository).should().save(userEntity);
     then(userModelMapper).should().userEntityToUserResp(userEntity);
+  }
+
+  @Nested
+  class Update {
+
+    UserEntity userEntity;
+
+    @BeforeEach
+    void beforeEach() {
+      userEntity = TestUser.getBuilder().build();
+      given(userRepository.findById(userEntity.getId(), UserStatus.ACTIVE)).willReturn(userEntity);
+    }
+
+    void commonCheck() {
+      then(userRepository).should().findById(userEntity.getId(), UserStatus.ACTIVE);
+      then(userRepository).should().save(any(UserEntity.class));
+      then(userModelMapper).should().userEntityToUserResp(any(UserEntity.class));
+    }
+
+    @Test
+    void whenFieldOfReqIsNotNullThenFieldOfUserEntityIsUpdated() {
+      //given
+      UserUpdateMyInfoReq req = UserUpdateMyInfoReq.builder()
+          .name("abc").gender(Gender.FEMALE).address("address").birthDate(LocalDate.now()).build();
+      //when
+      userService.update(userEntity.getId(), req);
+      //then
+      commonCheck();
+      assertThat(userEntity.getName()).isEqualTo(req.getName());
+      assertThat(userEntity.getGender()).isEqualTo(req.getGender());
+      assertThat(userEntity.getAddress()).isEqualTo(req.getAddress());
+      assertThat(userEntity.getBirthDate()).isEqualTo(req.getBirthDate());
+    }
+
+    @Test
+    void whenFieldOfReqNullThenFieldOfUserEntityIsUpdated() {
+      //given
+      UserUpdateMyInfoReq req = UserUpdateMyInfoReq.builder().build();
+      //when
+      userService.update(userEntity.getId(), req);
+      //then
+      commonCheck();
+      assertThat(userEntity.getName()).isEqualTo(userEntity.getName());
+      assertThat(userEntity.getGender()).isEqualTo(userEntity.getGender());
+      assertThat(userEntity.getAddress()).isEqualTo(userEntity.getAddress());
+      assertThat(userEntity.getBirthDate()).isEqualTo(userEntity.getBirthDate());
+    }
   }
 }
