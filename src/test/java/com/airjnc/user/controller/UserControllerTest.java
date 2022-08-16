@@ -26,9 +26,8 @@ import com.airjnc.user.util.UserModelMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
 import com.testutil.fixture.user.UserCreateReqFixture;
-import com.testutil.fixture.user.UserInquiryEmailReqDTOFixture;
-import com.testutil.fixture.user.UserInquiryEmailResDTOFixture;
 import com.testutil.fixture.user.UserRespFixture;
+import com.testutil.testdata.TestUser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -111,8 +110,9 @@ class UserControllerTest {
   @Test
   void inquiryEmail() throws Exception {
     //given
-    UserInquiryEmailReq req = UserInquiryEmailReqDTOFixture.getBuilder().build();
-    UserInquiryEmailResp resp = UserInquiryEmailResDTOFixture.getBuilder().build();
+    UserInquiryEmailReq req = UserInquiryEmailReq.builder().name(TestUser.NAME).birthDate(TestUser.BIRTH_DATE).build();
+    UserInquiryEmailResp resp = UserInquiryEmailResp.builder()
+        .id(TestUser.ID).email(TestUser.EMAIL).isActive(TestUser.IS_ACTIVE).deletedAt(TestUser.CREATED_AT).build();
     UserResp userResp = UserRespFixture.getBuilder().build();
     given(userService.getUserByWhere(any(UserWhereDto.class))).willReturn(userResp);
     given(userModelMapper.userRespToUserInquiryEmailResp(userResp)).willReturn(resp);

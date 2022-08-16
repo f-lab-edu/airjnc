@@ -17,8 +17,8 @@ import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.response.UserResp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
-import com.testutil.fixture.auth.AuthLogInReqFixture;
 import com.testutil.fixture.user.UserRespFixture;
+import com.testutil.testdata.TestUser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -57,7 +57,7 @@ class AuthControllerTest {
   @Test
   void logIn() throws Exception {
     //given
-    AuthLogInReq req = AuthLogInReqFixture.getBuilder().build();
+    AuthLogInReq req = AuthLogInReq.builder().email(TestUser.EMAIL).password(TestUser.PASSWORD).build();
     UserResp userResp = UserRespFixture.getBuilder().build();
     given(authAssembleService.logIn(any(AuthLogInReq.class))).willReturn(userResp);
     //when
