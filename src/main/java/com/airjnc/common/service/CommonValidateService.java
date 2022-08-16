@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CommonCheckService {
+public class CommonValidateService {
 
   private final RedisDao redisDao;
 

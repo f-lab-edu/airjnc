@@ -7,7 +7,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.Mockito.spy;
 import com.airjnc.common.dao.RedisDao;
-import com.airjnc.common.service.CommonCheckService;
+import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.common.service.CommonHashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
@@ -41,13 +41,13 @@ class UserServiceTest {
   UserModelMapper userModelMapper;
 
   @Mock
-  UserCheckService userCheckService;
+  UserValidateService userValidateService;
 
   @Mock
   RedisDao redisDao;
 
   @Mock
-  CommonCheckService commonCheckService;
+  CommonValidateService commonValidateService;
 
   @InjectMocks
   UserService userService;
@@ -65,7 +65,7 @@ class UserServiceTest {
     //when
     UserResp result = userService.create(userCreateReq);
     //then
-    then(userCheckService).should(times(1)).emailShouldNotBeDuplicated(userCreateReq.getEmail());
+    then(userValidateService).should(times(1)).emailShouldNotBeDuplicated(userCreateReq.getEmail());
     then(commonHashService).should(times(1)).encrypt(userCreateReq.getPassword());
     then(userModelMapper).should(times(1)).userEntityToUserResp(any(UserEntity.class));
     assertThat(userEntity.getPassword()).isEqualTo(hash);
@@ -99,7 +99,7 @@ class UserServiceTest {
     UserResp result = userService.getUserByEmailAndPassword(email, password);
     //then
     then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
-    then(userCheckService).should(times(1)).passwordShouldBeMatch(password, userEntity.getPassword());
+    then(userValidateService).should(times(1)).passwordShouldBeMatch(password, userEntity.getPassword());
     then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
     assertThat(result).isSameAs(userResp);
   }
@@ -116,7 +116,7 @@ class UserServiceTest {
     //when
     userService.resetPassword(userResetPwdReq);
     //then
-    then(commonCheckService).should(times(1)).verifyCertificationCode(userResetPwdReq.getEmail(), userResetPwdReq.getCertificationCode());
+    then(commonValidateService).should(times(1)).verifyCertificationCode(userResetPwdReq.getEmail(), userResetPwdReq.getCertificationCode());
     then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
     then(commonHashService).should(times(1)).encrypt(userResetPwdReq.getPassword());
     assertThat(userEntity.getPassword()).isEqualTo(hash);

@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import com.airjnc.common.service.CommonCheckService;
+import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.common.service.CommonNcpService;
 import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.mail.dto.NcpMailSendReqDto;
@@ -39,7 +39,7 @@ class NcpMailProviderTest {
   CommonNcpService commonNcpService;
 
   @Mock
-  CommonCheckService commonCheckService;
+  CommonValidateService commonValidateService;
 
   @Mock
   NcpMailProperties.Uri uri;
@@ -90,6 +90,6 @@ class NcpMailProviderTest {
     then(commonNcpService).should(times(1)).createHeaders(sendUri);
     then(commonUtilService).should(times(1)).createHttpEntity(eq(headers), any(NcpMailSendReqDto.class));
     then(restTemplate).should(times(1)).postForObject(sendUri, entity, NcpMailSendRespDto.class);
-    then(commonCheckService).should(times(1)).shouldBeMatch(res.getCount(), 1);
+    then(commonValidateService).should(times(1)).shouldBeMatch(res.getCount(), 1);
   }
 }

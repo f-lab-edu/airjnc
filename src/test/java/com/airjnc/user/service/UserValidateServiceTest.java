@@ -22,7 +22,7 @@ import org.springframework.validation.Errors;
 
 @ExtendWith(MockitoExtension.class)
 @UnitTest
-class UserCheckServiceTest {
+class UserValidateServiceTest {
 
   @Mock
   UserRepository userRepository;
@@ -31,7 +31,7 @@ class UserCheckServiceTest {
   CommonHashService commonHashService;
 
   @InjectMocks
-  UserCheckService userCheckService;
+  UserValidateService userValidateService;
 
 
   private void assertObjectNameOfGlobalError(DefaultException e, String objectName) {
@@ -48,7 +48,7 @@ class UserCheckServiceTest {
       given(userRepository.exists(any(UserWhereDto.class))).willReturn(true);
       //when
       try {
-        userCheckService.emailShouldNotBeDuplicated("test@naver.com");
+        userValidateService.emailShouldNotBeDuplicated("test@naver.com");
       } catch (EmailIsDuplicatedException e) {
         //then
         assertObjectNameOfGlobalError(e, "emailIsDuplicated");
@@ -60,7 +60,7 @@ class UserCheckServiceTest {
       //given
       given(userRepository.exists(any(UserWhereDto.class))).willReturn(false);
       //when
-      userCheckService.emailShouldNotBeDuplicated("test@naver.com");
+      userValidateService.emailShouldNotBeDuplicated("test@naver.com");
     }
   }
 
@@ -72,7 +72,7 @@ class UserCheckServiceTest {
       String plain = "plain";
       String hash = commonHashService.encrypt(plain);
       //when
-      userCheckService.passwordShouldBeMatch(plain, hash);
+      userValidateService.passwordShouldBeMatch(plain, hash);
     }
 
     @Test
@@ -81,7 +81,7 @@ class UserCheckServiceTest {
       String hash = commonHashService.encrypt("plain2");
       try {
         //when
-        userCheckService.passwordShouldBeMatch(plain, hash);
+        userValidateService.passwordShouldBeMatch(plain, hash);
       } catch (PasswordIsNotMatchException e) {
         //then
         assertObjectNameOfGlobalError(e, "passwordIsNotMatch");

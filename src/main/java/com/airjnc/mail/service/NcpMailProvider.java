@@ -1,6 +1,6 @@
 package com.airjnc.mail.service;
 
-import com.airjnc.common.service.CommonCheckService;
+import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.common.service.CommonNcpService;
 import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.mail.annotation.NcpMailRestTemplate;
@@ -30,7 +30,7 @@ public class NcpMailProvider implements MailProvider {
 
   private final CommonNcpService commonNcpService;
 
-  private final CommonCheckService commonCheckService;
+  private final CommonValidateService commonValidateService;
 
   private final CommonUtilService commonUtilService;
 
@@ -66,6 +66,6 @@ public class NcpMailProvider implements MailProvider {
         NcpMailSendRespDto.class
     );
 
-    commonCheckService.shouldBeMatch(Objects.requireNonNull(res).getCount(), 1);
+    commonValidateService.shouldBeMatch(Objects.requireNonNull(res).getCount(), 1);
   }
 }

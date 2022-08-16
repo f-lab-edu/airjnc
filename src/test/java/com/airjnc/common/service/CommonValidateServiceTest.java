@@ -15,13 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @UnitTest
 @ExtendWith(MockitoExtension.class)
-class CommonCheckServiceTest {
+class CommonValidateServiceTest {
 
   @Mock
   RedisDao redisDao;
 
   @InjectMocks
-  CommonCheckService commonCheckService;
+  CommonValidateService commonValidateService;
 
   @Test
   void verifyCode() {
@@ -31,7 +31,7 @@ class CommonCheckServiceTest {
     String codeFromRedis = "code";
     given(redisDao.get(key)).willReturn(codeFromRedis);
     //when
-    commonCheckService.verifyCertificationCode(key, code);
+    commonValidateService.verifyCertificationCode(key, code);
     //then
     then(redisDao).should(times(1)).get(key);
     then(redisDao).should(times(1)).delete(key);
@@ -39,14 +39,14 @@ class CommonCheckServiceTest {
 
   @Test
   void whenEqualThenNothing() {
-    commonCheckService.shouldBeMatch(1, 1);
+    commonValidateService.shouldBeMatch(1, 1);
   }
 
   @Test
   void whenEqualThenThrowException() {
     assertThrows(
         DefaultException.class,
-        () -> commonCheckService.shouldBeMatch(1, 2)
+        () -> commonValidateService.shouldBeMatch(1, 2)
     );
   }
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserCheckService {
+public class UserValidateService {
 
   private final UserRepository userRepository;
 

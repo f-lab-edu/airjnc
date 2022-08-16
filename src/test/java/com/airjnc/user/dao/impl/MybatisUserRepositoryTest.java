@@ -3,7 +3,7 @@ package com.airjnc.user.dao.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
-import com.airjnc.common.service.CommonCheckService;
+import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.Gender;
@@ -28,13 +28,13 @@ class MybatisUserRepositoryTest {
   UserMapper userMapper;
 
   @Mock
-  CommonCheckService commonCheckService;
+  CommonValidateService commonValidateService;
 
   UserEntity testUser;
 
   @BeforeEach
   void beforeEach() {
-    userRepository = new MybatisUserRepository(userMapper, commonCheckService);
+    userRepository = new MybatisUserRepository(userMapper, commonValidateService);
     testUser = TestUser.getBuilder().build();
   }
 
@@ -50,7 +50,7 @@ class MybatisUserRepositoryTest {
     UserEntity byEmail = userRepository.findByWhere(
         UserWhereDto.builder().email(newUserEntity.getEmail()).status(UserStatus.ALL).build());
     assertThat(byEmail.getName()).isEqualTo(newUserEntity.getName());
-    then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
+    then(commonValidateService).should(times(1)).shouldBeMatch(1, 1);
     assertThat(userEntity.getId()).isNotNull();
   }
 
@@ -95,6 +95,6 @@ class MybatisUserRepositoryTest {
     //when
     userRepository.save(userEntity);
     //then
-    then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
+    then(commonValidateService).should(times(1)).shouldBeMatch(1, 1);
   }
 }

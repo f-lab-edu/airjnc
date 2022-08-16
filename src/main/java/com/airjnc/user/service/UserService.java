@@ -1,6 +1,6 @@
 package com.airjnc.user.service;
 
-import com.airjnc.common.service.CommonCheckService;
+import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.common.service.CommonHashService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
@@ -31,12 +31,12 @@ public class UserService {
 
   private final CommonHashService commonHashService;
 
-  private final CommonCheckService commonCheckService;
+  private final CommonValidateService commonValidateService;
 
-  private final UserCheckService userCheckService;
+  private final UserValidateService userValidateService;
 
   public UserResp create(UserCreateReq userCreateReq) {
-    userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
+    userValidateService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
     String hash = commonHashService.encrypt(userCreateReq.getPassword());
     UserEntity userEntity = userModelMapper.userCreateReqToUserEntity(userCreateReq);
     userEntity.setPassword(hash);
@@ -53,7 +53,7 @@ public class UserService {
   public UserResp getUserByEmailAndPassword(String email, String password) {
     UserWhereDto userWhereDto = UserWhereDto.builder().email(email).build();
     UserEntity userEntity = userRepository.findByWhere(userWhereDto);
-    userCheckService.passwordShouldBeMatch(password, userEntity.getPassword());
+    userValidateService.passwordShouldBeMatch(password, userEntity.getPassword());
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
@@ -68,7 +68,7 @@ public class UserService {
   }
 
   public void resetPassword(UserResetPwdReq userResetPwdReq) {
-    commonCheckService.verifyCertificationCode(userResetPwdReq.getEmail(), userResetPwdReq.getCertificationCode());
+    commonValidateService.verifyCertificationCode(userResetPwdReq.getEmail(), userResetPwdReq.getCertificationCode());
     UserWhereDto userWhereDto = UserWhereDto.builder().email(userResetPwdReq.getEmail()).status(UserStatus.ALL).build();
     UserEntity userEntity = userRepository.findByWhere(userWhereDto);
     String hash = commonHashService.encrypt(userResetPwdReq.getPassword());
