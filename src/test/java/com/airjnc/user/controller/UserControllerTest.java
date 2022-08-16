@@ -123,7 +123,7 @@ class UserControllerTest {
         .andExpect(jsonPath("id").value(userId))
         .andExpect(jsonPath("email").value(TestUser.EMAIL));
     //then
-    then(userService).should(times(1)).getUserById(userId, UserStatus.ACTIVE);
+    then(userService).should().getUserById(userId, UserStatus.ACTIVE);
     checkInterceptorAndArgumentResolver();
   }
 

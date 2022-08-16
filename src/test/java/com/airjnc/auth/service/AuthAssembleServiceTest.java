@@ -46,7 +46,7 @@ class AuthAssembleServiceTest {
     }
 
     void commonValidate(UserResp userResp, UserResp result, int stateCallNumber) {
-      then(userService).should(times(1)).getUserByEmailAndPassword(req.getEmail(), req.getPassword());
+      then(userService).should().getUserByEmailAndPassword(req.getEmail(), req.getPassword());
       then(stateService).should(times(stateCallNumber)).create(SessionKey.USER, userResp.getId());
       assertThat(result.getId()).isEqualTo(userResp.getId());
     }
