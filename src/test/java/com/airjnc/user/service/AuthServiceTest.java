@@ -1,11 +1,15 @@
 package com.airjnc.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
+import com.airjnc.common.service.StateService;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.request.AuthLogInReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
@@ -32,6 +36,9 @@ class AuthServiceTest {
   @Mock
   UserCheckService userCheckService;
 
+  @Mock
+  StateService stateService;
+
   @InjectMocks
   AuthService authService;
 
@@ -41,14 +48,15 @@ class AuthServiceTest {
     AuthLogInReq authLogInReq = AuthLogInReqFixture.getBuilder().build();
     UserEntity userEntity = TestUser.getBuilder().build();
     UserResp userResp = UserRespFixture.getBuilder().build();
-    given(userRepository.findWithDeletedByEmail(authLogInReq.getEmail())).willReturn(userEntity);
+
+    given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);
     given(userModelMapper.userEntityToUserResp(userEntity)).willReturn(userResp);
     //when
     UserResp result = authService.logIn(authLogInReq);
     //then
-    then(userRepository).should(times(1)).findWithDeletedByEmail(authLogInReq.getEmail());
-    then(userCheckService).should(times(1))
-        .passwordShouldBeMatch(authLogInReq.getPassword(), userEntity.getPassword());
+    then(userRepository).should(times(1)).findByWhere(any(UserWhereDto.class));
+    then(userCheckService).should(times(1)).passwordShouldBeMatch(authLogInReq.getPassword(), userEntity.getPassword());
+    then(stateService).should(times(1)).create(SessionKey.USER, userEntity.getId());
     then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
     assertThat(result).isSameAs(userResp);
   }

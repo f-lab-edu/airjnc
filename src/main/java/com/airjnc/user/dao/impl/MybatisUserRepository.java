@@ -5,9 +5,8 @@ import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.UserSaveDto;
-import com.airjnc.user.util.UserModelMapper;
-import java.time.LocalDate;
+import com.airjnc.user.dto.UserWhereDto;
+import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -19,59 +18,32 @@ public class MybatisUserRepository implements UserRepository {
 
   private final CommonCheckService commonCheckService;
 
-  private final UserModelMapper userModelMapper;
-
-  public void delete(Long id) {
-    int affect = userMapper.delete(id);
+  @Override
+  public UserEntity create(UserEntity userEntity) {
+    int affect = userMapper.create(userEntity);
     commonCheckService.shouldBeMatch(affect, 1);
+    return userEntity;
   }
 
   @Override
-  public UserEntity findByEmail(String email) {
-    return userMapper.findByEmail(email).orElseThrow(NotFoundException::new);
+  public boolean exists(UserWhereDto userWhereDto) {
+    return userMapper.exists(userWhereDto);
   }
 
   @Override
-  public UserEntity findById(Long id) {
-    return userMapper.findById(id).orElseThrow(NotFoundException::new);
+  public UserEntity findById(Long userId, UserStatus status) {
+    return userMapper.findById(userId, status).orElseThrow(NotFoundException::new);
   }
 
   @Override
-  public UserEntity findByPhoneNumber(String phoneNumber) {
-    return userMapper.findByPhoneNumber(phoneNumber).orElseThrow(NotFoundException::new);
+  public UserEntity findByWhere(UserWhereDto userWhereDto) {
+    return userMapper.findByWhere(userWhereDto).orElseThrow(NotFoundException::new);
   }
 
   @Override
-  public UserEntity findOnlyDeletedById(Long id) {
-    return userMapper.findOnlyDeletedById(id).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public UserEntity findWithDeletedByEmail(String email) {
-    return userMapper.findWithDeletedByEmail(email).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public UserEntity findWithDeletedByNameAndBirthDate(String name, LocalDate birthDate) {
-    return userMapper.findWithDeletedByNameAndBirthDate(name, birthDate).orElseThrow(NotFoundException::new);
-  }
-
-  @Override
-  public void restore(Long id) {
-    int affect = userMapper.restore(id);
+  public UserEntity save(UserEntity userEntity) {
+    int affect = userMapper.save(userEntity);
     commonCheckService.shouldBeMatch(affect, 1);
-  }
-
-  @Override
-  public UserEntity save(UserSaveDto userSaveDTO) {
-    int affect = userMapper.save(userSaveDTO);
-    commonCheckService.shouldBeMatch(affect, 1);
-    return userModelMapper.userSaveDtoToUserEntity(userSaveDTO);
-  }
-
-  @Override
-  public void updatePasswordByEmail(String email, String password) {
-    int affect = userMapper.updatePasswordByEmail(email, password);
-    commonCheckService.shouldBeMatch(affect, 1);
+    return userEntity;
   }
 }

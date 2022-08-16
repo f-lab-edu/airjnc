@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailCommonService {
 
-  private final CommonUtilService commonUtilService;
-
   private final MailProvider mailProvider;
+
+  private final CommonUtilService commonUtilService;
 
   private final SessionTtlProperties sessionTtlProperties;
 

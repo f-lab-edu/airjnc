@@ -1,19 +1,15 @@
 package com.airjnc.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import com.airjnc.common.exception.DefaultException;
-import com.airjnc.common.exception.NotFoundException;
 import com.airjnc.common.service.HashService;
 import com.airjnc.user.dao.UserRepository;
-import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
 import com.airjnc.user.exception.PasswordIsNotMatchException;
-import com.airjnc.user.exception.UserIsNotDeletedException;
 import com.testutil.annotation.UnitTest;
-import com.testutil.testdata.TestUser;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -49,10 +45,10 @@ class UserCheckServiceTest {
     @Test
     void whenEmailFoundAndDuplicatedThenThrow() {
       //given
-      String email = TestUser.EMAIL;
+      given(userRepository.exists(any(UserWhereDto.class))).willReturn(true);
       //when
       try {
-        userCheckService.emailShouldNotBeDuplicated(email);
+        userCheckService.emailShouldNotBeDuplicated("test@naver.com");
       } catch (EmailIsDuplicatedException e) {
         //then
         assertObjectNameOfGlobalError(e, "emailIsDuplicated");
@@ -62,10 +58,9 @@ class UserCheckServiceTest {
     @Test
     void whenEmailNotFoundThenSuccess() {
       //given
-      String email = TestUser.EMAIL;
-      given(userRepository.findByEmail(email)).willThrow(NotFoundException.class);
+      given(userRepository.exists(any(UserWhereDto.class))).willReturn(false);
       //when
-      userCheckService.emailShouldNotBeDuplicated(email);
+      userCheckService.emailShouldNotBeDuplicated("test@naver.com");
     }
   }
 
@@ -91,29 +86,6 @@ class UserCheckServiceTest {
         //then
         assertObjectNameOfGlobalError(e, "passwordIsNotMatch");
       }
-    }
-  }
-
-  @Nested
-  class ShouldBeDeleted {
-
-    @Test
-    void whenUserDeletedThenSuccess() {
-      //given
-      UserEntity user = TestUser.getBuilder().deletedAt(LocalDateTime.now()).build();
-      //when
-      userCheckService.shouldBeDeleted(user);
-    }
-
-    @Test
-    void whenUserIsNotDeletedThenThrow() {
-      //given
-      UserEntity user = TestUser.getBuilder().build();
-      //when
-      assertThrows(
-          UserIsNotDeletedException.class,
-          () -> userCheckService.shouldBeDeleted(user)
-      );
     }
   }
 }

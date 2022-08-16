@@ -3,9 +3,8 @@ package com.airjnc.common.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import com.airjnc.common.dto.response.ExceptionResp;
 import com.airjnc.common.exception.DefaultException;
-import com.airjnc.common.service.CommonCheckService;
-import com.airjnc.common.util.factory.ExceptionRespFactory;
 import com.airjnc.common.util.factory.ErrorsFactory;
+import com.airjnc.common.util.factory.ExceptionRespFactory;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
 import com.testutil.annotation.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,16 +21,12 @@ class ExceptionRespFactoryTest {
   @Test
   void argumentsTest() {
     //given
-    CommonCheckService commonCheckService = new CommonCheckService();
-    ExceptionResp exceptionResp = null;
     int actual = 1;
     int expected = 2;
-    //when
-    try {
-      commonCheckService.shouldBeMatch(actual, expected);
-    } catch (DefaultException ex) {
-      exceptionResp = ExceptionRespFactory.create(ex, messageSource);
-    }
+    ExceptionResp exceptionResp = ExceptionRespFactory.create(new DefaultException(
+        ErrorsFactory.createAndReject("CommonCheckService", "shouldBeMatch", new Object[]{actual, expected})
+    ), messageSource);
+
     assertThat(exceptionResp.getGlobal()).isNotNull();
     assertThat(exceptionResp.getGlobal().get(0)).isEqualTo(String.format("%d != %d", actual, expected));
   }

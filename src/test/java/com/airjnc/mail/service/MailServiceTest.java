@@ -1,13 +1,17 @@
 package com.airjnc.mail.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
+import com.airjnc.user.dto.UserWhereDto;
+import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.UserRespFixture;
+import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,28 +40,27 @@ class MailServiceTest {
   }
 
   @Test
-  void sendCertificationCodeToEmail() {
-    Long userId = 1L;
-    MailSendCertificationCodeToEmailReq req = MailSendCertificationCodeToEmailReq.builder().email("test@naver.com")
-        .build();
+  void sendCertificationCodeToEmailWithUserId() {
     //given
-    given(userService.getUserWithDeletedByEmail(req.getEmail())).willReturn(user);
+    Long userId = TestUser.ID;
+    given(userService.getUserById(userId, UserStatus.ACTIVE)).willReturn(user);
     //when
-    mailService.sendCertificationCodeToEmail(req);
+    mailService.sendCertificationCodeToEmail(userId);
     //then
-    then(userService).should(times(1)).getUserWithDeletedByEmail(user.getEmail());
+    then(userService).should(times(1)).getUserById(userId, UserStatus.ACTIVE);
     then(mailCommonService).should(times(1)).sendCode(user.getEmail(), user.getName());
   }
 
   @Test
-  void sendCertificationCodeToEmailWithUserId() {
-    Long userId = 1L;
+  void sendCertificationCodeToEmail_noUserId() {
+    MailSendCertificationCodeToEmailReq req = MailSendCertificationCodeToEmailReq.builder()
+        .email(TestUser.EMAIL).build();
     //given
-    given(userService.getUserById(userId)).willReturn(user);
+    given(userService.getUserByWhere(any(UserWhereDto.class))).willReturn(user);
     //when
-    mailService.sendCertificationCodeToEmail(userId);
+    mailService.sendCertificationCodeToEmail(req);
     //then
-    then(userService).should(times(1)).getUserById(userId);
+    then(userService).should(times(1)).getUserByWhere(any(UserWhereDto.class));
     then(mailCommonService).should(times(1)).sendCode(user.getEmail(), user.getName());
   }
 }

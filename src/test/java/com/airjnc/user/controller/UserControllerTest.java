@@ -12,18 +12,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
+import com.airjnc.common.service.StateService;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
-import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.testutil.annotation.IntegrationTest;
 import com.testutil.fixture.UserCreateReqFixture;
 import com.testutil.fixture.UserInquiryEmailReqDTOFixture;
 import com.testutil.fixture.UserInquiryEmailResDTOFixture;
 import com.testutil.fixture.UserRespFixture;
+import com.testutil.testdata.TestUser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -36,6 +38,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(UserController.class)
+@IntegrationTest
 class UserControllerTest {
 
   @Autowired
@@ -48,7 +51,7 @@ class UserControllerTest {
   UserService userService;
 
   @MockBean
-  UserStateService userStateService;
+  StateService stateService;
 
   @SpyBean
   CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
@@ -79,14 +82,13 @@ class UserControllerTest {
         .andExpect(jsonPath("id").value(userResp.getId()));
     //then
     then(userService).should(times(1)).create(any(UserCreateReq.class));
-    then(userStateService).should(times(1)).create(userResp.getId());
   }
 
   @Test
   void delete() throws Exception {
     //given
-    Long userId = 1L;
-    given(userStateService.getUserId()).willReturn(userId);
+    Long userId = TestUser.ID;
+    given(stateService.getUserId()).willReturn(userId);
     //when
     mockMvc.perform(
             MockMvcRequestBuilders.delete("/users/me")
@@ -95,7 +97,6 @@ class UserControllerTest {
     //then
     checkInterceptorAndArgumentResolver();
     then(userService).should(times(1)).delete(userId);
-    then(userStateService).should(times(1)).delete();
   }
 
   @Test
@@ -139,8 +140,8 @@ class UserControllerTest {
   @Test
   void restore() throws Exception {
     //given
-    Long userId = 1L;
-    given(userStateService.getUserId()).willReturn(userId);
+    Long userId = TestUser.ID;
+    given(stateService.getUserId()).willReturn(userId);
     //when
     mockMvc.perform(
             put("/users/me")

@@ -1,8 +1,8 @@
 package com.airjnc.user.dao;
 
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.UserSaveDto;
-import java.time.LocalDate;
+import com.airjnc.user.dto.UserWhereDto;
+import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -10,24 +10,13 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserMapper {
 
-  int delete(Long id);
+  int create(UserEntity userEntity);
 
-  Optional<UserEntity> findByEmail(String email);
+  boolean exists(UserWhereDto userWhereDto);
 
-  Optional<UserEntity> findById(Long id);
+  Optional<UserEntity> findById(@Param("id") Long userId, @Param("status") UserStatus status);
 
-  Optional<UserEntity> findByPhoneNumber(String phoneNumber);
+  Optional<UserEntity> findByWhere(UserWhereDto userWhereDto);
 
-  Optional<UserEntity> findOnlyDeletedById(Long id);
-
-  Optional<UserEntity> findWithDeletedByEmail(String email);
-
-  Optional<UserEntity> findWithDeletedByNameAndBirthDate(@Param("name") String name,
-      @Param("birthDate") LocalDate birthDate);
-
-  int restore(Long id);
-
-  int save(UserSaveDto userSaveDTO);
-
-  int updatePasswordByEmail(@Param("email") String email, @Param("password") String password);
+  int save(UserEntity userEntity);
 }

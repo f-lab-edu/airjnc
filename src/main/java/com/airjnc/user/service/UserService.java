@@ -1,10 +1,13 @@
 package com.airjnc.user.service;
 
-import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.common.service.HashService;
+import com.airjnc.common.service.StateService;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
+import com.airjnc.user.dto.UserWhereDto;
+import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
@@ -18,58 +21,64 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
-  private final HashService hashService;
-
   private final UserModelMapper userModelMapper;
 
   private final UserRepository userRepository;
 
-  private final UserCheckService userCheckService;
+  private final StateService stateService;
 
-  private final RedisDao redisDao;
+  private final HashService hashService;
+
+  private final UserCheckService userCheckService;
 
   private final CommonCheckService commonCheckService;
 
   public UserResp create(UserCreateReq userCreateReq) {
     userCheckService.emailShouldNotBeDuplicated(userCreateReq.getEmail());
     String hash = hashService.encrypt(userCreateReq.getPassword());
-    UserEntity userEntity = userRepository.save(userCreateReq.toSaveDTO(hash));
+    UserEntity userEntity = userModelMapper.userCreateReqToUserEntity(userCreateReq);
+    userEntity.setPassword(hash);
+    userRepository.create(userEntity);
+    stateService.create(SessionKey.USER, userEntity.getId());
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
-  public void delete(Long currentUserId) {
-    userRepository.delete(currentUserId);
+  public void delete(Long userId) {
+    UserEntity userEntity = userRepository.findById(userId, UserStatus.ACTIVE);
+    userEntity.delete();
+    userRepository.save(userEntity);
+    stateService.delete(SessionKey.USER);
   }
 
-  public UserResp getUserById(Long userId) {
-    UserEntity userEntity = userRepository.findById(userId);
+  public UserResp getUserById(Long userId, UserStatus userStatus) {
+    UserEntity userEntity = userRepository.findById(userId, userStatus);
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
-  public UserResp getUserWithDeletedByEmail(String email) {
-    UserEntity userEntity = userRepository.findWithDeletedByEmail(email);
+  public UserResp getUserByWhere(UserWhereDto userWhereDto) {
+    UserEntity userEntity = userRepository.findByWhere(userWhereDto);
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
-  public UserInquiryEmailResp inquiryEmail(UserInquiryEmailReq userInquiryEmailReq) {
-    UserEntity userEntity = userRepository.findWithDeletedByNameAndBirthDate(
-        userInquiryEmailReq.getName(),
-        userInquiryEmailReq.getBirthDate()
-    );
+  public UserInquiryEmailResp inquiryEmail(UserInquiryEmailReq req) {
+    UserWhereDto userWhereDto = UserWhereDto.builder()
+        .name(req.getName()).birthDate(req.getBirthDate()).status(UserStatus.ALL).build();
+    UserEntity userEntity = userRepository.findByWhere(userWhereDto);
     return userModelMapper.userEntityToUserInquiryEmailResp(userEntity);
   }
 
   public void resetPassword(UserResetPwdReq userResetPwdReq) {
-    String code = redisDao.get(userResetPwdReq.getEmail());
-    commonCheckService.shouldBeMatch(code, userResetPwdReq.getCode());
-    redisDao.delete(userResetPwdReq.getEmail());
+    commonCheckService.verifyCode(userResetPwdReq.getEmail(), userResetPwdReq.getCode());
+    UserWhereDto userWhereDto = UserWhereDto.builder().email(userResetPwdReq.getEmail()).status(UserStatus.ALL).build();
+    UserEntity userEntity = userRepository.findByWhere(userWhereDto);
     String hash = hashService.encrypt(userResetPwdReq.getPassword());
-    userRepository.updatePasswordByEmail(userResetPwdReq.getEmail(), hash);
+    userEntity.setPassword(hash);
+    userRepository.save(userEntity);
   }
 
   public void restore(Long userId) {
-    UserEntity userEntity = userRepository.findOnlyDeletedById(userId);
-    userCheckService.shouldBeDeleted(userEntity);
-    userRepository.restore(userId);
+    UserEntity userEntity = userRepository.findById(userId, UserStatus.DELETED);
+    userEntity.restore();
+    userRepository.save(userEntity);
   }
 }

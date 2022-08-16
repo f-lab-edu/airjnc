@@ -21,7 +21,8 @@ public class TestUser {
 
   public static final String ADDRESS = "서울 강남구";
 
-  public static final boolean IS_ACTIVE = true;
+  public static final boolean isActive = true;
+
 
   public static final LocalDate BIRTH_DATE = LocalDate.of(2020, 1, 1);
 
@@ -38,9 +39,6 @@ public class TestUser {
         .gender(GENDER)
         .phoneNumber(PHONE_NUMBER)
         .address(ADDRESS)
-        .isActive(IS_ACTIVE)
-        .birthDate(BIRTH_DATE)
-        .createdAt(CREATED_AT)
-        .updatedAt(UPDATED_AT);
+        .birthDate(BIRTH_DATE);
   }
 }

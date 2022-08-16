@@ -1,25 +1,20 @@
 package com.airjnc.user.dao.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.anyInt;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
-import com.airjnc.common.exception.NotFoundException;
 import com.airjnc.common.service.CommonCheckService;
 import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
-import com.airjnc.user.dto.UserSaveDto;
-import com.airjnc.user.dto.request.UserCreateReq;
-import com.airjnc.user.util.UserModelMapper;
+import com.airjnc.user.dto.UserWhereDto;
+import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.testdata.TestUser;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,146 +27,73 @@ class MybatisUserRepositoryTest {
   @Autowired
   UserMapper userMapper;
 
-  @Spy
-  CommonCheckService commonCheckService;
-
   @Mock
-  UserModelMapper userModelMapper;
+  CommonCheckService commonCheckService;
 
   UserEntity testUser;
 
   @BeforeEach
   void beforeEach() {
-    userRepository = new MybatisUserRepository(userMapper, commonCheckService,
-        userModelMapper);
+    userRepository = new MybatisUserRepository(userMapper, commonCheckService);
     testUser = TestUser.getBuilder().build();
   }
 
   @Test
   @Transactional
-  void delete() {
+  void create() {
+    //given
+    UserEntity newUserEntity = UserEntity.builder()
+        .email("abc@google.com").password("q1w2e3").name("abcUser").gender(Gender.FEMALE).build();
     //when
-    userRepository.delete(testUser.getId());
+    UserEntity userEntity = userRepository.create(newUserEntity);
     //then
-    Assertions.assertThrows(
-        NotFoundException.class,
-        () -> userRepository.findByEmail(testUser.getEmail())
-    );
-    then(commonCheckService).should(times(1)).shouldBeMatch(anyInt(), anyInt());
+    UserEntity byEmail = userRepository.findByWhere(
+        UserWhereDto.builder().email(newUserEntity.getEmail()).status(UserStatus.ALL).build());
+    assertThat(byEmail.getName()).isEqualTo(newUserEntity.getName());
+    then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
+    assertThat(userEntity.getId()).isNotNull();
   }
 
   @Test
-  void findByEmail() {
+  void exists() {
+    //given
+    UserWhereDto dto1 = UserWhereDto.builder().id(testUser.getId()).build();
+    UserWhereDto dto2 = UserWhereDto.builder().id(testUser.getId() + 1L).build();
     //when
-    UserEntity findUser = userRepository.findByEmail(testUser.getEmail());
+    boolean exists1 = userRepository.exists(dto1);
+    boolean exists2 = userRepository.exists(dto2);
     //then
-    assertThat(findUser.getId()).isSameAs(testUser.getId());
-    assertThat(findUser.getEmail()).isEqualTo(testUser.getEmail());
+    assertThat(exists1).isTrue();
+    assertThat(exists2).isFalse();
   }
 
   @Test
   void findById() {
     //when
-    UserEntity findUser = userRepository.findById(testUser.getId());
+    UserEntity findUser = userRepository.findById(testUser.getId(), UserStatus.ACTIVE);
     //then
     assertThat(findUser.getId()).isSameAs(testUser.getId());
   }
 
   @Test
-  void findByPhoneNumber() {
+  void findByWhere() {
     //when
-    UserEntity findUser = userRepository.findByPhoneNumber(testUser.getPhoneNumber());
+    UserWhereDto userWhereDto = UserWhereDto.builder().id(testUser.getId()).build();
+    UserEntity findUser = userRepository.findByWhere(userWhereDto);
     //then
     assertThat(findUser.getId()).isSameAs(testUser.getId());
-  }
-
-  @Test
-  @Transactional
-  void findOnlyDeletedById_givenDeletedThenSuccess() {
-    userRepository.delete(testUser.getId());
-    //when
-    UserEntity findUser = userRepository.findOnlyDeletedById(testUser.getId());
-    //then
-    assertThat(testUser.getId()).isEqualTo(findUser.getId());
-  }
-
-  @Test
-  void findOnlyDeletedById_givenNotDeletedThenThrowException() {
-    //when
-    Assertions.assertThrows(
-        NotFoundException.class,
-        () -> userRepository.findOnlyDeletedById(testUser.getId())
-    );
-  }
-
-  @Test
-  @Transactional
-  void findWithDeletedByEmail_givenDeletedThenSuccess() {
-    //given
-    userMapper.delete(testUser.getId());
-    //when
-    UserEntity findUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
-    //then
-    assertThat(testUser.getId()).isEqualTo(findUser.getId());
-  }
-
-  @Test
-  void findWithDeletedByEmail_givenNotDeletedThenSuccess() {
-    //when
-    UserEntity findUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
-    //then
-    assertThat(testUser.getId()).isEqualTo(findUser.getId());
-  }
-
-  @Test
-  void findWithDeletedByNameAndBirthDate() {
-    //when
-    UserEntity findUser = userRepository.findWithDeletedByNameAndBirthDate(testUser.getName(), testUser.getBirthDate());
-    //then
-    assertThat(findUser.getEmail()).isEqualTo(testUser.getEmail());
-  }
-
-  @Test
-  @Transactional
-  void restore() {
-    //given
-    userMapper.delete(testUser.getId());
-    UserEntity deletedUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
-    //when
-    userRepository.restore(testUser.getId());
-    UserEntity restoredUser = userRepository.findWithDeletedByEmail(testUser.getEmail());
-    //then
-    assertThat(deletedUser.isDeleted()).isTrue();
-    assertThat(restoredUser.isDeleted()).isFalse();
   }
 
   @Test
   @Transactional
   void save() {
     //given
-    UserSaveDto userSaveDTO = UserCreateReq.builder()
-        .email("abc@google.com")
-        .password("q1w2e3")
-        .name("abcUser")
-        .gender(Gender.FEMALE)
-        .build()
-        .toSaveDTO("hash");
+    String password = "q1w2e3r4t5!@#";
+    UserEntity userEntity = userRepository.findById(TestUser.ID, UserStatus.ALL);
+    userEntity.setPassword(password);
+    userEntity.delete();
     //when
-    userRepository.save(userSaveDTO);
-    //then
-    UserEntity byEmail = userRepository.findByEmail(userSaveDTO.getEmail());
-    assertThat(byEmail.getName()).isEqualTo(userSaveDTO.getName());
-    then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
-  }
-
-  @Test
-  @Transactional
-  void updatePasswordByEmail() {
-    //given
-    String email = TestUser.EMAIL;
-    String passwrod = "q1w2e3r4t5!@#";
-    //when
-    userRepository.updatePasswordByEmail(email, passwrod);
+    userRepository.save(userEntity);
     //then
     then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
   }

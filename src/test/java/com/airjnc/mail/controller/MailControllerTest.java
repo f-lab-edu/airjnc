@@ -9,11 +9,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
+import com.airjnc.common.service.StateService;
 import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
 import com.airjnc.mail.service.MailService;
-import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
+import com.testutil.testdata.TestUser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ class MailControllerTest {
   CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
 
   @MockBean
-  UserStateService userStateService;
+  StateService stateService;
 
   private void checkInterceptorAndArgumentResolver() throws Exception {
     then(checkAuthInterceptor).should(times(1))
@@ -56,8 +57,8 @@ class MailControllerTest {
   @Test
   void sendCertificationCodeToEmail_isAuth() throws Exception {
     //given
-    Long userId = 1L;
-    given(userStateService.getUserId()).willReturn(userId);
+    Long userId = TestUser.ID;
+    given(stateService.getUserId()).willReturn(userId);
     //when
     mockMvc.perform(
             post("/mail/certificationCode")

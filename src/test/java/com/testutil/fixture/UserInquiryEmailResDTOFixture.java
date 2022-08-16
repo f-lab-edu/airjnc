@@ -7,9 +7,9 @@ public class UserInquiryEmailResDTOFixture {
 
   public static UserInquiryEmailResp.UserInquiryEmailRespBuilder getBuilder() {
     return UserInquiryEmailResp.builder()
-        .id(1L)
+        .id(TestUser.ID)
         .email(TestUser.EMAIL)
-        .isActive(true)
+        .isActive(TestUser.isActive)
         .deletedAt(TestUser.CREATED_AT);
   }
 }
