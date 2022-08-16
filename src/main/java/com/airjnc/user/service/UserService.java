@@ -77,7 +77,10 @@ public class UserService {
   }
 
   public UserResp update(Long userId, UserUpdateMyInfoReq req) {
-    return null;
+    UserEntity userEntity = userRepository.findById(userId, UserStatus.ACTIVE);
+    userEntity.update(req);
+    userRepository.save(userEntity);
+    return userModelMapper.userEntityToUserResp(userEntity);
   }
 
   public UserResp updateMyEmail(Long userId, UserUpdateMyEmailReq userUpdateMyEmailReq) {

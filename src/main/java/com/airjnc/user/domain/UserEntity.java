@@ -1,5 +1,6 @@
 package com.airjnc.user.domain;
 
+import com.airjnc.user.dto.request.UserUpdateMyInfoReq;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -53,5 +54,20 @@ public class UserEntity {
 
   public void restore() {
     this.deletedAt = null;
+  }
+
+  public void update(UserUpdateMyInfoReq req) {
+    if (req.getName() != null) {
+      name = req.getName();
+    }
+    if (req.getGender() != null) {
+      gender = req.getGender();
+    }
+    if (req.getAddress() != null) {
+      address = req.getAddress();
+    }
+    if (req.getBirthDate() != null) {
+      birthDate = req.getBirthDate();
+    }
   }
 }
