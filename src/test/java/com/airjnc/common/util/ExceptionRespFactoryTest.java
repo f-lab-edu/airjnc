@@ -1,22 +1,20 @@
 package com.airjnc.common.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import com.airjnc.common.dto.ErrorResponse;
+import com.airjnc.common.dto.response.ExceptionResp;
 import com.airjnc.common.exception.DefaultException;
-import com.airjnc.common.service.CommonInternalCheckService;
-import com.airjnc.common.util.factory.ErrorResponseFactory;
+import com.airjnc.common.service.CommonCheckService;
+import com.airjnc.common.util.factory.ExceptionRespFactory;
 import com.airjnc.common.util.factory.ErrorsFactory;
 import com.airjnc.user.exception.EmailIsDuplicatedException;
 import com.testutil.annotation.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 
 @UnitTest
-class ErrorResponseFactoryTest {
+class ExceptionRespFactoryTest {
 
   ResourceBundleMessageSource messageSource;
 
@@ -24,19 +22,18 @@ class ErrorResponseFactoryTest {
   @Test
   void argumentsTest() {
     //given
-    CommonInternalCheckService commonInternalCheckService = new CommonInternalCheckService();
-    ErrorResponse errorResponse = null;
+    CommonCheckService commonCheckService = new CommonCheckService();
+    ExceptionResp exceptionResp = null;
     int actual = 1;
     int expected = 2;
     //when
     try {
-      commonInternalCheckService.shouldBeMatch(actual, expected);
+      commonCheckService.shouldBeMatch(actual, expected);
     } catch (DefaultException ex) {
-      errorResponse = ErrorResponseFactory.create(ex, messageSource);
+      exceptionResp = ExceptionRespFactory.create(ex, messageSource);
     }
-    assertThat(errorResponse.getGlobal()).isNotNull();
-    assertThat(errorResponse.getGlobal().get(0))
-        .isEqualTo(String.format("actual: %d, but expected: %d", actual, expected));
+    assertThat(exceptionResp.getGlobal()).isNotNull();
+    assertThat(exceptionResp.getGlobal().get(0)).isEqualTo(String.format("%d != %d", actual, expected));
   }
 
   @BeforeEach
@@ -56,7 +53,7 @@ class ErrorResponseFactoryTest {
 //    errors.reject(ErrorCode.DUPLICATED.name());
     EmailIsDuplicatedException ex = new EmailIsDuplicatedException(errors);
     //when
-    ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
+    ExceptionResp exceptionResp = ExceptionRespFactory.create(ex, messageSource);
     //then
     /*
      * objectName = "Target"
@@ -76,29 +73,15 @@ class ErrorResponseFactoryTest {
   }
 
   @Test
-  void whenCodeIsInPropertiesThenGetTheMessageInProperties() {
+  void whenDefaultExceptionThenSuccessfullyResolveMessage() {
     //given
     DefaultException ex = new DefaultException();
     //when
-    ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
+    ExceptionResp exceptionResp = ExceptionRespFactory.create(ex, messageSource);
     //then
-    assertThat(errorResponse.getGlobal().size()).isSameAs(1);
-    assertThat(errorResponse.getGlobal().get(0)).isEqualTo("message from errors.properties");
-    assertThat(errorResponse.getField().size()).isSameAs(0);
-  }
-
-  @Test
-  void whenPassBindExceptionThenSuccessfullyResolveMessage() {
-    //given
-    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(new Target(), "target");
-    bindingResult.rejectValue("test", "required");
-    BindException ex = new BindException(bindingResult);
-    //when
-    ErrorResponse errorResponse = ErrorResponseFactory.create(ex, messageSource);
-    //then
-    assertThat(errorResponse.getGlobal().size()).isSameAs(0);
-    assertThat(errorResponse.getField().size()).isSameAs(1);
-    assertThat(errorResponse.getField().get("test")).isEqualTo("required message");
+    assertThat(exceptionResp.getGlobal().size()).isSameAs(1);
+    assertThat(exceptionResp.getGlobal().get(0)).isEqualTo("Error");
+    assertThat(exceptionResp.getField().size()).isSameAs(0);
   }
 
   private static class Target {

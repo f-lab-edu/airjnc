@@ -1,4 +1,4 @@
-package com.airjnc.user.dao.mapper;
+package com.airjnc.user.dao;
 
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.request.CreateDTO;

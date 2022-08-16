@@ -1,6 +1,6 @@
 package com.airjnc.common.exception;
 
-import com.airjnc.common.util.constant.ErrorCode;
+import com.airjnc.common.util.enumerate.ErrorCode;
 import com.airjnc.common.util.factory.ErrorsFactory;
 import org.springframework.validation.Errors;
 
@@ -9,7 +9,7 @@ public class DefaultException extends RuntimeException {
   private final Errors errors;
 
   public DefaultException() {
-    this.errors = ErrorsFactory.create(ErrorCode.INTERNAL);
+    this.errors = ErrorsFactory.createAndReject(ErrorCode.INTERNAL.name());
   }
 
   public DefaultException(Errors errors) {

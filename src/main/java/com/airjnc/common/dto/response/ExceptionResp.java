@@ -1,4 +1,4 @@
-package com.airjnc.common.dto;
+package com.airjnc.common.dto.response;
 
 import java.util.List;
 import java.util.Map;
@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class ErrorResponse {
+public class ExceptionResp {
 
   private final String exceptionType;
 
@@ -15,7 +15,7 @@ public class ErrorResponse {
 
   private final Map<String, String> field;
 
-  public ErrorResponse(Exception ex, List<String> global, Map<String, String> field) {
+  public ExceptionResp(Exception ex, List<String> global, Map<String, String> field) {
     exceptionType = ex.getClass().getSimpleName();
     this.global = global;
     this.field = field;
