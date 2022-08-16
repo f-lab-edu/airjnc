@@ -176,4 +176,3 @@ class MybatisUserRepositoryTest {
     then(commonCheckService).should(times(1)).shouldBeMatch(1, 1);
   }
 }
-
