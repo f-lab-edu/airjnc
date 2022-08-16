@@ -19,7 +19,7 @@ public class SessionStateService implements StateService {
     httpSession.removeAttribute(sessionKey.name());
   }
 
-  public Long getUserId() {
-    return (Long) httpSession.getAttribute(SessionKey.USER.name());
+  public Long get(SessionKey sessionKey) {
+    return (Long) httpSession.getAttribute(sessionKey.name());
   }
 }

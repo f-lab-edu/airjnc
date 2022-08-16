@@ -14,6 +14,7 @@ import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.common.service.StateService;
 import com.airjnc.user.dto.UserWhereDto;
+import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
@@ -96,7 +97,7 @@ class UserControllerTest {
   void delete() throws Exception {
     //given
     Long userId = 1L;
-    given(stateService.getUserId()).willReturn(userId);
+    given(stateService.get(SessionKey.USER)).willReturn(userId);
     //when
     mockMvc.perform(
             MockMvcRequestBuilders.delete("/users/me")
@@ -152,7 +153,7 @@ class UserControllerTest {
   void restore() throws Exception {
     //given
     Long userId = 1L;
-    given(stateService.getUserId()).willReturn(userId);
+    given(stateService.get(SessionKey.USER)).willReturn(userId);
     //when
     mockMvc.perform(
             put("/users/me")

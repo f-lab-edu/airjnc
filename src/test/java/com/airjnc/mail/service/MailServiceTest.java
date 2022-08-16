@@ -11,6 +11,7 @@ import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.user.UserRespFixture;
+import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,8 +41,8 @@ class MailServiceTest {
 
   @Test
   void sendCertificationCodeToEmailWithUserId() {
-    Long userId = 1L;
     //given
+    Long userId = TestUser.ID;
     given(userService.getUserById(userId, UserStatus.ACTIVE)).willReturn(user);
     //when
     mailService.sendCertificationCodeToEmail(userId);
@@ -53,7 +54,7 @@ class MailServiceTest {
   @Test
   void sendCertificationCodeToEmail_noUserId() {
     MailSendCertificationCodeToEmailReq req = MailSendCertificationCodeToEmailReq.builder()
-        .email("test@naver.com").build();
+        .email(TestUser.EMAIL).build();
     //given
     given(userService.getUserByWhere(any(UserWhereDto.class))).willReturn(user);
     //when
