@@ -1,6 +1,5 @@
 package com.airjnc.common.service;
 
-import com.airjnc.common.dao.RedisDao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Random;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CommonUtilService {
-
-  private final RedisDao redisDao;
 
   private final ObjectMapper objectMapper;
 

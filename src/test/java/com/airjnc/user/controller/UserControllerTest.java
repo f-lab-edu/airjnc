@@ -14,7 +14,6 @@ import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
-import com.airjnc.user.dto.request.UserInquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
@@ -25,7 +24,6 @@ import com.testutil.fixture.UserCreateReqFixture;
 import com.testutil.fixture.UserInquiryEmailReqDTOFixture;
 import com.testutil.fixture.UserInquiryEmailResDTOFixture;
 import com.testutil.fixture.UserRespFixture;
-import com.testutil.testdata.TestUser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -117,20 +115,6 @@ class UserControllerTest {
         .andExpect(jsonPath("email").value(userInquiryEmailResp.getEmail()));
     //then
     then(userService).should(times(1)).inquiryEmail(any(UserInquiryEmailReq.class));
-  }
-
-  @Test
-  void inquiryPasswordViaEmail() throws Exception {
-    //given
-    String email = TestUser.EMAIL;
-    //when
-    mockMvc.perform(
-            get("/users/inquiryPassword")
-                .param("email", email)
-        ).andDo(print())
-        .andExpect(status().isOk());
-    //then
-    then(userService).should(times(1)).inquiryPasswordViaEmail(any(UserInquiryPasswordViaEmailReq.class));
   }
 
   @Test

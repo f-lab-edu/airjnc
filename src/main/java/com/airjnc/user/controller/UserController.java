@@ -4,7 +4,6 @@ import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.annotation.CurrentUserId;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
-import com.airjnc.user.dto.request.UserInquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
@@ -51,12 +50,6 @@ public class UserController {
   @GetMapping("/inquiryEmail")
   public UserInquiryEmailResp inquiryEmail(@Validated @ModelAttribute UserInquiryEmailReq userInquiryEmailReq) {
     return userService.inquiryEmail(userInquiryEmailReq);
-  }
-
-  @GetMapping(value = "/inquiryPassword", params = "email")
-  public void inquiryPasswordViaEmail(
-      @Validated @ModelAttribute UserInquiryPasswordViaEmailReq userinquiryPasswordViaEmailReq) {
-    userService.inquiryPasswordViaEmail(userinquiryPasswordViaEmailReq);
   }
 
   @PutMapping("/resetPassword")

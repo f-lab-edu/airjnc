@@ -1,10 +1,27 @@
 package com.airjnc.mail.service;
 
-import com.airjnc.mail.dto.SendUsingTemplateDto;
+import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
+import com.airjnc.user.dto.response.UserResp;
+import com.airjnc.user.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-// 특정 기술에 종속적이지 않는 인터페이스
-public interface MailService {
+@Service
+@RequiredArgsConstructor
+public class MailService {
 
-  // SendUsingTemplateDto -> Template 에서 사용할 데이터들만 담아있기 때문에, 특정 cloud에 종속적이지 않은 데이터이다.
-  void send(String email, SendUsingTemplateDto sendUsingTemplateDto);
+  private final UserService userService;
+
+
+  private final MailCommonService mailCommonService;
+
+  public void sendCertificationCodeToEmail(Long userId) {
+    UserResp user = userService.getUserById(userId);
+    mailCommonService.sendCode(user.getEmail(), user.getName());
+  }
+
+  public void sendCertificationCodeToEmail(MailSendCertificationCodeToEmailReq req) {
+    UserResp user = userService.getUserWithDeletedByEmail(req.getEmail());
+    mailCommonService.sendCode(user.getEmail(), user.getName());
+  }
 }

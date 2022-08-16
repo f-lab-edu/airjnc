@@ -40,7 +40,7 @@ class CommonUtilServiceTest {
   }
 
   @Test
-  void generateCodeOnce() {
+  void generateCode() {
     //when
     String code = commonUtilService.generateCode();
     //then

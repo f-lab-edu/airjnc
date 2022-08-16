@@ -2,25 +2,19 @@ package com.airjnc.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import com.airjnc.common.dao.RedisDao;
-import com.airjnc.common.properties.SessionTtlProperties;
 import com.airjnc.common.service.CommonCheckService;
-import com.airjnc.common.service.CommonUtilService;
 import com.airjnc.common.service.HashService;
-import com.airjnc.mail.dto.SendUsingTemplateDto;
-import com.airjnc.mail.service.MailService;
 import com.airjnc.user.dao.UserRepository;
 import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserSaveDto;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
-import com.airjnc.user.dto.request.UserInquiryPasswordViaEmailReq;
 import com.airjnc.user.dto.request.UserResetPwdReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
@@ -29,7 +23,6 @@ import com.testutil.fixture.UserCreateReqFixture;
 import com.testutil.fixture.UserInquiryEmailReqDTOFixture;
 import com.testutil.fixture.UserRespFixture;
 import com.testutil.testdata.TestUser;
-import java.time.Duration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,22 +40,13 @@ class UserServiceTest {
   UserRepository userRepository;
 
   @Mock
-  UserCheckService userCheckService;
-
-  @Mock
   UserModelMapper userModelMapper;
 
   @Mock
-  CommonUtilService commonUtilService;
+  UserCheckService userCheckService;
 
   @Mock
   RedisDao redisDao;
-
-  @Mock
-  MailService mailService;
-
-  @Mock
-  SessionTtlProperties sessionTtlProperties;
 
   @Mock
   CommonCheckService commonCheckService;
@@ -94,6 +78,16 @@ class UserServiceTest {
   }
 
   @Test
+  void delete() {
+    //given
+    UserEntity userEntity = TestUser.getBuilder().build();
+    //when
+    userService.delete(userEntity.getId());
+    //then
+    then(userRepository).should(times(1)).delete(userEntity.getId());
+  }
+
+  @Test
   void inquiryEmail() {
     //given
     UserInquiryEmailReq dto = UserInquiryEmailReqDTOFixture.getBuilder().build();
@@ -104,35 +98,6 @@ class UserServiceTest {
     //then
     then(userModelMapper).should(times(1)).userEntityToUserInquiryEmailResp(userEntity);
     then(userRepository).should(times(1)).findWithDeletedByNameAndBirthDate(dto.getName(), dto.getBirthDate());
-  }
-
-  @Test
-  void inquiryPasswordViaEmail() {
-    //given
-    UserInquiryPasswordViaEmailReq userInquiryPasswordViaEmailReq = new UserInquiryPasswordViaEmailReq(TestUser.EMAIL);
-    UserEntity user = TestUser.getBuilder().build();
-    String code = "123456";
-    given(userRepository.findWithDeletedByEmail(userInquiryPasswordViaEmailReq.getEmail())).willReturn(user);
-    given(commonUtilService.generateCode()).willReturn(code);
-    given(sessionTtlProperties.getResetPasswordCode()).willReturn(Duration.ofMinutes(1L));
-    //when
-    userService.inquiryPasswordViaEmail(userInquiryPasswordViaEmailReq);
-    //then
-    then(userRepository).should(times(1)).findWithDeletedByEmail(userInquiryPasswordViaEmailReq.getEmail());
-    then(commonUtilService).should(times(1)).generateCode();
-    then(redisDao).should(times(1)).store(eq(user.getEmail()), eq(code), any(Duration.class));
-    then(mailService).should(times(1))
-        .send(eq(userInquiryPasswordViaEmailReq.getEmail()), any(SendUsingTemplateDto.class));
-  }
-
-  @Test
-  void remove() {
-    //given
-    UserEntity userEntity = TestUser.getBuilder().build();
-    //when
-    userService.delete(userEntity.getId());
-    //then
-    then(userRepository).should(times(1)).delete(userEntity.getId());
   }
 
   @Test

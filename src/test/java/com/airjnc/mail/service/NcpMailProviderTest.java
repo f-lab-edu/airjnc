@@ -27,7 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(MockitoExtension.class)
 @UnitTest
-class NcpMailServiceTest {
+class NcpMailProviderTest {
 
   @Mock
   RestTemplate restTemplate;
@@ -48,7 +48,7 @@ class NcpMailServiceTest {
   NcpMailProperties.TemplateSid templateSid;
 
   @InjectMocks
-  NcpMailService ncpMailService;
+  NcpMailProvider ncpMailService;
 
 
   @Test

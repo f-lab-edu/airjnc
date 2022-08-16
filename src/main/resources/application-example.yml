@@ -24,7 +24,7 @@ cloud:
     credentials:
       accessKey:
       secretKey:
-    maile:
+    mail:
       templateSid:
         resetPassword:
       uri:
