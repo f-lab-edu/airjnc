@@ -112,7 +112,6 @@ class UserServiceTest {
     //given
     UserResetPwdReq userResetPwdReq = UserResetPwdReq.builder()
         .email("test@naver.com").password("123456").code("code").build();
-    String code = "code";
     String hash = "hash";
     UserEntity userEntity = TestUser.getBuilder().build();
     given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);

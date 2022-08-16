@@ -10,6 +10,7 @@ import com.airjnc.common.exception.UnauthorizedException;
 import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
 import com.testutil.annotation.UnitTest;
+import com.testutil.testdata.TestUser;
 import java.lang.reflect.Method;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -105,8 +106,8 @@ class CheckAuthInterceptorTest {
     @Test
     void givenHaveCheckAuthAndStoreUserIdToStateThenReturnTrue() throws Exception {
       //given
+      Long userId = TestUser.ID;
       HandlerMethod handler = getHaveCheckAuthHandler();
-      Long userId = 1L;
       given(stateService.get(SessionKey.USER)).willReturn(userId);
       //when
       boolean result = checkAuthInterceptor.preHandle(req, resp, handler);

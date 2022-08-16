@@ -54,7 +54,7 @@ class NcpMailProviderTest {
   @Test
   void createSendApiBody() {
     //given
-    String name = "name";
+    String name = TestUser.NAME;
     String code = "code";
     int resetPasswordTemplateSid = 123;
     SendUsingTemplateDto dto = SendUsingTemplateDto.builder()

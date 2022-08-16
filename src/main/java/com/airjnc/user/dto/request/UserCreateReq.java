@@ -1,7 +1,6 @@
 package com.airjnc.user.dto.request;
 
 import com.airjnc.user.domain.Gender;
-import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.util.UserRegex;
 import java.time.LocalDate;
 import javax.validation.constraints.Email;
