@@ -50,6 +50,13 @@ public class UserService {
     userRepository.save(userEntity);
   }
 
+  public UserResp getUserByEmailAndPassword(String email, String password) {
+    UserWhereDto userWhereDto = UserWhereDto.builder().email(email).build();
+    UserEntity userEntity = userRepository.findByWhere(userWhereDto);
+    userCheckService.passwordShouldBeMatch(password, userEntity.getPassword());
+    return userModelMapper.userEntityToUserResp(userEntity);
+  }
+
   public UserResp getUserById(Long userId, UserStatus userStatus) {
     UserEntity userEntity = userRepository.findById(userId, userStatus);
     return userModelMapper.userEntityToUserResp(userEntity);
@@ -57,13 +64,6 @@ public class UserService {
 
   public UserResp getUserByWhere(UserWhereDto userWhereDto) {
     UserEntity userEntity = userRepository.findByWhere(userWhereDto);
-    return userModelMapper.userEntityToUserResp(userEntity);
-  }
-
-  public UserResp getUserByEmailAndPassword(String email, String password) {
-    UserWhereDto userWhereDto = UserWhereDto.builder().email(email).build();
-    UserEntity userEntity = userRepository.findByWhere(userWhereDto);
-    userCheckService.passwordShouldBeMatch(password, userEntity.getPassword());
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 

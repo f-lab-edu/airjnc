@@ -15,7 +15,6 @@ import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
 import com.airjnc.mail.service.MailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
-import com.testutil.testdata.TestUser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
