@@ -210,7 +210,7 @@ class UserControllerTest {
         .andExpect(jsonPath("id").value(userResp.getId()))
         .andExpect(jsonPath("email").value(userResp.getEmail()));
     //then
-    then(userService).should(times(1)).updateMyPassword(eq(userId), any(UserUpdateMyPasswordReq.class));
+    then(userService).should().updateMyPassword(eq(userId), any(UserUpdateMyPasswordReq.class));
     checkInterceptorAndArgumentResolver();
   }
 }
