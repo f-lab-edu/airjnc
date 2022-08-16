@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserResetPwdReq {
+public class UserUpdatePwdReq {
 
   @NotBlank
   @Email
@@ -28,7 +28,7 @@ public class UserResetPwdReq {
 
 
   @Builder
-  public UserResetPwdReq(String email, String certificationCode, String password) {
+  public UserUpdatePwdReq(String email, String certificationCode, String password) {
     this.email = email;
     this.certificationCode = certificationCode;
     this.password = password;

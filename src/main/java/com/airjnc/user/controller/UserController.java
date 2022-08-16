@@ -6,7 +6,7 @@ import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
-import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserAssembleService;
@@ -67,7 +67,7 @@ public class UserController {
   }
 
   @PatchMapping(params = {"type=info", "what=password"})
-  public void updatePassword(@Validated @RequestBody UserResetPwdReq userResetPwdReq) {
-    userService.updatePassword(userResetPwdReq);
+  public void updatePassword(@Validated @RequestBody UserUpdatePwdReq userUpdatePwdReq) {
+    userService.updatePassword(userUpdatePwdReq);
   }
 }

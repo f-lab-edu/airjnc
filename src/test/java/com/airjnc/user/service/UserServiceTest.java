@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.times;
 import static org.mockito.Mockito.spy;
 import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.service.CommonHashService;
@@ -14,7 +13,7 @@ import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
-import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
@@ -107,18 +106,18 @@ class UserServiceTest {
   @Test
   void resetPassword() {
     //given
-    UserResetPwdReq userResetPwdReq = UserResetPwdReq.builder()
+    UserUpdatePwdReq userUpdatePwdReq = UserUpdatePwdReq.builder()
         .email("test@naver.com").password("123456").certificationCode("code").build();
     String hash = "hash";
     UserEntity userEntity = TestUser.getBuilder().build();
     given(userRepository.findByWhere(any(UserWhereDto.class))).willReturn(userEntity);
-    given(commonHashService.encrypt(userResetPwdReq.getPassword())).willReturn(hash);
+    given(commonHashService.encrypt(userUpdatePwdReq.getPassword())).willReturn(hash);
     //when
-    userService.updatePassword(userResetPwdReq);
+    userService.updatePassword(userUpdatePwdReq);
     //then
-    then(commonValidateService).should().verifyCertificationCode(userResetPwdReq.getEmail(), userResetPwdReq.getCertificationCode());
+    then(commonValidateService).should().verifyCertificationCode(userUpdatePwdReq.getEmail(), userUpdatePwdReq.getCertificationCode());
     then(userRepository).should().findByWhere(any(UserWhereDto.class));
-    then(commonHashService).should().encrypt(userResetPwdReq.getPassword());
+    then(commonHashService).should().encrypt(userUpdatePwdReq.getPassword());
     assertThat(userEntity.getPassword()).isEqualTo(hash);
     then(userRepository).should().save(userEntity);
   }

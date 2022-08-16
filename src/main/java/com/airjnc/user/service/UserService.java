@@ -7,7 +7,7 @@ import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
-import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import lombok.RequiredArgsConstructor;
@@ -67,11 +67,11 @@ public class UserService {
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
-  public void updatePassword(UserResetPwdReq userResetPwdReq) {
-    commonValidateService.verifyCertificationCode(userResetPwdReq.getEmail(), userResetPwdReq.getCertificationCode());
-    UserWhereDto userWhereDto = UserWhereDto.builder().email(userResetPwdReq.getEmail()).status(UserStatus.ALL).build();
+  public void updatePassword(UserUpdatePwdReq userUpdatePwdReq) {
+    commonValidateService.verifyCertificationCode(userUpdatePwdReq.getEmail(), userUpdatePwdReq.getCertificationCode());
+    UserWhereDto userWhereDto = UserWhereDto.builder().email(userUpdatePwdReq.getEmail()).status(UserStatus.ALL).build();
     UserEntity userEntity = userRepository.findByWhere(userWhereDto);
-    String hash = commonHashService.encrypt(userResetPwdReq.getPassword());
+    String hash = commonHashService.encrypt(userUpdatePwdReq.getPassword());
     userEntity.setPassword(hash);
     userRepository.save(userEntity);
   }

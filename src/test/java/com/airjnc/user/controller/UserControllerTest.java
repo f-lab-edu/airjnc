@@ -3,7 +3,6 @@ package com.airjnc.user.controller;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -17,7 +16,7 @@ import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
-import com.airjnc.user.dto.request.UserResetPwdReq;
+import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserAssembleService;
@@ -149,7 +148,7 @@ class UserControllerTest {
   @Test
   void updatePassword() throws Exception {
     //given
-    UserResetPwdReq userResetPwdReq = UserResetPwdReq.builder()
+    UserUpdatePwdReq userUpdatePwdReq = UserUpdatePwdReq.builder()
         .email("test@naver.com")
         .certificationCode("123456")
         .password("q1w2e3r4t5!")
@@ -160,10 +159,10 @@ class UserControllerTest {
                 .param("type", "info")
                 .param("what", "password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userResetPwdReq))
+                .content(objectMapper.writeValueAsString(userUpdatePwdReq))
         ).andDo(print())
         .andExpect(status().isOk());
     //then
-    then(userService).should().updatePassword(any(UserResetPwdReq.class));
+    then(userService).should().updatePassword(any(UserUpdatePwdReq.class));
   }
 }
