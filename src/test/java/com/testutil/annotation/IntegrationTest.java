@@ -6,12 +6,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.junit.jupiter.api.Tag;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Tag("integration")
-@CommonTest
+@ActiveProfiles("test")
+@TestPropertySource(locations = "classpath:/application-test.properties") // 테스트용 properties 설정
 public @interface IntegrationTest {
 
 }

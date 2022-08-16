@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.user.dto.request.AuthLogInReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.AuthService;
@@ -16,10 +17,13 @@ import com.airjnc.user.service.UserStateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.fixture.AuthLogInReqFixture;
 import com.testutil.fixture.UserRespFixture;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -38,6 +42,15 @@ class AuthControllerTest {
   @MockBean
   UserStateService userStateService;
 
+  @SpyBean
+  CheckAuthInterceptor checkAuthInterceptor;
+
+  private void checkInterceptor(int n) throws Exception {
+    then(checkAuthInterceptor).should(times(1))
+        .preHandle(any(HttpServletRequest.class), any(HttpServletResponse.class), any(Object.class));
+    then(userStateService).should(times(n)).getUserId();
+  }
+
   @Test
   void logIn() throws Exception {
     //given
@@ -53,6 +66,7 @@ class AuthControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("id").value(userResp.getId()));
     //then
+    checkInterceptor(0);
     then(authService).should(times(1)).logIn(any(AuthLogInReq.class));
     then(userStateService).should(times(1)).create(userResp.getId());
   }
@@ -66,6 +80,7 @@ class AuthControllerTest {
         ).andDo(print())
         .andExpect(status().isOk());
     //then
+    checkInterceptor(1);
     then(userStateService).should(times(1)).delete();
   }
 }

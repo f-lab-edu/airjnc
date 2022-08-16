@@ -1,11 +1,11 @@
-package com.testutil.fixture;
+package com.testutil.testdata;
 
 import com.airjnc.user.domain.Gender;
 import com.airjnc.user.domain.UserEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class UserEntityFixture {
+public class TestUser {
 
   public static final Long ID = 1L;
 
@@ -17,13 +17,13 @@ public class UserEntityFixture {
 
   public static final Gender GENDER = Gender.MALE;
 
-  public static final String PHONE_NUMBER = "010-1111-2222";
+  public static final String PHONE_NUMBER = "01011112222";
 
   public static final String ADDRESS = "서울 강남구";
 
   public static final boolean IS_ACTIVE = true;
 
-  public static final LocalDate BIRTH_DATE = LocalDate.of(2000, 5, 15);
+  public static final LocalDate BIRTH_DATE = LocalDate.of(2020, 1, 1);
 
   public static final LocalDateTime CREATED_AT = LocalDateTime.of(2022, 1, 1, 9, 0);
 
@@ -41,7 +41,6 @@ public class UserEntityFixture {
         .isActive(IS_ACTIVE)
         .birthDate(BIRTH_DATE)
         .createdAt(CREATED_AT)
-        .updatedAt(UPDATED_AT)
-        .deletedAt(null);
+        .updatedAt(UPDATED_AT);
   }
 }
