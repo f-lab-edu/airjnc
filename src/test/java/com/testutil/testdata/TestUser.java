@@ -17,11 +17,7 @@ public class TestUser {
 
   public static final Gender GENDER = Gender.MALE;
 
-  public static final String PHONE_NUMBER = "01011112222";
-
   public static final String ADDRESS = "서울 강남구";
-
-  public static final Boolean IS_ACTIVE = true;
 
   public static final LocalDate BIRTH_DATE = LocalDate.of(2020, 1, 1);
 
@@ -34,7 +30,6 @@ public class TestUser {
         .password(PASSWORD)
         .name(NAME)
         .gender(GENDER)
-        .phoneNumber(PHONE_NUMBER)
         .address(ADDRESS)
         .birthDate(BIRTH_DATE);
   }

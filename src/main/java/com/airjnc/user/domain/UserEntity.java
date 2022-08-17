@@ -20,8 +20,6 @@ public class UserEntity {
 
   private String email;
 
-  private String phoneNumber;
-
   private String password;
 
   private String name;
@@ -35,11 +33,10 @@ public class UserEntity {
   private LocalDateTime deletedAt;
 
   @Builder
-  public UserEntity(Long id, String email, String phoneNumber, String password, String name, Gender gender,
+  public UserEntity(Long id, String email, String password, String name, Gender gender,
       String address, LocalDate birthDate, LocalDateTime deletedAt) {
     this.id = id;
     this.email = email;
-    this.phoneNumber = phoneNumber;
     this.password = password;
     this.name = name;
     this.gender = gender;

@@ -14,8 +14,6 @@ public class UserRespFixture {
 
   public static final Gender GENDER = Gender.MALE;
 
-  public static final String PHONE_NUMBER = "010-1111-2222";
-
   public static final String ADDRESS = "서울 강남구";
 
   public static final LocalDate BIRTH_DATE = LocalDate.of(2000, 5, 15);
@@ -26,7 +24,6 @@ public class UserRespFixture {
         .email(EMAIL)
         .name(NAME)
         .gender(GENDER)
-        .phoneNumber(PHONE_NUMBER)
         .address(ADDRESS)
         .birthDate(BIRTH_DATE);
   }
