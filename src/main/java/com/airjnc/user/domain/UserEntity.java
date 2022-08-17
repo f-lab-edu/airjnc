@@ -1,9 +1,7 @@
 package com.airjnc.user.domain;
 
 import com.airjnc.common.entity.CommonTimeEntity;
-import java.time.Clock;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,16 +33,15 @@ public class UserEntity extends CommonTimeEntity {
 
   private LocalDate birthDate;
 
-
   @Builder
-  public UserEntity(Long id, String email, String password, String name, Gender gender, String phoneNumber,
+  public UserEntity(Long id, String email, String phoneNumber, String password, String name, Gender gender,
       String address, LocalDate birthDate) {
     this.id = id;
     this.email = email;
+    this.phoneNumber = phoneNumber;
     this.password = password;
     this.name = name;
     this.gender = gender;
-    this.phoneNumber = phoneNumber;
     this.address = address;
     this.isActive = true;
     this.birthDate = birthDate;
