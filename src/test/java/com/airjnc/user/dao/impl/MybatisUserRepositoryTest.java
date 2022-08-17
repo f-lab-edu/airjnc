@@ -2,7 +2,7 @@ package com.airjnc.user.dao.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.times;
+
 import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.user.dao.UserMapper;
 import com.airjnc.user.dao.UserRepository;

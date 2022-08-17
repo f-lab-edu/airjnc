@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.spy;
+
 import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.service.CommonHashService;
 import com.airjnc.common.service.CommonValidateService;
@@ -115,7 +116,8 @@ class UserServiceTest {
     //when
     userService.updatePassword(userUpdatePwdReq);
     //then
-    then(commonValidateService).should().verifyCertificationCode(userUpdatePwdReq.getEmail(), userUpdatePwdReq.getCertificationCode());
+    then(commonValidateService).should()
+        .verifyCertificationCode(userUpdatePwdReq.getEmail(), userUpdatePwdReq.getCertificationCode());
     then(userRepository).should().findByWhere(any(UserWhereDto.class));
     then(commonHashService).should().encrypt(userUpdatePwdReq.getPassword());
     assertThat(userEntity.getPassword()).isEqualTo(hash);

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo "-------------- Running Test --------------"
+./gradlew test
+RESULT=$?
+if [ $RESULT -ne 0 ]; then
+  exit $RESULT
+fi
+
+echo "-------------- Running Checkstyle --------------"
+./gradlew check
+RESULT=$?
+if [ $RESULT -ne 0 ]; then
+  exit $RESULT
+fi

@@ -67,18 +67,19 @@ public class UserService {
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
-  public void updatePassword(UserUpdatePwdReq userUpdatePwdReq) {
-    commonValidateService.verifyCertificationCode(userUpdatePwdReq.getEmail(), userUpdatePwdReq.getCertificationCode());
-    UserWhereDto userWhereDto = UserWhereDto.builder().email(userUpdatePwdReq.getEmail()).status(UserStatus.ALL).build();
-    UserEntity userEntity = userRepository.findByWhere(userWhereDto);
-    String hash = commonHashService.encrypt(userUpdatePwdReq.getPassword());
-    userEntity.setPassword(hash);
-    userRepository.save(userEntity);
-  }
-
   public void restore(Long userId) {
     UserEntity userEntity = userRepository.findById(userId, UserStatus.DELETED);
     userEntity.restore();
+    userRepository.save(userEntity);
+  }
+
+  public void updatePassword(UserUpdatePwdReq userUpdatePwdReq) {
+    commonValidateService.verifyCertificationCode(userUpdatePwdReq.getEmail(), userUpdatePwdReq.getCertificationCode());
+    UserWhereDto userWhereDto = UserWhereDto.builder().email(userUpdatePwdReq.getEmail()).status(UserStatus.ALL)
+        .build();
+    UserEntity userEntity = userRepository.findByWhere(userWhereDto);
+    String hash = commonHashService.encrypt(userUpdatePwdReq.getPassword());
+    userEntity.setPassword(hash);
     userRepository.save(userEntity);
   }
 }

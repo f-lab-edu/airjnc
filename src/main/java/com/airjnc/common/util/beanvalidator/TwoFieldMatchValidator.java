@@ -37,19 +37,8 @@ public class TwoFieldMatchValidator implements ConstraintValidator<TwoFieldMatch
     }
     if (!isValid) {
       context.buildConstraintViolationWithTemplate(message)
-          /*
-           * `addPropertNode` -> `@TwoFieldMatch` 를 사용할 경우, 필드 접근 방법을 정의한다.
-           * Ex) `@TwoFieldMatch class Ex { String a; }` 일 경우, `addPropertyNode("a")` 해주면 된다.
-           * Ex) `@TwoFieldMatch class Ex { Ex2 ex2; } class Ex2{ String a; }` 일 경우, `addPropertyNode("ex2").addPropertyNode("a")` 해주면 된다.
-           */
           .addPropertyNode(secondFieldName)
-          /*
-           * 에러 메시지[message]와 node key[secondFieldName] 값을 넘겨주며, 해당 node는 errors[].field에 바인딩된다.
-           * `addConstraintViolation` 를 사용할 경우, fieldError에 담긴다.
-           * `addConstraintViolation` 를 사용하지 않고 `context.buildConstraintViolationWithTemplate(message);` 만 사용할 경우, global error에 담긴다.
-           */
           .addConstraintViolation()
-          // `addConstraintViolation` 를 통해 field error을 담았고, `disableDefaultConstraintViolation` 을 통해 global error을 제거한다.
           .disableDefaultConstraintViolation();
     }
     return isValid;

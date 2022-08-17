@@ -1,6 +1,7 @@
 package com.airjnc.common.service;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.airjnc.common.properties.NcpCredentialProperties;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;

@@ -25,8 +25,8 @@ public class UserWhereDto {
   private final UserStatus status;
 
   @Builder
-  public UserWhereDto(Long id, String email, String name, Gender gender, String address,
-      LocalDate birthDate, UserStatus status) {
+  public UserWhereDto(Long id, String email, String name, Gender gender, String address, LocalDate birthDate,
+      UserStatus status) {
     if (id == null && email == null && name == null && birthDate == null) {
       throw new DefaultException(ErrorsFactory.createAndReject("dangerousQuery"));
     }
@@ -39,5 +39,7 @@ public class UserWhereDto {
     this.status = status;
   }
 
-  public enum UserStatus {ACTIVE, DELETED, ALL}
+  public enum UserStatus {
+    ACTIVE, DELETED, ALL
+  }
 }

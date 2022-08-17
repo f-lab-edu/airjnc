@@ -1,8 +1,8 @@
 package com.airjnc.mail.service;
 
-import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.common.service.CommonNcpService;
 import com.airjnc.common.service.CommonUtilService;
+import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.mail.annotation.NcpMailRestTemplate;
 import com.airjnc.mail.dto.NcpMailSendReqDto;
 import com.airjnc.mail.dto.NcpMailSendReqDto.Recipient;

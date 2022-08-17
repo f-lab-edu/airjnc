@@ -1,6 +1,7 @@
 package com.airjnc.common.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import com.airjnc.common.dto.response.ExceptionResp;
 import com.airjnc.common.exception.DefaultException;
 import com.airjnc.common.util.factory.ErrorsFactory;
@@ -45,7 +46,7 @@ class ExceptionRespFactoryTest {
     Target target = new Target();
     Errors errors = ErrorsFactory.create(target);
     errors.rejectValue("field", "errorCode");
-//    errors.reject(ErrorCode.DUPLICATED.name());
+    // errors.reject(ErrorCode.DUPLICATED.name());
     EmailIsDuplicatedException ex = new EmailIsDuplicatedException(errors);
     //when
     ExceptionResp exceptionResp = ExceptionRespFactory.create(ex, messageSource);

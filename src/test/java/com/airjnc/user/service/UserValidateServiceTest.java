@@ -3,6 +3,7 @@ package com.airjnc.user.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+
 import com.airjnc.common.exception.DefaultException;
 import com.airjnc.common.service.CommonHashService;
 import com.airjnc.user.dao.UserRepository;

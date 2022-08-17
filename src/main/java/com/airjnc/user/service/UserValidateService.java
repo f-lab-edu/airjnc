@@ -22,10 +22,10 @@ public class UserValidateService {
     if (!exists) {
       return;
     }
-        /*
-        1. UserCheckService.emailIsDuplicated
-        2. UserCheckService
-         */
+    /*
+    1. UserCheckService.emailIsDuplicated
+    2. UserCheckService
+    */
     throw new EmailIsDuplicatedException(
         ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "emailIsDuplicated"));
   }
@@ -35,12 +35,11 @@ public class UserValidateService {
     if (isMatch) {
       return;
     }
-        /*
-        1. UserCheckService.passwordIsNotMatch
-        2. UserCheckService
-         */
+    /*
+     1. UserCheckService.passwordIsNotMatch
+     2. UserCheckService
+     */
     throw new PasswordIsNotMatchException(
-        ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "passwordIsNotMatch")
-    );
+        ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "passwordIsNotMatch"));
   }
 }
