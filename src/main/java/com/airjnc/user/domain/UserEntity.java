@@ -34,15 +34,11 @@ public class UserEntity {
 
   private LocalDate birthDate;
 
-  private LocalDateTime createdAt;
-
-  private LocalDateTime updatedAt;
-
   private LocalDateTime deletedAt;
 
   @Builder
   public UserEntity(Long id, String email, String password, String name, Gender gender, String phoneNumber,
-      String address, LocalDate birthDate) {
+      String address, LocalDate birthDate, LocalDateTime deletedAt) {
     this.id = id;
     this.email = email;
     this.password = password;
@@ -52,6 +48,7 @@ public class UserEntity {
     this.address = address;
     this.isActive = true;
     this.birthDate = birthDate;
+    this.deletedAt = deletedAt;
   }
 
   public void delete() {
