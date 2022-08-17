@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS `user`
     `password`     VARCHAR(100)    NOT NULL,
     `name`         VARCHAR(50)     NOT NULL,
     `gender`       VARCHAR(10),
-    `phone_number` VARCHAR(20),
     `address`      VARCHAR(200),
     `birthdate`    TIMESTAMP,
     `created_at`   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -13,8 +12,7 @@ CREATE TABLE IF NOT EXISTS `user`
     `deleted_at`   TIMESTAMP,
 
     PRIMARY KEY (`id`),
-    UNIQUE KEY `email-unique` (`email`),
-    UNIQUE KEY `phone_number-unique` (`phone_number`)
+    UNIQUE KEY `email-unique` (`email`)
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `host`

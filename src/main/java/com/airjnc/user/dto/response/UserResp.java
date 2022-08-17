@@ -13,8 +13,6 @@ public class UserResp {
 
   private final String email;
 
-  private final String phoneNumber;
-
   private final String name;
 
   private final Gender gender;
@@ -26,13 +24,12 @@ public class UserResp {
   private final LocalDateTime deletedAt;
 
   @Builder
-  public UserResp(Long id, String email, String name, Gender gender, String phoneNumber, String address,
+  public UserResp(Long id, String email, String name, Gender gender, String address,
       LocalDate birthDate, LocalDateTime deletedAt) {
     this.id = id;
     this.email = email;
     this.name = name;
     this.gender = gender;
-    this.phoneNumber = phoneNumber;
     this.address = address;
     this.birthDate = birthDate;
     this.deletedAt = deletedAt;
