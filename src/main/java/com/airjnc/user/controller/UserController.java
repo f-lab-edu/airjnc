@@ -6,6 +6,7 @@ import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
@@ -64,6 +65,13 @@ public class UserController {
   @CheckAuth
   public void restore(@CurrentUserId Long userId) {
     userService.restore(userId);
+  }
+
+  @PatchMapping(value = "me", params = {"type=info", "what=email"})
+  @CheckAuth
+  public UserResp updateMyEmail(@CurrentUserId Long userId,
+      @Validated @RequestBody UserUpdateMyEmailReq userUpdateMyEmailReq) {
+    return userService.updateMyEmail(userId, userUpdateMyEmailReq);
   }
 
   @PatchMapping(params = {"type=info", "what=password"})
