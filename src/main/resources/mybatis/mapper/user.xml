@@ -31,13 +31,13 @@
     SELECT EXISTS(SELECT 1 FROM user<include refid="where"/>)
   </select>
   <select id="findById" resultType="UserEntity">
-    SELECT id, email, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at, deleted_at
+    SELECT id, email, name, gender, phone_number, address, birthdate, created_at, updated_at, deleted_at
     FROM user
     WHERE id = #{id}
     <include refid="checkStatus"/>
   </select>
   <select id="findByWhere" resultType="UserEntity">
-    SELECT id, email, name, gender, phone_number, address, is_active, birthdate, created_at, updated_at, deleted_at
+    SELECT id, email, name, gender, phone_number, address, birthdate, created_at, updated_at, deleted_at
     FROM user
     <include refid="where"/>
   </select>
@@ -50,7 +50,6 @@
         gender=#{gender},
         address=#{address},
         birthdate=#{birthDate},
-        is_active=#{isActive},
         deleted_at=#{deletedAt}
     WHERE id = #{id}
   </update>

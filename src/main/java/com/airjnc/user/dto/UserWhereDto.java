@@ -22,15 +22,13 @@ public class UserWhereDto {
 
   private final String address;
 
-  private final Boolean isActive;
-
   private final LocalDate birthDate;
 
   private final UserStatus status;
 
   @Builder
   public UserWhereDto(Long id, String email, String phoneNumber, String name, Gender gender, String address,
-      LocalDate birthDate, boolean isActive, UserStatus status) {
+      LocalDate birthDate, UserStatus status) {
     if (id == null && email == null && phoneNumber == null && name == null && birthDate == null) {
       throw new DefaultException(ErrorsFactory.createAndReject("dangerousQuery"));
     }
@@ -41,7 +39,6 @@ public class UserWhereDto {
     this.gender = gender;
     this.address = address;
     this.birthDate = birthDate;
-    this.isActive = isActive;
     this.status = status;
   }
 

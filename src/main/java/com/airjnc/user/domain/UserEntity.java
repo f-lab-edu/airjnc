@@ -29,8 +29,6 @@ public class UserEntity extends CommonTimeEntity {
 
   private String address;
 
-  private Boolean isActive;
-
   private LocalDate birthDate;
 
   @Builder
@@ -43,7 +41,6 @@ public class UserEntity extends CommonTimeEntity {
     this.name = name;
     this.gender = gender;
     this.address = address;
-    this.isActive = true;
     this.birthDate = birthDate;
   }
 }

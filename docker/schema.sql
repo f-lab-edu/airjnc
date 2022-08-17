@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS `user`
     `gender`       VARCHAR(10),
     `phone_number` VARCHAR(20),
     `address`      VARCHAR(200),
-    `is_active`    BOOLEAN   DEFAULT TRUE, -- 활성화 유저인가? 아닌가?
     `birthdate`    TIMESTAMP,
     `created_at`   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at`   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
