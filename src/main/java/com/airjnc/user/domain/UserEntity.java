@@ -1,5 +1,6 @@
 package com.airjnc.user.domain;
 
+import com.airjnc.common.entity.CommonTimeEntity;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
-public class UserEntity {
+public class UserEntity extends CommonTimeEntity {
 
   private Long id;
 
@@ -34,11 +35,6 @@ public class UserEntity {
 
   private LocalDate birthDate;
 
-  private LocalDateTime createdAt;
-
-  private LocalDateTime updatedAt;
-
-  private LocalDateTime deletedAt;
 
   @Builder
   public UserEntity(Long id, String email, String password, String name, Gender gender, String phoneNumber,
@@ -52,17 +48,5 @@ public class UserEntity {
     this.address = address;
     this.isActive = true;
     this.birthDate = birthDate;
-  }
-
-  public void delete() {
-    this.deletedAt = LocalDateTime.now(Clock.systemUTC());
-  }
-
-  public boolean isDeleted() {
-    return deletedAt != null;
-  }
-
-  public void restore() {
-    this.deletedAt = null;
   }
 }
