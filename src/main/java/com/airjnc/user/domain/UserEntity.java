@@ -30,8 +30,6 @@ public class UserEntity {
 
   private String address;
 
-  private Boolean isActive;
-
   private LocalDate birthDate;
 
   private LocalDateTime deletedAt;
@@ -46,7 +44,6 @@ public class UserEntity {
     this.name = name;
     this.gender = gender;
     this.address = address;
-    this.isActive = true;
     this.birthDate = birthDate;
     this.deletedAt = deletedAt;
   }

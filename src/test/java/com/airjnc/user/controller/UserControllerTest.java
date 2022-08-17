@@ -111,7 +111,7 @@ class UserControllerTest {
     //given
     UserInquiryEmailReq req = UserInquiryEmailReq.builder().name(TestUser.NAME).birthDate(TestUser.BIRTH_DATE).build();
     UserInquiryEmailResp resp = UserInquiryEmailResp.builder()
-        .id(TestUser.ID).email(TestUser.EMAIL).isActive(TestUser.IS_ACTIVE).deletedAt(TestUser.CREATED_AT).build();
+        .id(TestUser.ID).email(TestUser.EMAIL).deletedAt(TestUser.CREATED_AT).build();
     UserResp userResp = UserRespFixture.getBuilder().build();
     given(userService.getUserByWhere(any(UserWhereDto.class))).willReturn(userResp);
     given(userModelMapper.userRespToUserInquiryEmailResp(userResp)).willReturn(resp);

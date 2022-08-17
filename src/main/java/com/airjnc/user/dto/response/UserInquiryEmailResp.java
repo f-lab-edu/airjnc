@@ -11,15 +11,12 @@ public class UserInquiryEmailResp {
 
   private final String email;
 
-  private final Boolean isActive;
-
   private final LocalDateTime deletedAt;
 
   @Builder
-  public UserInquiryEmailResp(Long id, String email, boolean isActive, LocalDateTime deletedAt) {
+  public UserInquiryEmailResp(Long id, String email, LocalDateTime deletedAt) {
     this.id = id;
     this.email = email;
-    this.isActive = isActive;
     this.deletedAt = deletedAt;
   }
 }
