@@ -22,6 +22,7 @@ public class MailCommonService {
   public void sendCode(String email, String userName) {
     String certificationCode = commonUtilService.generateCertificationCode();
     redisDao.store(email, certificationCode, sessionTtlProperties.getCertificationCode());
-    mailProvider.send(email, SendUsingTemplateDto.builder().name(userName).certificationCode(certificationCode).build());
+    mailProvider.send(email,
+        SendUsingTemplateDto.builder().name(userName).certificationCode(certificationCode).build());
   }
 }

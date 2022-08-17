@@ -1,6 +1,7 @@
 package com.airjnc.mail.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import com.testutil.annotation.UnitTest;
 import org.junit.jupiter.api.Test;
 

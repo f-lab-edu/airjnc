@@ -3,7 +3,7 @@ package com.airjnc.user.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
+
 import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.request.UserCreateReq;

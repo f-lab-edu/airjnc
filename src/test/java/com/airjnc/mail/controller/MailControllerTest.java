@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.common.service.StateService;

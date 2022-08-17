@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'checkstyle' // https://checkstyle.sourceforge.io/
 }
 
 group = 'com.example'
@@ -43,4 +44,19 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+checkstyle {
+    toolVersion = "10.3"
+    configFile = file("config/checkstyle/checkstyle.xml")
+    reportsDir = file('report/checkstyle-output')
+    ignoreFailures = false //경고가 날 경우, 빌드 stop
+    maxErrors = 0
+    maxWarnings = 0
+}
+
+tasks.register('installGitHook', Copy) {
+    from(file('scripts/pre-commit'))
+    into(file('.git/hooks'))
+    fileMode 0775
 }

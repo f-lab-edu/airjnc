@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.exception.UnauthorizedException;
 import com.airjnc.common.service.StateService;
@@ -85,7 +86,7 @@ class CheckAuthInterceptorTest {
   }
 
   @Nested
-  class givenMethodHandler {
+  class GivenMethodHandler {
 
     @Test
     void givenHaveCheckAuthAndNotStoreUserIdToStateThenThrowException() throws Exception {

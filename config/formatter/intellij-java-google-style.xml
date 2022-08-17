@@ -49,6 +49,7 @@
       <value>
         <emptyLine/>
         <package name="" static="true" withSubpackages="true"/>
+        <emptyLine/>
         <package name="" static="false" withSubpackages="true"/>
       </value>
     </option>

@@ -3,6 +3,7 @@ package com.airjnc.common.resolver;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+
 import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.testutil.annotation.UnitTest;
 import com.testutil.testdata.TestUser;

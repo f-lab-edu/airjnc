@@ -2,6 +2,7 @@ package com.airjnc.common.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+
 import com.airjnc.common.properties.NcpCredentialProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.UnitTest;

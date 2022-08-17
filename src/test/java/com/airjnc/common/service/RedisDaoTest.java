@@ -1,6 +1,7 @@
 package com.airjnc.common.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import com.airjnc.common.dao.RedisDao;
 import com.testutil.annotation.RedisTest;
 import java.time.Duration;
