@@ -8,7 +8,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.spy;
 
-import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.service.CommonHashService;
 import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.user.dao.UserRepository;
@@ -16,8 +15,8 @@ import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
-import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
+import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
 import com.testutil.annotation.UnitTest;
@@ -148,10 +147,10 @@ class UserServiceTest {
     //when
     userService.updateMyEmail(TestUser.ID, userUpdateMyEmailReq);
     //then
-    then(userRepository).should(times(1)).findById(TestUser.ID, UserStatus.ACTIVE);
-    then(commonValidateService).should(times(1)).verifyCertificationCode(anyString(), eq(userUpdateMyEmailReq.getCode()));
+    then(userRepository).should().findById(TestUser.ID, UserStatus.ACTIVE);
+    then(commonValidateService).should().verifyCertificationCode(anyString(), eq(userUpdateMyEmailReq.getCode()));
     assertThat(userEntity.getEmail()).isEqualTo(userUpdateMyEmailReq.getNewEmail());
-    then(userRepository).should(times(1)).save(userEntity);
-    then(userModelMapper).should(times(1)).userEntityToUserResp(userEntity);
+    then(userRepository).should().save(userEntity);
+    then(userModelMapper).should().userEntityToUserResp(userEntity);
   }
 }
