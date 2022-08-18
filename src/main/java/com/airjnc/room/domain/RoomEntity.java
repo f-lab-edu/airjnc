@@ -23,13 +23,13 @@ public class RoomEntity {
 
   private Integer bathroomCount;
 
-  private Integer limitGuests;
+  private Integer maxGuestCount;
+
+  private Integer roomCount;
 
   private Integer minNumberOfNights;
 
   private Integer maxNumberOfNights;
-
-  private Integer roomCount;
 
   private String checkIn;
 
@@ -37,22 +37,25 @@ public class RoomEntity {
 
   private String address;
 
+  private RoomStatus status;
+
   @Builder
   public RoomEntity(Long id, String title, String description, Integer bedCount, Integer bedroomCount,
-      Integer bathroomCount, Integer limitGuests, Integer minNumberOfNights, Integer maxNumberOfNights,
-      Integer roomCount, String checkIn, String checkOut, String address) {
+      Integer bathroomCount, Integer maxGuestCount, Integer roomCount, Integer minNumberOfNights,
+      Integer maxNumberOfNights, String checkIn, String checkOut, String address, RoomStatus status) {
     this.id = id;
     this.title = title;
     this.description = description;
     this.bedCount = bedCount;
     this.bedroomCount = bedroomCount;
     this.bathroomCount = bathroomCount;
-    this.limitGuests = limitGuests;
+    this.maxGuestCount = maxGuestCount;
+    this.roomCount = roomCount;
     this.minNumberOfNights = minNumberOfNights;
     this.maxNumberOfNights = maxNumberOfNights;
-    this.roomCount = roomCount;
     this.checkIn = checkIn;
     this.checkOut = checkOut;
     this.address = address;
+    this.status = status;
   }
 }
