@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.airjnc.room.dao.RoomMapper">
+  <resultMap id="findByIdMap" type="com.airjnc.room.dto.response.RoomDetailResp">
+    <id column="id" property="id"/>
+    <result column="title" property="title"/>
+    <result column="description" property="description"/>
+    <result column="bed_count" property="bedCount"/>
+    <result column="bedroom_count" property="bedroomCount"/>
+    <result column="bathroom_count" property="bathroomCount"/>
+    <result column="maxGuest_count" property="maxGuestCount"/>
+    <result column="room_count" property="roomCount"/>
+    <result column="min_number_of_nights" property="minNumberOfNights"/>
+    <result column="max_number_of_nights" property="maxNumberOfNights"/>
+    <result column="check_in" property="checkIn"/>
+    <result column="check_out" property="checkOut"/>
+    <result column="address" property="address"/>
+    <result column="status" property="status"/>
+    <collection column="id" property="photoList" resultMap="roomPhotoListMap"/>
+  </resultMap>
+  <resultMap id="roomPhotoListMap" type="String">
+    <result column="url"/>
+  </resultMap>
+
+  <select id="findById" resultMap="findByIdMap">
+    SELECT r.*, rp.url
+    FROM room r
+           LEFT OUTER JOIN room_photo rp on r.id = rp.room_id
+    WHERE r.id = #{id}
+  </select>
 </mapper>
