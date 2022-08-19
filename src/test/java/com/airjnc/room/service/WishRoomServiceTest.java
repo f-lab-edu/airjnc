@@ -4,6 +4,7 @@ import static org.mockito.BDDMockito.then;
 
 import com.airjnc.room.dao.WishRoomRepository;
 import com.testutil.annotation.UnitTest;
+import com.testutil.testdata.TestId;
 import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,5 +34,16 @@ class WishRoomServiceTest {
     //then
     then(wishRoomValidateService).should().shouldBeNotWishRoom(TestUser.ID, roomId);
     then(wishRoomRepository).should().create(TestUser.ID, roomId);
+  }
+
+  @Test
+  void delete() {
+    //given
+    Long wishRoomId = TestId.WISH_ROOM;
+    //when
+    wishRoomService.delete(TestUser.ID, wishRoomId);
+    //then
+    then(wishRoomValidateService).should().shouldBeWishRoom(TestUser.ID, wishRoomId);
+    then(wishRoomRepository).should().delete(wishRoomId);
   }
 }

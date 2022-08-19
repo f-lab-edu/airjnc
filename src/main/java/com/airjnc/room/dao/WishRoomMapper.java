@@ -11,9 +11,9 @@ public interface WishRoomMapper {
 
   int create(@Param("userId") Long userId, @Param("roomId") Long roomId);
 
-  boolean existsByUserIdAndRoomId(@Param("userId") Long userId, @Param("roomId") Long roomId);
-
   int delete(Long id);
+
+  boolean existsByUserIdAndRoomId(@Param("userId") Long userId, @Param("roomId") Long roomId);
 
   Optional<WishRoomDto> findById(Long id);
 }

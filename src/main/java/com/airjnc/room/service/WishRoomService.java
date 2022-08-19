@@ -18,6 +18,7 @@ public class WishRoomService {
   }
 
   public void delete(Long userId, Long id) {
-
+    wishRoomValidateService.shouldBeWishRoom(userId, id);
+    wishRoomRepository.delete(id);
   }
 }
