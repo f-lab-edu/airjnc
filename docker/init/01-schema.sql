@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `user`
     -- DEFAULT -> 일반 유저
     -- HOST -> 호스팅하는 유저
     -- ADMIN -> 관리자
-    `role`       VARCHAR(10)     NOT NULL,
+    `role`       VARCHAR(10)     NOT NULL DEFAULT 'DEFAULT',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `deleted_at` TIMESTAMP,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `room`
     `max_guest_count`      INT UNSIGNED    NOT NULL,           -- 최대 게스트 수
     `min_number_of_nights` INT UNSIGNED    NOT NULL,           -- 최소 숙박 일수
     `max_number_of_nights` INT UNSIGNED    NOT NULL,           -- 최대 숙박 일수
-    `check_in`             TIME            NOT NULL,           -- 체크인 시간
+    `check_in`             VARCHAR(2)      NOT NULL,           -- 체크인 시간
     `check_out`            VARCHAR(2)      NOT NULL,           -- 체크아웃 시간
     `address`              VARCHAR(200),
     -- IN_OPERATION : 영업 중, 게스트가 숙소를 검색하고 예약 요청을 보내거나 예약 가능 날짜를 예약할 수 있습니다. [영업 중]
@@ -114,12 +114,10 @@ CREATE TABLE IF NOT EXISTS `room_reservation_date`
 
 CREATE TABLE IF NOT EXISTS `wish_room`
 (
-    `id`         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `deleted_at` TIMESTAMP, -- Soft Delete
+    `id`      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 
-    `user_id`    BIGINT UNSIGNED NOT NULL,
-    `room_id`    BIGINT UNSIGNED NOT NULL,
+    `user_id` BIGINT UNSIGNED NOT NULL,
+    `room_id` BIGINT UNSIGNED NOT NULL,
 
     PRIMARY KEY (`id`),
     UNIQUE KEY `wish_room-unique` (`user_id`, `room_id`),
