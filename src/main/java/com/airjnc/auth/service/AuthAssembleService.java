@@ -22,7 +22,9 @@ public class AuthAssembleService {
 
   public UserResp logIn(AuthLogInReq req) {
     UserResp userResp = userService.getUserByEmailAndPassword(req.getEmail(), req.getPassword());
-    stateService.create(SessionKey.USER, userResp.getId());
+    if (!userResp.isDeleted()) {
+      stateService.create(SessionKey.USER, userResp.getId());
+    }
     return userResp;
   }
 }
