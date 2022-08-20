@@ -7,6 +7,7 @@ import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
@@ -71,6 +72,14 @@ public class UserService {
     UserEntity userEntity = userRepository.findById(userId, UserStatus.DELETED);
     userEntity.restore();
     userRepository.save(userEntity);
+  }
+
+  public UserResp updateMyEmail(Long userId, UserUpdateMyEmailReq userUpdateMyEmailReq) {
+    UserEntity userEntity = userRepository.findById(userId, UserStatus.ACTIVE);
+    commonValidateService.verifyCertificationCode(userEntity.getEmail(), userUpdateMyEmailReq.getCode());
+    userEntity.setEmail(userUpdateMyEmailReq.getNewEmail());
+    userRepository.save(userEntity);
+    return userModelMapper.userEntityToUserResp(userEntity);
   }
 
   public void updatePassword(UserUpdatePwdReq userUpdatePwdReq) {
