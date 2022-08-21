@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.airjnc.room.dao.RoomMapper;
 import com.airjnc.room.dao.RoomRepository;
-import com.airjnc.room.dto.response.RoomDetailResp;
+import com.airjnc.room.dto.response.Room;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.testdata.TestId;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,8 +27,8 @@ class MybatisRoomRepositoryTest {
   @Test
   void findById() {
     //when
-    RoomDetailResp roomDetailResp = roomRepository.findById(TestId.ROOM[0]);
+    Room room = roomRepository.findById(TestId.ROOM[0]);
     //then
-    assertThat(roomDetailResp.getId()).isEqualTo(TestId.ROOM[0]);
+    assertThat(room.getId()).isEqualTo(TestId.ROOM[0]);
   }
 }

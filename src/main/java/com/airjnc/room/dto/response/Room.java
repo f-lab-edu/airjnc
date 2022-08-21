@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class RoomDetailResp {
+public class Room {
 
   private Long id;
 
@@ -42,7 +42,7 @@ public class RoomDetailResp {
   private List<String> photoList;
 
   @Builder
-  public RoomDetailResp(Long id, String title, String description, Integer bedCount, Integer bedroomCount,
+  public Room(Long id, String title, String description, Integer bedCount, Integer bedroomCount,
       Integer bathroomCount, Integer maxGuestCount, Integer roomCount, Integer minNumberOfNights,
       Integer maxNumberOfNights, String checkIn, String checkOut, String address, RoomStatus status,
       List<String> photoList) {

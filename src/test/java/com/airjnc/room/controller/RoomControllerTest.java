@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.airjnc.common.service.StateService;
 import com.airjnc.room.dao.RoomRepository;
-import com.airjnc.room.dto.response.RoomDetailResp;
+import com.airjnc.room.dto.response.Room;
 import com.airjnc.room.service.RoomQueryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
@@ -42,8 +42,8 @@ class RoomControllerTest {
   void getOne() throws Exception {
     //given
     Long id = 1L;
-    RoomDetailResp roomDetailResp = RoomDetailResp.builder().id(id).build();
-    given(roomRepository.findById(id)).willReturn(roomDetailResp);
+    Room room = Room.builder().id(id).build();
+    given(roomRepository.findById(id)).willReturn(room);
     //when
     ResultActions resultActions = mockMvc.perform(
             get("/rooms/" + id)

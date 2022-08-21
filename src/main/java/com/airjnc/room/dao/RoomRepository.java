@@ -1,8 +1,8 @@
 package com.airjnc.room.dao;
 
-import com.airjnc.room.dto.response.RoomDetailResp;
+import com.airjnc.room.dto.response.Room;
 
 public interface RoomRepository {
 
-  RoomDetailResp findById(Long id);
+  Room findById(Long id);
 }

@@ -1,7 +1,7 @@
 package com.airjnc.room.controller;
 
 import com.airjnc.room.dao.RoomRepository;
-import com.airjnc.room.dto.response.RoomDetailResp;
+import com.airjnc.room.dto.response.Room;
 import com.airjnc.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +19,7 @@ public class RoomController {
   private final RoomRepository roomRepository;
 
   @GetMapping("/{id}")
-  public RoomDetailResp getOne(@PathVariable Long id) {
+  public Room getOne(@PathVariable Long id) {
     return roomRepository.findById(id);
   }
 }
