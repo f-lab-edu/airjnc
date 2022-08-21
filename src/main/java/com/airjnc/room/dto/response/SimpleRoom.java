@@ -10,7 +10,7 @@ public class SimpleRoom {
 
   private String title;
 
-  private Integer price; // 1박당 가격
+  private Integer pricePerNight;
 
   private List<String> thumbnailList;
 }

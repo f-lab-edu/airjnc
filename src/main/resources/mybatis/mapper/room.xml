@@ -4,7 +4,7 @@
   <resultMap id="findAll" type="com.airjnc.room.dto.response.SimpleRoom">
     <id column="id" property="id"/>
     <result column="title" property="title"/>
-    <result column="price" property="price"/>
+    <result column="pricePerNight" property="pricePerNight"/>
     <collection column="id" property="thumbnailList" resultMap="thumbnailMap"/>
   </resultMap>
   <resultMap id="thumbnailMap" type="String">
@@ -12,8 +12,8 @@
   </resultMap>
 
   <select id="findAllByCategory" resultMap="findAll">
-    SELECT r.id, r.title, r.price, rp.url
-    FROM (SELECT id, title, price
+    SELECT r.id, r.title, r.pricePerNight, rp.url
+    FROM (SELECT id, title, pricePerNight
           FROM room
           WHERE room_category_id = #{categoryId}
             AND status = #{roomStatus}

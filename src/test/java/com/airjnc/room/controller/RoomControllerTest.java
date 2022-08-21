@@ -57,7 +57,7 @@ class RoomControllerTest {
     ).andDo(print());
     //then
     resultActions.andExpect(status().isOk())
-        .andExpect(content().json("[{\"id\":null,\"title\":null,\"price\":null,\"thumbnailList\":null}]"));
+        .andExpect(content().json("[{\"id\":null,\"title\":null,\"pricePerNight\":null,\"thumbnailList\":null}]"));
     then(roomService).should().getAll(any(RoomGetAllReq.class), any(Pageable.class));
   }
 }
