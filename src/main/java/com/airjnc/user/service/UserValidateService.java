@@ -30,7 +30,7 @@ public class UserValidateService {
         ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "emailIsDuplicated"));
   }
 
-  public void passwordShouldBeMatch(String plain, String hash) {
+  public void plainAndHashShouldMatch(String plain, String hash) {
     boolean isMatch = commonHashService.isMatch(plain, hash);
     if (isMatch) {
       return;

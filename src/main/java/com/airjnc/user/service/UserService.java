@@ -8,6 +8,7 @@ import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
+import com.airjnc.user.dto.request.UserUpdateMyPasswordReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
@@ -54,7 +55,7 @@ public class UserService {
   public UserResp getUserByEmailAndPassword(String email, String password) {
     UserWhereDto userWhereDto = UserWhereDto.builder().email(email).build();
     UserEntity userEntity = userRepository.findByWhere(userWhereDto);
-    userValidateService.passwordShouldBeMatch(password, userEntity.getPassword());
+    userValidateService.plainAndHashShouldMatch(password, userEntity.getPassword());
     return userModelMapper.userEntityToUserResp(userEntity);
   }
 
@@ -78,6 +79,15 @@ public class UserService {
     UserEntity userEntity = userRepository.findById(userId, UserStatus.ACTIVE);
     commonValidateService.verifyCertificationCode(userEntity.getEmail(), userUpdateMyEmailReq.getCode());
     userEntity.setEmail(userUpdateMyEmailReq.getNewEmail());
+    userRepository.save(userEntity);
+    return userModelMapper.userEntityToUserResp(userEntity);
+  }
+
+  public UserResp updateMyPassword(Long userId, UserUpdateMyPasswordReq userUpdateMyPasswordReq) {
+    UserEntity userEntity = userRepository.findById(userId, UserStatus.ACTIVE);
+    userValidateService.plainAndHashShouldMatch(userUpdateMyPasswordReq.getPassword(), userEntity.getPassword());
+    String newHash = commonHashService.encrypt(userUpdateMyPasswordReq.getNewPassword());
+    userEntity.setPassword(newHash);
     userRepository.save(userEntity);
     return userModelMapper.userEntityToUserResp(userEntity);
   }

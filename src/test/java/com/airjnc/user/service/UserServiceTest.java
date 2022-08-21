@@ -16,6 +16,7 @@ import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
+import com.airjnc.user.dto.request.UserUpdateMyPasswordReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
@@ -98,7 +99,7 @@ class UserServiceTest {
     UserResp result = userService.getUserByEmailAndPassword(email, password);
     //then
     then(userRepository).should().findByWhere(any(UserWhereDto.class));
-    then(userValidateService).should().passwordShouldBeMatch(password, userEntity.getPassword());
+    then(userValidateService).should().plainAndHashShouldMatch(password, userEntity.getPassword());
     then(userModelMapper).should().userEntityToUserResp(userEntity);
     assertThat(result).isSameAs(userResp);
   }
@@ -150,6 +151,25 @@ class UserServiceTest {
     then(userRepository).should().findById(TestUser.ID, UserStatus.ACTIVE);
     then(commonValidateService).should().verifyCertificationCode(anyString(), eq(userUpdateMyEmailReq.getCode()));
     assertThat(userEntity.getEmail()).isEqualTo(userUpdateMyEmailReq.getNewEmail());
+    then(userRepository).should().save(userEntity);
+    then(userModelMapper).should().userEntityToUserResp(userEntity);
+  }
+
+  @Test
+  void updateMyPassword() {
+    //given
+    Long userId = TestUser.ID;
+    UserUpdateMyPasswordReq userUpdateMyPasswordReq = UserUpdateMyPasswordReq.builder()
+        .password(TestUser.PASSWORD).newPassword("newPassword").build();
+    UserEntity userEntity = TestUser.getBuilder().build();
+    given(userRepository.findById(userId, UserStatus.ACTIVE)).willReturn(userEntity);
+    //when
+    userService.updateMyPassword(userId, userUpdateMyPasswordReq);
+    //then
+    then(userRepository).should().findById(userId, UserStatus.ACTIVE);
+    then(userValidateService).should()
+        .plainAndHashShouldMatch(eq(userUpdateMyPasswordReq.getPassword()), anyString());
+    then(commonHashService).should().encrypt(userUpdateMyPasswordReq.getNewPassword());
     then(userRepository).should().save(userEntity);
     then(userModelMapper).should().userEntityToUserResp(userEntity);
   }
