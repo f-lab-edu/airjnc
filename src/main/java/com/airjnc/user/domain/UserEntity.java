@@ -13,7 +13,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString
 public class UserEntity {
 
   private Long id;

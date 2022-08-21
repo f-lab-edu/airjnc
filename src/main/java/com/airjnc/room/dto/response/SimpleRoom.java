@@ -2,10 +2,8 @@ package com.airjnc.room.dto.response;
 
 import java.util.List;
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
 public class SimpleRoom {
 
   private Long id;
