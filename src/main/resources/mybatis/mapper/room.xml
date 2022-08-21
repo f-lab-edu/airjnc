@@ -17,7 +17,13 @@
           FROM room
           WHERE room_category_id = #{categoryId}
             AND status = #{roomStatus}
-          LIMIT #{pageable.skip}, #{pageable.take}) r
+          LIMIT #{skip}, #{offset}) r
            LEFT OUTER JOIN room_photo rp on r.id = rp.room_id
+  </select>
+  <select id="count" resultType="int">
+    SELECT COUNT(*)
+    FROM room
+    WHERE room_category_id = #{categoryId}
+      AND status = #{status}
   </select>
 </mapper>

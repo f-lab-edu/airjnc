@@ -1,14 +1,11 @@
 package com.airjnc.room.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
-import com.airjnc.common.dto.Pageable;
 import com.airjnc.room.dao.RoomRepository;
-import com.airjnc.room.domain.RoomStatus;
+import com.airjnc.room.dto.FindAllByCategoryDto;
 import com.airjnc.room.dto.request.RoomGetAllReq;
 import com.airjnc.room.dto.response.SimpleRoom;
 import com.testutil.annotation.UnitTest;
@@ -19,6 +16,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @UnitTest
 @ExtendWith(MockitoExtension.class)
@@ -33,13 +33,12 @@ class RoomServiceTest {
   @Test
   void getAll() {
     RoomGetAllReq req = RoomGetAllReqFixture.getBuilder().build();
-    Pageable pageable = Pageable.builder().skip(0).take(20).build();
+    Pageable pageable = PageRequest.of(1, 20);
     List<SimpleRoom> list = List.of(new SimpleRoom());
-    given(roomRepository.findAllByCategory(anyLong(), any(RoomStatus.class), any(Pageable.class))).willReturn(list);
+    given(roomRepository.findAllByCategory(any(FindAllByCategoryDto.class))).willReturn(list);
     //when
-    List<SimpleRoom> result = roomService.getAll(req, pageable);
+    Page<SimpleRoom> result = roomService.getAll(req, pageable);
     //then
-    then(roomRepository).should().findAllByCategory(req.getCategoryId(), req.getStatus(), pageable);
-    assertThat(list).isEqualTo(result);
+    then(roomRepository).should().findAllByCategory(any(FindAllByCategoryDto.class));
   }
 }

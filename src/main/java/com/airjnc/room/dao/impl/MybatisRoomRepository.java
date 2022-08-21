@@ -1,9 +1,9 @@
 package com.airjnc.room.dao.impl;
 
-import com.airjnc.common.dto.Pageable;
 import com.airjnc.room.dao.RoomMapper;
 import com.airjnc.room.dao.RoomRepository;
 import com.airjnc.room.domain.RoomStatus;
+import com.airjnc.room.dto.FindAllByCategoryDto;
 import com.airjnc.room.dto.response.SimpleRoom;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,12 @@ public class MybatisRoomRepository implements RoomRepository {
   private final RoomMapper roomMapper;
 
   @Override
-  public List<SimpleRoom> findAllByCategory(Long categoryId, RoomStatus roomStatus, Pageable pageable) {
-    return roomMapper.findAllByCategory(categoryId, roomStatus, pageable);
+  public int count(Long categoryId, RoomStatus status) {
+    return roomMapper.count(categoryId, status);
+  }
+
+  @Override
+  public List<SimpleRoom> findAllByCategory(FindAllByCategoryDto dto) {
+    return roomMapper.findAllByCategory(dto);
   }
 }
