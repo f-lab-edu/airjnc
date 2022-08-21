@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.airjnc.room.dao.RoomMapper">
-  <resultMap id="findAll" type="com.airjnc.room.dto.response.RoomSimpleResp">
+  <resultMap id="findAll" type="com.airjnc.room.dto.response.SimpleRoom">
     <id column="id" property="id"/>
     <result column="title" property="title"/>
     <result column="price" property="price"/>

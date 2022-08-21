@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.airjnc.common.dto.Pageable;
 import com.airjnc.common.service.StateService;
 import com.airjnc.room.dto.request.RoomGetAllReq;
-import com.airjnc.room.dto.response.RoomSimpleResp;
+import com.airjnc.room.dto.response.SimpleRoom;
 import com.airjnc.room.service.RoomService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
@@ -46,7 +46,7 @@ class RoomControllerTest {
     //given
     RoomGetAllReq req = RoomGetAllReqFixture.getBuilder().build();
     given(roomService.getAll(any(RoomGetAllReq.class), any(Pageable.class)))
-        .willReturn(List.of(new RoomSimpleResp()));
+        .willReturn(List.of(new SimpleRoom()));
     //when
     ResultActions resultActions = mockMvc.perform(
         get("/rooms")

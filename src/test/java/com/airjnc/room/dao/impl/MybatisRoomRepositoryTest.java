@@ -4,7 +4,7 @@ import com.airjnc.common.dto.Pageable;
 import com.airjnc.room.dao.RoomMapper;
 import com.airjnc.room.dao.RoomRepository;
 import com.airjnc.room.domain.RoomStatus;
-import com.airjnc.room.dto.response.RoomSimpleResp;
+import com.airjnc.room.dto.response.SimpleRoom;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.testdata.TestId;
 import java.util.List;
@@ -31,7 +31,7 @@ class MybatisRoomRepositoryTest {
     RoomStatus roomStatus = RoomStatus.IN_OPERATION;
     Pageable pageable = Pageable.builder().skip(0).take(20).build();
     //when
-    List<RoomSimpleResp> list = roomRepository.findAllByCategory(TestId.ROOM_CATEGORY[0], roomStatus, pageable);
+    List<SimpleRoom> list = roomRepository.findAllByCategory(TestId.ROOM_CATEGORY[0], roomStatus, pageable);
     //then
   }
 }

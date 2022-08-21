@@ -10,7 +10,7 @@ import com.airjnc.common.dto.Pageable;
 import com.airjnc.room.dao.RoomRepository;
 import com.airjnc.room.domain.RoomStatus;
 import com.airjnc.room.dto.request.RoomGetAllReq;
-import com.airjnc.room.dto.response.RoomSimpleResp;
+import com.airjnc.room.dto.response.SimpleRoom;
 import com.testutil.annotation.UnitTest;
 import com.testutil.fixture.room.RoomGetAllReqFixture;
 import java.util.List;
@@ -34,10 +34,10 @@ class RoomServiceTest {
   void getAll() {
     RoomGetAllReq req = RoomGetAllReqFixture.getBuilder().build();
     Pageable pageable = Pageable.builder().skip(0).take(20).build();
-    List<RoomSimpleResp> list = List.of(new RoomSimpleResp());
+    List<SimpleRoom> list = List.of(new SimpleRoom());
     given(roomRepository.findAllByCategory(anyLong(), any(RoomStatus.class), any(Pageable.class))).willReturn(list);
     //when
-    List<RoomSimpleResp> result = roomService.getAll(req, pageable);
+    List<SimpleRoom> result = roomService.getAll(req, pageable);
     //then
     then(roomRepository).should().findAllByCategory(req.getCategoryId(), req.getStatus(), pageable);
     assertThat(list).isEqualTo(result);

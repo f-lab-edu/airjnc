@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class RoomSimpleResp {
+public class SimpleRoom {
 
   private Long id;
 

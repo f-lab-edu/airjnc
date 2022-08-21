@@ -2,7 +2,7 @@ package com.airjnc.room.controller;
 
 import com.airjnc.common.dto.Pageable;
 import com.airjnc.room.dto.request.RoomGetAllReq;
-import com.airjnc.room.dto.response.RoomSimpleResp;
+import com.airjnc.room.dto.response.SimpleRoom;
 import com.airjnc.room.service.RoomService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class RoomController {
   private final RoomService roomService;
 
   @GetMapping
-  public List<RoomSimpleResp> getAll(@Validated @RequestBody RoomGetAllReq req,
+  public List<SimpleRoom> getAll(@Validated @RequestBody RoomGetAllReq req,
       @Validated @ModelAttribute Pageable pageable) {
     return roomService.getAll(req, pageable);
   }
