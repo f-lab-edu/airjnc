@@ -1,13 +1,17 @@
 package com.airjnc.room.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import com.airjnc.common.service.StateService;
+import com.airjnc.room.dao.RoomRepository;
 import com.airjnc.room.domain.RoomStatus;
 import com.airjnc.room.dto.request.RoomGetAllReq;
+import com.airjnc.room.dto.response.Room;
 import com.airjnc.room.service.RoomService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
@@ -25,6 +29,9 @@ class RoomControllerTest {
 
   @MockBean
   StateService stateService;
+
+  @MockBean
+  RoomRepository roomRepository;
 
   @MockBean
   RoomService roomService;
@@ -48,5 +55,20 @@ class RoomControllerTest {
     ).andDo(print());
     //then
     then(roomService).should().getAll(any(RoomGetAllReq.class), any(Pageable.class));
+  }
+
+  @Test
+  void getOne() throws Exception {
+    //given
+    Long id = 1L;
+    Room room = Room.builder().id(id).build();
+    given(roomRepository.findById(id)).willReturn(room);
+    //when
+    ResultActions resultActions = mockMvc.perform(
+            get("/rooms/" + id)
+        ).andDo(print())
+        .andExpect(jsonPath("id").value(id));
+    //then
+    then(roomRepository).should().findById(id);
   }
 }

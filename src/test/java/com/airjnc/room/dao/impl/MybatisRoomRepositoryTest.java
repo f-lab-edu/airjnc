@@ -6,6 +6,7 @@ import com.airjnc.room.dao.RoomMapper;
 import com.airjnc.room.dao.RoomRepository;
 import com.airjnc.room.domain.RoomStatus;
 import com.airjnc.room.dto.FindAllByCategoryDto;
+import com.airjnc.room.dto.response.Room;
 import com.airjnc.room.dto.response.SimpleRoom;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.testdata.TestId;
@@ -27,7 +28,6 @@ class MybatisRoomRepositoryTest {
     roomRepository = new MybatisRoomRepository(roomMapper);
   }
 
-  @Test
   void count() {
     //when
     int count = roomRepository.count(TestId.ROOM_CATEGORY[0], RoomStatus.IN_OPERATION);
@@ -43,5 +43,13 @@ class MybatisRoomRepositoryTest {
     //when
     List<SimpleRoom> list = roomRepository.findAllByCategory(dto);
     //then
+  }
+
+  @Test
+  void findById() {
+    //when
+    Room room = roomRepository.findById(TestId.ROOM[0]);
+    //then
+    assertThat(room.getId()).isEqualTo(TestId.ROOM[0]);
   }
 }
