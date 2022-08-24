@@ -1,5 +1,6 @@
 package com.airjnc.user.controller;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -15,8 +16,10 @@ import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.UserWhereDto;
+import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserUpdateMyPasswordReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
@@ -108,6 +111,25 @@ class UserControllerTest {
   }
 
   @Test
+  void getMyInfo() throws Exception {
+    //given
+    Long userId = 1L;
+    UserResp userResp = UserRespFixture.getBuilder().id(userId).email(TestUser.EMAIL).build();
+    given(stateService.get(SessionKey.USER)).willReturn(userId);
+    given(userService.getUserById(userId, UserStatus.ACTIVE)).willReturn(userResp);
+    //when
+    mockMvc.perform(
+            get("/users/me")
+        ).andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("id").value(userId))
+        .andExpect(jsonPath("email").value(TestUser.EMAIL));
+    //then
+    then(userService).should().getUserById(userId, UserStatus.ACTIVE);
+    checkInterceptorAndArgumentResolver();
+  }
+
+  @Test
   void inquiryEmail() throws Exception {
     //given
     UserInquiryEmailReq req = UserInquiryEmailReq.builder().name(TestUser.NAME).birthDate(TestUser.BIRTH_DATE).build();
@@ -143,6 +165,31 @@ class UserControllerTest {
         .andExpect(status().isOk());
     //then
     then(userService).should().restore(userId);
+    checkInterceptorAndArgumentResolver();
+  }
+
+  @Test
+  void updateMyPassword() throws Exception {
+    //given
+    Long userId = TestUser.ID;
+    UserUpdateMyPasswordReq userUpdateMyPasswordReq = UserUpdateMyPasswordReq.builder()
+        .password(TestUser.PASSWORD).newPassword("q1w2e3r4t5!@").build();
+    UserResp userResp = UserRespFixture.getBuilder().build();
+    given(stateService.get(SessionKey.USER)).willReturn(userId);
+    given(userService.updateMyPassword(eq(userId), any(UserUpdateMyPasswordReq.class))).willReturn(userResp);
+    //when
+    mockMvc.perform(
+            patch("/users/me")
+                .param("type", "info")
+                .param("what", "password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userUpdateMyPasswordReq))
+        ).andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("id").value(userResp.getId()))
+        .andExpect(jsonPath("email").value(userResp.getEmail()));
+    //then
+    then(userService).should().updateMyPassword(eq(userId), any(UserUpdateMyPasswordReq.class));
     checkInterceptorAndArgumentResolver();
   }
 

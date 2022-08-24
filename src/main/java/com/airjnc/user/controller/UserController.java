@@ -6,6 +6,8 @@ import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
+import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
+import com.airjnc.user.dto.request.UserUpdateMyPasswordReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
 import com.airjnc.user.dto.response.UserResp;
@@ -52,6 +54,12 @@ public class UserController {
     userAssembleService.delete(userId);
   }
 
+  @GetMapping("/me")
+  @CheckAuth
+  public UserResp getMyInfo(@CurrentUserId Long userId) {
+    return userService.getUserById(userId, UserStatus.ACTIVE);
+  }
+
   @GetMapping("/inquiryEmail")
   public UserInquiryEmailResp inquiryEmail(@Validated @ModelAttribute UserInquiryEmailReq req) {
     UserWhereDto userWhereDto = UserWhereDto.builder()
@@ -64,6 +72,20 @@ public class UserController {
   @CheckAuth
   public void restore(@CurrentUserId Long userId) {
     userService.restore(userId);
+  }
+
+  @PatchMapping(value = "me", params = {"type=info", "what=email"})
+  @CheckAuth
+  public UserResp updateMyEmail(@CurrentUserId Long userId,
+      @Validated @RequestBody UserUpdateMyEmailReq userUpdateMyEmailReq) {
+    return userService.updateMyEmail(userId, userUpdateMyEmailReq);
+  }
+
+  @PatchMapping(value = "/me", params = {"type=info", "what=password"})
+  @CheckAuth
+  public UserResp updateMyPassword(@CurrentUserId Long userId,
+      @Validated @RequestBody UserUpdateMyPasswordReq userUpdateMyPasswordReq) {
+    return userService.updateMyPassword(userId, userUpdateMyPasswordReq);
   }
 
   @PatchMapping(params = {"type=info", "what=password"})

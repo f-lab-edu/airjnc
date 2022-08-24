@@ -2,11 +2,12 @@ package com.airjnc.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.spy;
 
-import com.airjnc.common.dao.RedisDao;
 import com.airjnc.common.service.CommonHashService;
 import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.user.dao.UserRepository;
@@ -14,6 +15,8 @@ import com.airjnc.user.domain.UserEntity;
 import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
+import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
+import com.airjnc.user.dto.request.UserUpdateMyPasswordReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.util.UserModelMapper;
@@ -42,9 +45,6 @@ class UserServiceTest {
 
   @Mock
   UserValidateService userValidateService;
-
-  @Mock
-  RedisDao redisDao;
 
   @Mock
   CommonValidateService commonValidateService;
@@ -99,7 +99,7 @@ class UserServiceTest {
     UserResp result = userService.getUserByEmailAndPassword(email, password);
     //then
     then(userRepository).should().findByWhere(any(UserWhereDto.class));
-    then(userValidateService).should().passwordShouldBeMatch(password, userEntity.getPassword());
+    then(userValidateService).should().plainAndHashShouldMatch(password, userEntity.getPassword());
     then(userModelMapper).should().userEntityToUserResp(userEntity);
     assertThat(result).isSameAs(userResp);
   }
@@ -136,5 +136,41 @@ class UserServiceTest {
     then(userRepository).should().findById(userEntity.getId(), deleted);
     assertThat(userEntity.isDeleted()).isFalse();
     then(userRepository).should().save(userEntity);
+  }
+
+  @Test
+  void updateMyEmail() {
+    //given
+    UserUpdateMyEmailReq userUpdateMyEmailReq = UserUpdateMyEmailReq.builder()
+        .newEmail("new@google.com").code("123456").build();
+    UserEntity userEntity = TestUser.getBuilder().build();
+    given(userRepository.findById(TestUser.ID, UserStatus.ACTIVE)).willReturn(userEntity);
+    //when
+    userService.updateMyEmail(TestUser.ID, userUpdateMyEmailReq);
+    //then
+    then(userRepository).should().findById(TestUser.ID, UserStatus.ACTIVE);
+    then(commonValidateService).should().verifyCertificationCode(anyString(), eq(userUpdateMyEmailReq.getCode()));
+    assertThat(userEntity.getEmail()).isEqualTo(userUpdateMyEmailReq.getNewEmail());
+    then(userRepository).should().save(userEntity);
+    then(userModelMapper).should().userEntityToUserResp(userEntity);
+  }
+
+  @Test
+  void updateMyPassword() {
+    //given
+    Long userId = TestUser.ID;
+    UserUpdateMyPasswordReq userUpdateMyPasswordReq = UserUpdateMyPasswordReq.builder()
+        .password(TestUser.PASSWORD).newPassword("newPassword").build();
+    UserEntity userEntity = TestUser.getBuilder().build();
+    given(userRepository.findById(userId, UserStatus.ACTIVE)).willReturn(userEntity);
+    //when
+    userService.updateMyPassword(userId, userUpdateMyPasswordReq);
+    //then
+    then(userRepository).should().findById(userId, UserStatus.ACTIVE);
+    then(userValidateService).should()
+        .plainAndHashShouldMatch(eq(userUpdateMyPasswordReq.getPassword()), anyString());
+    then(commonHashService).should().encrypt(userUpdateMyPasswordReq.getNewPassword());
+    then(userRepository).should().save(userEntity);
+    then(userModelMapper).should().userEntityToUserResp(userEntity);
   }
 }

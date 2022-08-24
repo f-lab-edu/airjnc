@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS `user`
     -- HOST -> 호스팅하는 유저
     -- ADMIN -> 관리자
     `role`       VARCHAR(10)     NOT NULL DEFAULT 'DEFAULT',
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `created_at` TIMESTAMP                DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `deleted_at` TIMESTAMP,
 
     PRIMARY KEY (`id`),
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `room`
     `id`                   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `title`                VARCHAR(50)     NOT NULL,
     `description`          TEXT            NOT NULL,
-    `price`                INT UNSIGNED    NOT NULL,
+    `pricePerNight`        INT UNSIGNED    NOT NULL,
     `bed_count`            INT UNSIGNED    NOT NULL,           -- 침대 수
     `bedroom_count`        INT UNSIGNED    NOT NULL,           -- 침실 수
     `bathroom_count`       INT UNSIGNED    NOT NULL,           -- 욕실 수

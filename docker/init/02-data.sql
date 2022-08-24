@@ -10,13 +10,15 @@ VALUES (1, 'TEST_CATEGORY-1', TRUE);
 INSERT INTO room_category
 VALUES (2, 'TEST_CATEGORY-2', FALSE);
 # Room
-INSERT INTO room (id, title, description, price, bed_count, bedroom_count, bathroom_count, room_count, max_guest_count,
+INSERT INTO room (id, title, description, pricePerNight, bed_count, bedroom_count, bathroom_count, room_count,
+                  max_guest_count,
                   min_number_of_nights, max_number_of_nights, check_in, check_out, address, status, created_at,
                   updated_at, deleted_at, host_id, room_category_id)
 VALUES (1, 'title', 'description',
         1000, 1, 2, 3, 4, 5, 2, 4, 12, 14,
         'address', 'IN_OPERATION', NOW(), NOW(), NULL, 1, 1);
-INSERT INTO room (id, title, description, price, bed_count, bedroom_count, bathroom_count, room_count, max_guest_count,
+INSERT INTO room (id, title, description, pricePerNight, bed_count, bedroom_count, bathroom_count, room_count,
+                  max_guest_count,
                   min_number_of_nights, max_number_of_nights, check_in, check_out, address, status, created_at,
                   updated_at, deleted_at, host_id, room_category_id)
 VALUES (2, 'title', 'description',
