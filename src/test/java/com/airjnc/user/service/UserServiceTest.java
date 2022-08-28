@@ -212,17 +212,21 @@ class UserServiceTest {
     }
 
     @Test
-    void whenFieldOfReqNullThenFieldOfUserEntityIsUpdated() {
+    void whenFieldOfReqIsNullThenFieldOfUserEntityDoNotUpdated() {
       //given
       UserUpdateMyInfoReq req = UserUpdateMyInfoReq.builder().build();
+      String name = userEntity.getName();
+      Gender gender = userEntity.getGender();
+      String address = userEntity.getAddress();
+      LocalDate birthDate = userEntity.getBirthDate();
       //when
       userService.update(userEntity.getId(), req);
       //then
       commonCheck();
-      assertThat(userEntity.getName()).isEqualTo(userEntity.getName());
-      assertThat(userEntity.getGender()).isEqualTo(userEntity.getGender());
-      assertThat(userEntity.getAddress()).isEqualTo(userEntity.getAddress());
-      assertThat(userEntity.getBirthDate()).isEqualTo(userEntity.getBirthDate());
+      assertThat(name).isEqualTo(userEntity.getName());
+      assertThat(gender).isEqualTo(userEntity.getGender());
+      assertThat(address).isEqualTo(userEntity.getAddress());
+      assertThat(birthDate).isEqualTo(userEntity.getBirthDate());
     }
   }
 }
