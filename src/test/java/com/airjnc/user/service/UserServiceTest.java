@@ -57,7 +57,6 @@ class UserServiceTest {
   @InjectMocks
   UserService userService;
 
-
   @Test()
   void create() {
     //given
