@@ -6,4 +6,5 @@ public enum ErrorCode {
   DUPLICATED,
   NOT_FOUND,
   UNAUTHORIZED,
+  FORBIDDEN
 }
