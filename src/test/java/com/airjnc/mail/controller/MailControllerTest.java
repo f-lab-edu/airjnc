@@ -13,6 +13,7 @@ import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.mail.dto.request.MailSendCertificationCodeToEmailReq;
 import com.airjnc.mail.service.MailService;
+import com.airjnc.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +44,9 @@ class MailControllerTest {
 
   @SpyBean
   CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
+
+  @MockBean
+  UserService userService;
 
   @MockBean
   StateService stateService;

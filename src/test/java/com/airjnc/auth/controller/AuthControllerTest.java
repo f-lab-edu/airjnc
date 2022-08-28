@@ -16,6 +16,7 @@ import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.airjnc.common.service.StateService;
 import com.airjnc.common.util.enumerate.SessionKey;
 import com.airjnc.user.dto.response.UserResp;
+import com.airjnc.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
 import com.testutil.fixture.user.UserRespFixture;
@@ -48,6 +49,9 @@ class AuthControllerTest {
 
   @SpyBean
   CheckAuthInterceptor checkAuthInterceptor;
+
+  @MockBean
+  UserService userService;
 
   private void checkInterceptor(int n) throws Exception {
     then(checkAuthInterceptor).should()
