@@ -33,6 +33,14 @@ class MybatisWishRoomRepositoryTest {
   }
 
   @Test
+  public void count() {
+    //when
+    int count = wishRoomRepository.count(TestId.USER);
+    //then
+    assertThat(count).isEqualTo(1);
+  }
+
+  @Test
   @Transactional
   void create() {
     //given

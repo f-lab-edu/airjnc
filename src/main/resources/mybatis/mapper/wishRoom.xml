@@ -8,4 +8,10 @@
     INSERT INTO wish_room (user_id, room_id)
     VALUES (#{userId}, #{roomId})
   </insert>
+  <select id="count" resultType="int">
+    SELECT count(wr.id)
+    FROM wish_room wr
+        INNER JOIN room r on wr.room_id = r.id AND r.status = 'IN_OPERATION'
+    WHERE user_id = #{userId}
+  </select>
 </mapper>

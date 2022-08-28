@@ -15,6 +15,11 @@ public class MybatisWishRoomRepository implements WishRoomRepository {
   private final CommonValidateService commonValidateService;
 
   @Override
+  public int count(Long userId) {
+    return wishRoomMapper.count(userId);
+  }
+
+  @Override
   public void create(Long userId, Long roomId) {
     int affect = wishRoomMapper.create(userId, roomId);
     commonValidateService.shouldBeMatch(affect, 1);
