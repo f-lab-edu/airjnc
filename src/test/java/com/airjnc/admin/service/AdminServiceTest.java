@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.then;
 import com.airjnc.admin.dao.AdminRepository;
 import com.airjnc.admin.dto.request.UpdateRoomReq;
 import com.airjnc.room.dao.RoomRepository;
+import com.airjnc.room.domain.RoomStatus;
 import com.airjnc.room.dto.response.Room;
 import com.testutil.annotation.UnitTest;
 import com.testutil.testdata.TestId;
@@ -31,7 +32,7 @@ class AdminServiceTest {
   public void updateRoom() {
     //given
     Long id = TestId.ROOM[0];
-    UpdateRoomReq req = new UpdateRoomReq();
+    UpdateRoomReq req = UpdateRoomReq.builder().status(RoomStatus.DISABLED).build();
     //when
     Room room = adminService.updateRoom(id, req);
     //then
