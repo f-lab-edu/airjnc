@@ -35,7 +35,7 @@ class WishRoomControllerTest {
     long roomId = 1L;
     //when
     mockMvc.perform(
-            post("/wishRoom/" + roomId)
+            post("/wishRooms/" + roomId)
         ).andDo(print())
         .andExpect(status().isCreated());
     //then
