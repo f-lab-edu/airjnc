@@ -1,6 +1,7 @@
 package com.airjnc.user.dto.response;
 
 import com.airjnc.user.domain.Gender;
+import com.airjnc.user.domain.UserRole;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -23,9 +24,11 @@ public class UserResp {
 
   private final LocalDateTime deletedAt;
 
+  private final UserRole role;
+
   @Builder
   public UserResp(Long id, String email, String name, Gender gender, String address,
-      LocalDate birthDate, LocalDateTime deletedAt) {
+      LocalDate birthDate, LocalDateTime deletedAt, UserRole role) {
     this.id = id;
     this.email = email;
     this.name = name;
@@ -33,6 +36,7 @@ public class UserResp {
     this.address = address;
     this.birthDate = birthDate;
     this.deletedAt = deletedAt;
+    this.role = role;
   }
 
   public boolean isDeleted() {
