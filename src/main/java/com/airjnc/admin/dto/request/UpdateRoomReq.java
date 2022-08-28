@@ -2,6 +2,7 @@ package com.airjnc.admin.dto.request;
 
 import com.airjnc.room.domain.RoomStatus;
 import javax.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
