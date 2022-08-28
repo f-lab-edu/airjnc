@@ -41,6 +41,12 @@
           LIMIT #{skip}, #{offset}) r
            LEFT OUTER JOIN room_photo rp on r.id = rp.room_id
   </select>
+  <select id="findAllByUserId" resultMap="findAll">
+    SELECT r.id, r.title, r.pricePerNight, rp.url
+    FROM (SELECT room_id FROM wish_room WHERE user_id = #{userId} LIMIT #{skip}, #{offset}) wr
+           INNER JOIN room r ON wr.room_id = r.id AND r.status = 'IN_OPERATION'
+           LEFT OUTER JOIN room_photo rp on r.id = rp.room_id;
+  </select>
   <select id="findById" resultMap="findByIdMap">
     SELECT r.*, rp.url
     FROM room r
