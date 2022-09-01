@@ -24,10 +24,9 @@ public class MybatisHostRepository implements HostRepository {
     }
 
     @Override
-    public HostEntity selectHostByUserId(Long userId) {
+    public Optional<HostEntity> selectHostByUserId(Long userId) {
         Optional<HostEntity> hostEntity = hostDAO.selectHostByUserId(userId);
-        hostEntity.orElseThrow(NotFoundException::new);
-        return hostEntity.get();
+        return hostEntity;
     }
 
     @Override

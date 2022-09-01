@@ -40,7 +40,7 @@ class MybatisHostRepositoryTest {
         Long hostId = hostRepository.insertHost(hostEntity);
         //then
         Assertions.assertThat(hostEntity.getId())
-                .isEqualTo(hostRepository.selectHostByUserId(hostEntity.getUserId())
+                .isEqualTo(hostRepository.selectHostByUserId(hostEntity.getUserId()).get()
                         .getId());
     }
 

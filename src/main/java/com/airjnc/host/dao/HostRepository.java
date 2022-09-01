@@ -2,11 +2,13 @@ package com.airjnc.host.dao;
 
 import com.airjnc.host.domain.HostEntity;
 
+import java.util.Optional;
+
 public interface HostRepository {
 
     Long insertHost(HostEntity hostEntity);
 
-    HostEntity selectHostByUserId(Long userId);
+    Optional<HostEntity> selectHostByUserId(Long userId);
 
     HostEntity selectHostAndRoomByHostId(Long hostId);
 
