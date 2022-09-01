@@ -8,9 +8,32 @@
     </insert>
 
     <select id="selectHostByUserId" parameterType="Long" resultType="HostEntity">
-        SELECT id, photo_url, description
+        SELECT id, photo_url, description, user_id
         FROM host
         WHERE user_id = #{userId}
     </select>
+
+    <select id="selectHostAndRoomByHostId" parameterType="Long" resultMap="hostAndRoomResultMap">
+        SELECT H.id as host_id,
+               H.photo_url,
+               H.description as host_description,
+               H.user_id,
+               R.id as room_id,
+               R.title
+        FROM host H
+        LEFT JOIN room R
+        on H.id = R.host_id
+        WHERE H.id = #{hostId}
+    </select>
+
+    <resultMap id="hostAndRoomResultMap" type="HostEntity">
+        <id property="id" column="host_id"/>
+        <result property="description" column="host_description"/>
+        <result property="userId" column="user_id"/>
+        <collection property="roomList" ofType="RoomEntity">
+            <id property="id" column="room_id"/>
+            <result property="description" column="room_description"/>
+        </collection>
+    </resultMap>
 
 </mapper>

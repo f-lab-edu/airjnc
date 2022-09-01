@@ -20,7 +20,6 @@ public class MybatisHostRepository implements HostRepository {
     public Long insertHost(HostEntity hostEntity) {
         System.out.println(hostEntity.toString());
         Long hostId = hostDAO.insertHost(hostEntity);
-        System.out.println(hostId);
         return hostId;
     }
 
@@ -31,5 +30,9 @@ public class MybatisHostRepository implements HostRepository {
         return hostEntity.get();
     }
 
-
+    @Override
+    public HostEntity selectHostAndRoomByHostId(Long hostId) {
+        HostEntity hostEntity = hostDAO.selectHostAndRoomByHostId(hostId);
+        return hostEntity;
+    }
 }

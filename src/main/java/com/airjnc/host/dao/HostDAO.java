@@ -11,4 +11,7 @@ public interface HostDAO {
 
     Optional<HostEntity> selectHostByUserId(Long userId);
 
+    HostEntity selectHostAndRoomByHostId(Long hostId);
+
+
 }

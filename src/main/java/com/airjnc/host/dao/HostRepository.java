@@ -7,4 +7,7 @@ public interface HostRepository {
     Long insertHost(HostEntity hostEntity);
 
     HostEntity selectHostByUserId(Long userId);
+
+    HostEntity selectHostAndRoomByHostId(Long hostId);
+
 }
