@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.airjnc.room.dao.WishRoomMapper">
+  <select id="existsByUserIdAndRoomId" resultType="boolean">
+    SELECT EXISTS(SELECT 1 FROM wish_room WHERE user_id = #{userId} AND room_id = #{roomId})
+  </select>
+  <insert id="create">
+    INSERT INTO wish_room (user_id, room_id)
+    VALUES (#{userId}, #{roomId})
+  </insert>
+</mapper>
