@@ -8,6 +8,7 @@ import com.airjnc.user.dto.UserWhereDto;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
+import com.airjnc.user.dto.request.UserUpdateMyInfoReq;
 import com.airjnc.user.dto.request.UserUpdateMyPasswordReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserResp;
@@ -73,6 +74,13 @@ public class UserService {
     UserEntity userEntity = userRepository.findById(userId, UserStatus.DELETED);
     userEntity.restore();
     userRepository.save(userEntity);
+  }
+
+  public UserResp update(Long userId, UserUpdateMyInfoReq req) {
+    UserEntity userEntity = userRepository.findById(userId, UserStatus.ACTIVE);
+    userEntity.update(req);
+    userRepository.save(userEntity);
+    return userModelMapper.userEntityToUserResp(userEntity);
   }
 
   public UserResp updateMyEmail(Long userId, UserUpdateMyEmailReq userUpdateMyEmailReq) {

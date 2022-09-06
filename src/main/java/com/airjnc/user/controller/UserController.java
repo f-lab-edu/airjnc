@@ -7,6 +7,7 @@ import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.request.UserCreateReq;
 import com.airjnc.user.dto.request.UserInquiryEmailReq;
 import com.airjnc.user.dto.request.UserUpdateMyEmailReq;
+import com.airjnc.user.dto.request.UserUpdateMyInfoReq;
 import com.airjnc.user.dto.request.UserUpdateMyPasswordReq;
 import com.airjnc.user.dto.request.UserUpdatePwdReq;
 import com.airjnc.user.dto.response.UserInquiryEmailResp;
@@ -79,6 +80,12 @@ public class UserController {
   public UserResp updateMyEmail(@CurrentUserId Long userId,
       @Validated @RequestBody UserUpdateMyEmailReq userUpdateMyEmailReq) {
     return userService.updateMyEmail(userId, userUpdateMyEmailReq);
+  }
+
+  @PatchMapping(value = "/me", params = {"type=info"})
+  @CheckAuth
+  public UserResp updateMyInfo(@CurrentUserId Long userId, UserUpdateMyInfoReq req) {
+    return userService.update(userId, req);
   }
 
   @PatchMapping(value = "/me", params = {"type=info", "what=password"})
