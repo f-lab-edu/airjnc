@@ -30,7 +30,7 @@
     SELECT EXISTS(SELECT 1 FROM user<include refid="where"/>)
   </select>
   <select id="findById" resultType="UserEntity">
-    SELECT id, email, name, gender, address, birthdate, created_at, updated_at, deleted_at
+    SELECT id, email, name, gender, address, birthdate, created_at, updated_at, deleted_at, role
     FROM user
     WHERE id = #{id}
     <include refid="checkStatus"/>

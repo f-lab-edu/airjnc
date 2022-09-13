@@ -1,5 +1,6 @@
 package com.airjnc.common.annotation;
 
+import com.airjnc.user.domain.UserRole;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -9,4 +10,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 public @interface CheckAuth {
 
+  UserRole role() default UserRole.DEFAULT;
 }

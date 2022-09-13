@@ -13,6 +13,7 @@ import com.airjnc.room.domain.RoomStatus;
 import com.airjnc.room.dto.request.RoomGetAllReq;
 import com.airjnc.room.dto.response.Room;
 import com.airjnc.room.service.RoomService;
+import com.airjnc.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.IntegrationTest;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,9 @@ class RoomControllerTest {
 
   @Autowired
   ObjectMapper objectMapper;
+
+  @MockBean
+  UserService userService;
 
   @Test
   void getAll() throws Exception {

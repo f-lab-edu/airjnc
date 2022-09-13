@@ -31,9 +31,11 @@ public class UserEntity {
 
   private LocalDateTime deletedAt;
 
+  private UserRole role;
+
   @Builder
   public UserEntity(Long id, String email, String password, String name, Gender gender,
-      String address, LocalDate birthDate, LocalDateTime deletedAt) {
+      String address, LocalDate birthDate, LocalDateTime deletedAt, UserRole role) {
     this.id = id;
     this.email = email;
     this.password = password;
@@ -42,6 +44,7 @@ public class UserEntity {
     this.address = address;
     this.birthDate = birthDate;
     this.deletedAt = deletedAt;
+    this.role = role;
   }
 
   public void delete() {

@@ -4,6 +4,7 @@ import com.airjnc.common.dto.response.ExceptionResp;
 import com.airjnc.common.exception.BadRequestException;
 import com.airjnc.common.exception.DefaultException;
 import com.airjnc.common.exception.DuplicatedException;
+import com.airjnc.common.exception.ForbiddenException;
 import com.airjnc.common.exception.NotFoundException;
 import com.airjnc.common.exception.UnauthorizedException;
 import com.airjnc.common.util.factory.ExceptionRespFactory;
@@ -56,6 +57,13 @@ public class ExceptionController {
   public ExceptionResp handleException(Exception ex) {
     log.error("[INTERNAL_SERVER_ERROR]", ex);
     return ExceptionRespFactory.create(ex);
+  }
+
+  // 403 - Forbidden
+  @ExceptionHandler(ForbiddenException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  public ExceptionResp handleForbiddenException(ForbiddenException ex) {
+    return ExceptionRespFactory.create(ex, messageSource);
   }
 
   // 404 - NOT FOUND
