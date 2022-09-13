@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/wishRoom")
+@RequestMapping("/wishRooms")
 @RequiredArgsConstructor
 public class WishRoomController {
 
@@ -26,10 +26,10 @@ public class WishRoomController {
     wishRoomService.create(userId, roomId);
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/{wishRoomId}")
   @CheckAuth
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@CurrentUserId Long userId, @PathVariable Long id) {
-    wishRoomService.delete(userId, id);
+  public void delete(@CurrentUserId Long userId, @PathVariable Long wishRoomId) {
+    wishRoomService.delete(userId, wishRoomId);
   }
 }

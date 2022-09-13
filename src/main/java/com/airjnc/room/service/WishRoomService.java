@@ -17,8 +17,8 @@ public class WishRoomService {
     wishRoomRepository.create(userId, roomId);
   }
 
-  public void delete(Long userId, Long id) {
-    wishRoomValidateService.shouldBeWishRoom(userId, id);
-    wishRoomRepository.delete(id);
+  public void delete(Long userId, Long wishRoomId) {
+    wishRoomValidateService.shouldBeWishRoom(userId, wishRoomId);
+    wishRoomRepository.delete(wishRoomId);
   }
 }

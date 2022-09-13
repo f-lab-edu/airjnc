@@ -33,4 +33,6 @@ public class RoomController {
   public Room getOne(@PathVariable Long id) {
     return roomRepository.findById(id);
   }
+
+
 }

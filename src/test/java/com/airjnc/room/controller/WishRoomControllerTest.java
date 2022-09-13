@@ -7,14 +7,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.airjnc.common.interceptor.CheckAuthInterceptor;
+import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.common.service.StateService;
 import com.airjnc.room.service.WishRoomService;
+import com.airjnc.user.service.UserService;
 import com.testutil.annotation.IntegrationTest;
 import com.testutil.testdata.TestId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -28,6 +32,15 @@ class WishRoomControllerTest {
   @MockBean
   WishRoomService wishRoomService;
 
+  @SpyBean
+  CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
+
+  @SpyBean
+  CheckAuthInterceptor checkAuthInterceptor;
+
+  @MockBean
+  UserService userService;
+
   @Autowired
   MockMvc mockMvc;
 
@@ -37,7 +50,7 @@ class WishRoomControllerTest {
     long roomId = 1L;
     //when
     mockMvc.perform(
-            post("/wishRoom/" + roomId)
+            post("/wishRooms/" + roomId)
         ).andDo(print())
         .andExpect(status().isCreated());
     //then
@@ -50,7 +63,7 @@ class WishRoomControllerTest {
     long wishRoomId = TestId.WISH_ROOM;
     //when
     mockMvc.perform(
-            MockMvcRequestBuilders.delete("/wishRoom/" + wishRoomId)
+            MockMvcRequestBuilders.delete("/wishRooms/" + wishRoomId)
         ).andDo(print())
         .andExpect(status().isNoContent());
     //then
