@@ -6,9 +6,9 @@ INSERT INTO host (id, photo_url, description, user_id)
 VALUES (1, 'photo', 'description', 1);
 # Category
 INSERT INTO room_category
-VALUES (1, 'TEST_CATEGORY-1', TRUE);
+VALUES (1, 'TEST_CATEGORY-1');
 INSERT INTO room_category
-VALUES (2, 'TEST_CATEGORY-2', FALSE);
+VALUES (2, 'TEST_CATEGORY-2');
 # Room
 INSERT INTO room (id, title, description, pricePerNight, bed_count, bedroom_count, bathroom_count, room_count,
                   max_guest_count,
