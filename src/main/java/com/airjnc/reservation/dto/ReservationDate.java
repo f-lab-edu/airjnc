@@ -1,4 +1,4 @@
-package com.airjnc.reservation.dto.response;
+package com.airjnc.reservation.dto;
 
 import java.time.LocalDate;
 import lombok.Getter;

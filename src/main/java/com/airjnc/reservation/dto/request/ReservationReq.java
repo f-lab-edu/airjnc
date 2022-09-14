@@ -2,8 +2,12 @@ package com.airjnc.reservation.dto.request;
 
 
 import com.airjnc.common.annotation.TwoFieldDate;
+import com.airjnc.reservation.domain.ReservationDateEntity;
+import com.airjnc.reservation.domain.ReservationEntity;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,7 +38,26 @@ public class ReservationReq {
     this.guestCount = guestCount;
   }
 
-  public List<LocalDate> dateToList() {
-    return List.of(startDate, endDate);
+  public List<ReservationDateEntity> toReservationEntityList(Long roomId, Long roomReservationId) {
+    return Stream.of(getStartDate(), getEndDate())
+        .map(
+            date -> ReservationDateEntity.builder()
+                .date(date)
+                .isCanceled(false)
+                .roomId(roomId)
+                .roomReservationId(roomReservationId)
+                .build()
+        ).collect(Collectors.toList());
+  }
+
+  public ReservationEntity toReservationEntity(Long userId, Long roomId, Integer pricePerNight) {
+    return ReservationEntity.builder()
+        .userCount(getGuestCount())
+        .startDate(getStartDate())
+        .endDate(getEndDate())
+        .pricePerNight(pricePerNight)
+        .userId(userId)
+        .roomId(roomId)
+        .build();
   }
 }

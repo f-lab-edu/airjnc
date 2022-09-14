@@ -1,6 +1,7 @@
 package com.airjnc.reservation.domain;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,12 +28,12 @@ public class ReservationEntity {
   private Long roomId;
 
   @Builder
-  public ReservationEntity(Integer userCount, LocalDate startDate, LocalDate endDate, Integer totalPrice,
+  public ReservationEntity(Integer userCount, LocalDate startDate, LocalDate endDate, Integer pricePerNight,
       Long userId, Long roomId) {
     this.userCount = userCount;
     this.startDate = startDate;
     this.endDate = endDate;
-    this.totalPrice = totalPrice;
+    this.totalPrice = Math.toIntExact(ChronoUnit.DAYS.between(startDate, endDate) * pricePerNight);
     this.userId = userId;
     this.roomId = roomId;
   }
