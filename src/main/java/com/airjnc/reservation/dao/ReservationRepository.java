@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ReservationRepository {
 
-  List<ReservationDate> findAllByDate(Long roomId, LocalDate startDate, LocalDate endDate);
+  List<ReservationDate> findAllByDateWithLock(Long roomId, LocalDate startDate, LocalDate endDate);
 
   void createReservation(ReservationEntity reservation);
 

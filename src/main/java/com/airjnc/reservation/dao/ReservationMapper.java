@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface ReservationMapper {
 
-  List<ReservationDate> findAllByDate(@Param("roomId") Long roomId, @Param("startDate") LocalDate startDate,
+  List<ReservationDate> findAllByDateWithLock(@Param("roomId") Long roomId, @Param("startDate") LocalDate startDate,
       @Param("endDate") LocalDate endDate);
 
   int createReservation(ReservationEntity reservation);

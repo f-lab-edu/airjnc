@@ -38,7 +38,7 @@ public class ReservationValidateService {
   }
 
   public void roomCountShouldNotBeExceed(Room room, LocalDate startDate, LocalDate endDate) {
-    List<ReservationDate> allByDate = reservationRepository.findAllByDate(room.getId(), startDate, endDate);
+    List<ReservationDate> allByDate = reservationRepository.findAllByDateWithLock(room.getId(), startDate, endDate);
     for (ReservationDate reservationDate : allByDate) {
       if (reservationDate.getCount() + 1 > room.getRoomCount()) {
         throw new OverRoomCountException(

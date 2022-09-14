@@ -37,7 +37,7 @@ class MybatisReservationRepositoryTest {
   @Test
   void findAllByDate() {
     Long roomId = 1L;
-    List<ReservationDate> allByDate = reservationRepository.findAllByDate(roomId, LocalDate.parse("2022-01-01"),
+    List<ReservationDate> allByDate = reservationRepository.findAllByDateWithLock(roomId, LocalDate.parse("2022-01-01"),
         LocalDate.parse("2022-01-02"));
 
     assertThat(allByDate.size()).isEqualTo(2);

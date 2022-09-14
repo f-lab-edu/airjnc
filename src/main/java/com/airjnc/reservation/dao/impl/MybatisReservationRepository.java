@@ -21,8 +21,8 @@ public class MybatisReservationRepository implements ReservationRepository {
 
 
   @Override
-  public List<ReservationDate> findAllByDate(Long roomId, LocalDate startDate, LocalDate endDate) {
-    return reservationMapper.findAllByDate(roomId, startDate, endDate);
+  public List<ReservationDate> findAllByDateWithLock(Long roomId, LocalDate startDate, LocalDate endDate) {
+    return reservationMapper.findAllByDateWithLock(roomId, startDate, endDate);
   }
 
   @Override
