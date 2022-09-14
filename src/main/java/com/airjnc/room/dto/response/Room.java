@@ -17,6 +17,8 @@ public class Room {
 
   private String description;
 
+  private Integer pricePerNight;
+
   private Integer bedCount;
 
   private Integer bedroomCount;
