@@ -28,8 +28,8 @@ public class MybatisReservationRepository implements ReservationRepository {
   }
 
   @Override
-  public void cacnelDate(Long reservationId) {
-    int affect = reservationMapper.cacnelDate(reservationId);
-    commonValidateService.shouldBeMatch(affect, 1);
+  public void cancelDate(Long reservationId) {
+    int affect = reservationMapper.cancelDate(reservationId);
+    commonValidateService.shouldNotBeMatch(affect, 0); // 0만 아니면 됨
   }
 }

@@ -8,5 +8,5 @@ public interface ReservationRepository {
 
   void cancel(Long reservationId);
 
-  void cacnelDate(Long reservationId);
+  void cancelDate(Long reservationId);
 }

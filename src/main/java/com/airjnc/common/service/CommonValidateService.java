@@ -39,6 +39,16 @@ public class CommonValidateService {
     );
   }
 
+  public void shouldNotBeMatch(int actual, int expected) {
+    if (actual != expected) {
+      return;
+    }
+    throw new DefaultException(
+        ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "shouldNotBeMatch",
+            new Object[]{actual, expected})
+    );
+  }
+
   public void verifyCertificationCode(String key, String code) {
     String codeFromRedis = redisDao.get(key);
     shouldBeMatch(code, codeFromRedis);

@@ -11,5 +11,5 @@ public interface ReservationMapper {
 
   int cancel(Long reservationId);
 
-  int cacnelDate(Long reservationId);
+  int cancelDate(Long reservationId);
 }

@@ -20,6 +20,6 @@ public class ReservationService {
     reservationValidateService.shouldBeIsMine(reservation, userId);
     reservationValidateService.nowShouldBeBeforeStartDate(reservation);
     reservationRepository.cancel(reservationId);
-    reservationRepository.cacnelDate(reservationId);
+    reservationRepository.cancelDate(reservationId);
   }
 }
