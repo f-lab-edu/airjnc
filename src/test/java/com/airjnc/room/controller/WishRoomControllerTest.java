@@ -7,13 +7,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.airjnc.common.interceptor.CheckAuthInterceptor;
+import com.airjnc.common.resolver.CurrentUserIdArgumentResolver;
 import com.airjnc.common.service.StateService;
 import com.airjnc.room.service.WishRoomService;
+import com.airjnc.user.service.UserService;
 import com.testutil.annotation.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(WishRoomController.class)
@@ -25,6 +29,15 @@ class WishRoomControllerTest {
 
   @MockBean
   WishRoomService wishRoomService;
+
+  @SpyBean
+  CurrentUserIdArgumentResolver currentUserIdArgumentResolver;
+
+  @SpyBean
+  CheckAuthInterceptor checkAuthInterceptor;
+
+  @MockBean
+  UserService userService;
 
   @Autowired
   MockMvc mockMvc;
