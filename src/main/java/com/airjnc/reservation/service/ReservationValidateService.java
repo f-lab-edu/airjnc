@@ -8,6 +8,7 @@ import com.airjnc.reservation.exception.OverRoomCountException;
 import com.airjnc.reservation.exception.ReservationBetweenException;
 import com.airjnc.room.dto.response.Room;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,9 @@ public class ReservationValidateService {
 
   private final ReservationRepository reservationRepository;
 
-  public void checkReservationBetween(int minNumberOfNights, int maxNumberOfNights, long between) {
+  public void checkReservationBetween(int minNumberOfNights, int maxNumberOfNights, LocalDate startDate,
+      LocalDate endDate) {
+    long between = ChronoUnit.DAYS.between(startDate, endDate);
     if (between >= minNumberOfNights && between <= maxNumberOfNights) {
       return;
     }
