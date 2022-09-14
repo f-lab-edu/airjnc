@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.airjnc.reservation.dao.ReservationMapper">
+  <select id="findAllByDate">
+    select date, count(*)
+    from room_reservation_date
+    where room_id = #{roomId}
+      AND is_canceled IS FALSE
+      AND date >= #{dates[0]}
+      AND date &lt; #{dates[1]}
+      for
+    update;
+  </select>
+</mapper>
