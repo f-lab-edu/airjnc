@@ -18,7 +18,6 @@ public class RoomService {
   private final RoomRepository roomRepository;
 
   public Page<SimpleRoom> getAll(RoomGetAllReq req, Pageable pageable) {
-    System.out.println(roomRepository);
     FindAllByCategoryDto findAllByCategoryDto = FindAllByCategoryDto.builder()
         .categoryId(req.getCategoryId())
         .roomStatus(req.getStatus())

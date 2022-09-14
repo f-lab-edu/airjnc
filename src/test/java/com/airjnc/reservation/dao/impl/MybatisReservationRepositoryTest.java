@@ -6,7 +6,9 @@ import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.reservation.dao.ReservationMapper;
 import com.airjnc.reservation.dao.ReservationRepository;
 import com.airjnc.reservation.domain.ReservationEntity;
+import com.airjnc.reservation.dto.response.Reservation;
 import com.testutil.annotation.MybatisTest;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -49,5 +51,23 @@ class MybatisReservationRepositoryTest {
   void cancelDate() {
     Long reservaionId = 1L;
     reservationRepository.cancelDate(reservaionId);
+  }
+
+  @Test
+  void findAllByUser() {
+    Long userId = 1L;
+    long offset = 10L;
+    long skip = 0;
+    List<Reservation> list = reservationMapper.findAllByUserId(userId, offset, skip);
+    assertThat(list.size()).isNotEqualTo(0);
+    for (Reservation reservation : list) {
+      assertThat(reservation.getUserId()).isEqualTo(userId);
+    }
+  }
+
+  @Test
+  void count() {
+    int count = reservationMapper.count(1L);
+    assertThat(count).isNotEqualTo(0);
   }
 }

@@ -17,4 +17,15 @@
     SET is_canceled = TRUE
     WHERE room_reservation_id = #{id}
   </update>
+  <select id="findAllByUserId" resultType="com.airjnc.reservation.dto.response.Reservation">
+    select *
+    from room_reservation
+    where user_id = #{userId}
+    LIMIT #{skip}, #{offset}
+  </select>
+  <select id="count" resultType="int">
+    select count(*)
+    from room_reservation
+    where user_id = #{userId}
+  </select>
 </mapper>

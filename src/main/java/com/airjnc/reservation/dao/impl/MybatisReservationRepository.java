@@ -5,6 +5,8 @@ import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.reservation.dao.ReservationMapper;
 import com.airjnc.reservation.dao.ReservationRepository;
 import com.airjnc.reservation.domain.ReservationEntity;
+import com.airjnc.reservation.dto.response.Reservation;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,16 @@ public class MybatisReservationRepository implements ReservationRepository {
   private final ReservationMapper reservationMapper;
 
   private final CommonValidateService commonValidateService;
+
+  @Override
+  public List<Reservation> findAllByUserId(Long userId, long offset, long skip) {
+    return reservationMapper.findAllByUserId(userId, offset, skip);
+  }
+
+  @Override
+  public int count(Long userId) {
+    return reservationMapper.count(userId);
+  }
 
   @Override
   public ReservationEntity findById(Long reservationId) {
