@@ -47,3 +47,13 @@ VALUES (3, 'content-3', 3, NOW(), NOW(), NULL, 1, 1);
 # Wish Room
 INSERT INTO wish_room (id, user_id, room_id)
 VALUES (1, 1, 1);
+# Reservation
+INSERT INTO room_reservation(id, user_count, start_date, end_date, total_price, created_at, deleted_at, user_id,
+                             room_id)
+VALUES (1, 3, '2022-01-01', '2022-01-03', 1000, NOW(), NULL, 1, 1);
+# Reservation Date
+INSERT INTO room_reservation_date(id, date, is_canceled, room_id, room_reservation_id)
+VALUES (1, '2022-01-01', false, 1, 1);
+INSERT INTO room_reservation_date(id, date, is_canceled, room_id, room_reservation_id)
+VALUES (2, '2022-01-02', false, 1, 1);
+
