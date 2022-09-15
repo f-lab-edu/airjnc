@@ -1,0 +1,37 @@
+spring:
+  profiles:
+    active: prod
+  datasource:
+    url: jdbc:mysql://192.168.1.6:3306/airjnc?serverTimezone=UTC&characterEncoding=UTF-8
+    username: airjnc
+    password: q1w2e3
+  messages:
+    basename: errors
+  session:
+    store-type: redis
+  redis:
+    session:
+      host: 192.168.1.7
+      password: q1w2e3
+      port: 6379
+      ttl:
+        certificationCode: 3m
+logging:
+  level:
+    org:
+      springframework:
+        #        OFF << FATAL << ERROR << WARN << INFO << DEBUG << TRACE << ALL
+        jdbc: warn
+    com:
+      airjnc: warn
+cloud:
+  naver:
+    credentials:
+      accessKey: zwIICC8SxBZwOZZDxOth
+      secretKey: DitvlIZzh6sjVH8AVKB8YKUmGcMtBGdP1JwA8TmJ
+    mail:
+      templateSid:
+        resetPassword: 6833
+      uri:
+        root: https://mail.apigw.ntruss.com
+        send: /api/v1/mails
