@@ -11,7 +11,6 @@ pipeline {
         withGradle() {
           sh './gradlew clean bootJar'
         }
-
       }
     }
 
@@ -31,13 +30,16 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        sh 'docker build -t airjnc-app .'
+        app = docker.build("hanjn2842/airjnc")
       }
     }
 
     stage('Push Docker Image') {
       steps {
-        sh 'docker image tag hanjn2842/airjnc-app:latest hanjn2842/airjnc-app:${BUILD_NUMBER}'
+        docker.withRegistry("https://registry.hub.docker.com", "docker-hub"){
+          app.push("${BUILD_NUMBER}")
+          app.push("latest")
+        }
       }
     }
 

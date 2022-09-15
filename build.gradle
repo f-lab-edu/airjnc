@@ -50,7 +50,6 @@ checkstyle {
     maxErrors = 0
     maxWarnings = 0
 }
-testResultsDirName = "$buildDir/junit-xml"
 tasks.named('test') {
     useJUnitPlatform {
         includeTags "unit"
