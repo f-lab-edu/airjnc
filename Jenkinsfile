@@ -23,29 +23,51 @@ pipeline {
 
     stage('Integration Test') {
       steps {
+        sh 'docker-compose -f docker/docker-compose.yml up -d'
         sh './gradlew integrationTest'
         junit '**/build/test-results/integrationTest/*.xml'
+        sh 'docker-compose -f docker/docker-compose.yml down'
       }
     }
 
     stage('Build Docker Image') {
       steps {
-        app = docker.build("hanjn2842/airjnc")
+        script {
+          app = docker.build("hanjn2842/airjnc")
+        }
       }
     }
 
     stage('Push Docker Image') {
       steps {
-        docker.withRegistry("https://registry.hub.docker.com", "docker-hub"){
-          app.push("${BUILD_NUMBER}")
-          app.push("latest")
+        script {
+          docker.withRegistry("https://registry.hub.docker.com", "docker-hub"){
+                    app.push("${BUILD_NUMBER}")
+                    app.push("latest")
+                  }
         }
       }
     }
 
     stage('Deploy Docker Image') {
       steps {
-        sh 'ssh -p 22 root@192.168.0.7 -T sh < /var/lib/jenkins/docker-deploy.sh'
+        sshPublisher(
+          continueOnError: false, failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: 'web-server',
+              verbose: true,
+              transfers: [
+                sshTransfer(
+                  execCommand: 'sh /app/scripts/deploy-app', // 젠킨스 서버가 아니라, ssh를 통하여 접속한 서버에 파일이 있어야 함
+                  remoteDirectory: '',
+                  removePrefix: '',
+                  sourceFiles: ''
+                  )
+                ],
+              )
+          ]
+        )
       }
     }
 
