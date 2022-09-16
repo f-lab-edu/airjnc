@@ -18,10 +18,10 @@ logging:
   level:
     org:
       springframework:
-        #        OFF << FATAL << ERROR << WARN << INFO << DEBUG << TRACE << ALL
+        # OFF << FATAL << ERROR << WARN << INFO << DEBUG << TRACE << ALL
         jdbc: warn
     com:
-      airjnc: warn
+      airjnc: info
 cloud:
   naver:
     credentials:
