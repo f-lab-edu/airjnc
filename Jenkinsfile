@@ -2,17 +2,12 @@ pipeline {
   agent any
 
   stages {
-    stage('Start') {
-      steps{
+    stage('Build Jar') {
+      steps {
         slackSend (teamDomain: 'f-lab-community',
                     tokenCredentialId: 'f-lab-slack-notification',
                     color: '#FFFF00',
                     message: "[🚀 Start] Job *${env.JOB_NAME}__${env.BUILD_NUMBER} (${env.BUILD_URL})* is Started")
-      }
-    }
-
-    stage('Build Jar') {
-      steps {
         withGradle() { sh './gradlew clean bootJar' }
       }
     }
@@ -35,7 +30,7 @@ pipeline {
 
     stage('Build Docker Image') {
       when {
-        expression {env.ghprbTargetBranch == 'master'}
+        expression { env.ghprbTargetBranch == 'master' || env.BRANCH_NAME == 'master'}
       }
       steps {
         script {
@@ -46,7 +41,7 @@ pipeline {
 
     stage('Push Docker Image') {
       when {
-        expression {env.ghprbTargetBranch == 'master'}
+        expression { env.ghprbTargetBranch == 'master' || env.BRANCH_NAME == 'master'}
       }
       steps {
         script {
@@ -60,7 +55,7 @@ pipeline {
 
     stage('Deploy Docker Image') {
       when {
-        expression {env.ghprbTargetBranch == 'master'}
+        expression { env.ghprbTargetBranch == 'master' || env.BRANCH_NAME == 'master'}
       }
       steps {
         sshPublisher(
