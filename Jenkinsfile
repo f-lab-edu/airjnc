@@ -1,16 +1,19 @@
 pipeline {
-  agent {
-    node {
-      label 'built-in'
+  agent any
+
+  stages {
+    stage('Start') {
+      steps{
+        slackSend (teamDomain: 'f-lab-community',
+                    tokenCredentialId: 'airjnc-slack-accesstoken',
+                    color: '#FFFF00',
+                    message: "[🚀 Start] Job *${env.JOB_NAME}__${env.BUILD_NUMBER} (${env.BUILD_URL})* is Started")
+      }
     }
 
-  }
-  stages {
     stage('Build Jar') {
       steps {
-        withGradle() {
-          sh './gradlew clean bootJar'
-        }
+        withGradle() { sh './gradlew clean bootJar' }
       }
     }
 
@@ -26,7 +29,6 @@ pipeline {
         sh 'docker-compose -f docker/docker-compose.yml up -d'
         sh './gradlew integrationTest'
         junit '**/build/test-results/integrationTest/*.xml'
-        sh 'docker-compose -f docker/docker-compose.yml down'
       }
     }
 
@@ -70,6 +72,23 @@ pipeline {
         )
       }
     }
-
+  } // stages
+  post {
+    always{
+      cleanWs()
+      sh 'docker-compose -f docker/docker-compose.yml down'
+    }
+    success {
+      slackSend (teamDomain: 'f-lab-community',
+                  tokenCredentialId: 'airjnc-slack-accesstoken',
+                  color: '#00FF00',
+                  message: "[📦 success] Job *${env.JOB_NAME}__${env.BUILD_NUMBER} (${env.BUILD_URL})* is Successfully done")
+    }
+    failure {
+      slackSend (teamDomain: 'f-lab-community',
+                  tokenCredentialId: 'airjnc-slack-accesstoken',
+                  color: '#FF0000',
+                  message: "[😭 Failed] Job *${env.JOB_NAME}__${env.BUILD_NUMBER} (${env.BUILD_URL})* is failed")
+    }
   }
 }
