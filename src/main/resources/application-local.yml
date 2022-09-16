@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:mysql://192.168.1.6:3306/airjnc?serverTimezone=UTC&characterEncoding=UTF-8
-    username: airjnc
+    url: jdbc:mysql://localhost:3306/airjnc?serverTimezone=UTC&characterEncoding=UTF-8
+    username: test
     password: q1w2e3
   messages:
     basename: errors
@@ -9,19 +9,19 @@ spring:
     store-type: redis
   redis:
     session:
-      host: 192.168.1.7
+      host: localhost
       password: q1w2e3
       port: 6379
       ttl:
         certificationCode: 3m
+
 logging:
   level:
     org:
       springframework:
-        #        OFF << FATAL << ERROR << WARN << INFO << DEBUG << TRACE << ALL
-        jdbc: warn
+        jdbc: debug
     com:
-      airjnc: warn
+      airjnc: trace
 cloud:
   naver:
     credentials:
