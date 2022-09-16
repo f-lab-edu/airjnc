@@ -1,16 +1,19 @@
 pipeline {
-  agent {
-    node {
-      label 'built-in'
+  agent any
+
+  stages {
+    stage('Start') {
+      steps{
+        slackSend (teamDomain: 'f-lab-community',
+                    tokenCredentialId: 'f-lab-slack-notification',
+                    color: '#FFFF00',
+                    message: "[🚀 Start] Job *${env.JOB_NAME}__${env.BUILD_NUMBER} (${env.BUILD_URL})* is Started")
+      }
     }
 
-  }
-  stages {
     stage('Build Jar') {
       steps {
-        withGradle() {
-          sh './gradlew clean bootJar'
-        }
+        withGradle() { sh './gradlew clean bootJar' }
       }
     }
 
@@ -31,6 +34,9 @@ pipeline {
     }
 
     stage('Build Docker Image') {
+      when {
+        expression {env.ghprbTargetBranch == 'master'}
+      }
       steps {
         script {
           app = docker.build("hanjn2842/airjnc")
@@ -39,6 +45,9 @@ pipeline {
     }
 
     stage('Push Docker Image') {
+      when {
+        expression {env.ghprbTargetBranch == 'master'}
+      }
       steps {
         script {
           docker.withRegistry("https://registry.hub.docker.com", "docker-hub"){
@@ -50,6 +59,9 @@ pipeline {
     }
 
     stage('Deploy Docker Image') {
+      when {
+        expression {env.ghprbTargetBranch == 'master'}
+      }
       steps {
         sshPublisher(
           continueOnError: false, failOnError: true,
@@ -70,6 +82,22 @@ pipeline {
         )
       }
     }
-
+  } // stages
+  post {
+    always{
+      cleanWs()
+    }
+    success {
+      slackSend (teamDomain: 'f-lab-community',
+                  tokenCredentialId: 'f-lab-slack-notification',
+                  color: '#00FF00',
+                  message: "[📦 success] Job *${env.JOB_NAME}__${env.BUILD_NUMBER} (${env.BUILD_URL})* is Successfully done")
+    }
+    failure {
+      slackSend (teamDomain: 'f-lab-community',
+                  tokenCredentialId: 'f-lab-slack-notification',
+                  color: '#FF0000',
+                  message: "[😭 Failed] Job *${env.JOB_NAME}__${env.BUILD_NUMBER} (${env.BUILD_URL})* is failed")
+    }
   }
 }
