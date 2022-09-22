@@ -23,8 +23,9 @@ AirBnB와 같은 숙박 예약 서비스를 개발하는 프로젝트입니다.
     - chore#(ISSUE_NUMBER):MESSAGE
     - hotfix#(ISSUE_NUMBER):MESSAGE
 
-# 아키텍처
-![architecture drawio](https://user-images.githubusercontent.com/41284492/191672298-f72a40d6-3757-43ff-93d5-973f793c4016.png)
+# 전체 구조
+![architecture drawio](https://user-images.githubusercontent.com/41284492/191675159-eea72ada-a76b-450c-9769-8cf7f520a008.png)
+
 ### 서브넷 구성 및 Security Group 설정
 1. Spring Server
     - Public Subnet
@@ -49,7 +50,7 @@ AirBnB와 같은 숙박 예약 서비스를 개발하는 프로젝트입니다.
     3. 통합 테스트
     4. 도커 이미지 생성
     5. 생성된 도커 이미지 허브에 푸시
-    6. Jenkins Server가 SSH를 통해 Spring Server에 접근하여, hub에 올라가져있는 docker image를 가져온 후, run
+    6. Jenkins Server가 SSH를 통해 Spring Server에 접근하여, hub에 올라가져있는 docker image를 가져온 후, 실행
     7. 슬랙으로 결과 알림
 4. Github PR 화면에서 파이프라인 성공 여부 출력
     - 성공시, Merge 가능
