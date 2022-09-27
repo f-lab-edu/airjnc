@@ -4,8 +4,18 @@
   <select id="existsByUserIdAndRoomId" resultType="boolean">
     SELECT EXISTS(SELECT 1 FROM wish_room WHERE user_id = #{userId} AND room_id = #{roomId})
   </select>
+  <select id="findById" resultType="com.airjnc.room.dto.WishRoomDto">
+    SELECT id, user_id, room_id
+    FROM wish_room
+    WHERE id = #{id};
+  </select>
   <insert id="create">
     INSERT INTO wish_room (user_id, room_id)
     VALUES (#{userId}, #{roomId})
   </insert>
+  <delete id="delete">
+    DELETE
+    FROM wish_room
+    WHERE id = #{id}
+  </delete>
 </mapper>

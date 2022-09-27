@@ -5,8 +5,11 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import com.airjnc.room.dao.WishRoomRepository;
+import com.airjnc.room.dto.WishRoomDto;
 import com.airjnc.room.exception.AlreadyWishRoomException;
+import com.airjnc.room.exception.NotWishRoomException;
 import com.testutil.annotation.UnitTest;
+import com.testutil.testdata.TestId;
 import com.testutil.testdata.TestUser;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -51,4 +54,29 @@ class WishRoomValidateServiceTest {
 
   }
 
+  @Nested
+  class ShouldBeWishRoom {
+
+    @Test
+    void givenEqualsUserId_thenThrow() {
+      //given
+      WishRoomDto dto = WishRoomDto.builder().userId(TestUser.ID).build();
+      given(wishRoomRepository.findById(anyLong())).willReturn(dto);
+      //when
+      wishRoomValidateService.shouldBeWishRoom(TestUser.ID, TestId.WISH_ROOM);
+    }
+
+    @Test
+    void givenNotEqualsUserId_thenThrow() {
+      //given
+      WishRoomDto dto = WishRoomDto.builder().userId(TestUser.ID + 1L).build();
+      given(wishRoomRepository.findById(anyLong())).willReturn(dto);
+      //when
+      assertThrows(
+          NotWishRoomException.class,
+          () -> wishRoomValidateService.shouldBeWishRoom(TestUser.ID, TestId.WISH_ROOM)
+      );
+    }
+
+  }
 }
