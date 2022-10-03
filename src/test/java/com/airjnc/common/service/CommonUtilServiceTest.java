@@ -1,9 +1,5 @@
 package com.airjnc.common.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testutil.annotation.UnitTest;
@@ -14,6 +10,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 @UnitTest
@@ -40,7 +40,7 @@ class CommonUtilServiceTest {
   }
 
   @Test
-  void generateCode() {
+  void generateCertificationCode() {
     //when
     String code = commonUtilService.generateCertificationCode();
     //then

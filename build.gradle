@@ -42,10 +42,6 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
 checkstyle {
     toolVersion = "10.3"
     configFile = file("config/checkstyle/checkstyle.xml")
@@ -54,7 +50,21 @@ checkstyle {
     maxErrors = 0
     maxWarnings = 0
 }
+tasks.named('test') {
+    useJUnitPlatform {
+        includeTags "unit"
+    }
+}
+tasks.named("check") {
+    dependsOn integrationTest
+}
 
+tasks.register("integrationTest", Test) {
+    useJUnitPlatform {
+        includeTags "integration"
+    }
+    shouldRunAfter test
+}
 tasks.register('installGitHook', Copy) {
     from(file('scripts/pre-commit'))
     into(file('.git/hooks'))
