@@ -39,7 +39,7 @@ class WishRoomValidateServiceTest {
       Long roomId = 1L;
       given(wishRoomRepository.existsByUserIdAndRoomId(anyLong(), anyLong())).willReturn(false);
       //when
-      wishRoomValidateService.shouldBeNotWishRoom(TestUser.ID, roomId);
+      wishRoomValidateService.noAlreadyWishRoomElseThrow(TestUser.ID, roomId);
     }
 
     @Test
@@ -51,7 +51,7 @@ class WishRoomValidateServiceTest {
       //when
       assertThrows(
               AlreadyWishRoomException.class,
-              () -> wishRoomValidateService.shouldBeNotWishRoom(TestUser.ID, roomId)
+              () -> wishRoomValidateService.noAlreadyWishRoomElseThrow(TestUser.ID, roomId)
       );
     }
 
@@ -61,23 +61,25 @@ class WishRoomValidateServiceTest {
   class ShouldBeWishRoom {
 
     @Test
-    void givenEqualsUserId_thenThrow() {
+    @DisplayName("위시 리스트에 있는 방이라면, 성공적으로 반환된다.")
+    void givenAlreadyWishRoom_ThenSuccess() {
       //given
       WishRoomDto dto = WishRoomDto.builder().userId(TestUser.ID).build();
       given(wishRoomRepository.findById(anyLong())).willReturn(dto);
       //when
-      wishRoomValidateService.shouldBeWishRoom(TestUser.ID, TestId.WISH_ROOM);
+      wishRoomValidateService.shouldAlreadyBeWishRoomElseThrow(TestUser.ID, TestId.WISH_ROOM);
     }
 
     @Test
+    @DisplayName("위시 리스트에 있는 방이 아니라면, NotWishRoomException을 던져야 한다.")
     void givenNotEqualsUserId_thenThrow() {
       //given
       WishRoomDto dto = WishRoomDto.builder().userId(TestUser.ID + 1L).build();
       given(wishRoomRepository.findById(anyLong())).willReturn(dto);
       //when
       assertThrows(
-          NotWishRoomException.class,
-          () -> wishRoomValidateService.shouldBeWishRoom(TestUser.ID, TestId.WISH_ROOM)
+              NotWishRoomException.class,
+              () -> wishRoomValidateService.shouldAlreadyBeWishRoomElseThrow(TestUser.ID, TestId.WISH_ROOM)
       );
     }
 

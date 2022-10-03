@@ -44,7 +44,7 @@ class WishRoomServiceTest {
     //when
     wishRoomService.create(TestUser.ID, roomId);
     //then
-    then(wishRoomValidateService).should().shouldBeNotWishRoom(TestUser.ID, roomId);
+    then(wishRoomValidateService).should().noAlreadyWishRoomElseThrow(TestUser.ID, roomId);
     then(wishRoomRepository).should().create(TestUser.ID, roomId);
   }
 
@@ -62,13 +62,14 @@ class WishRoomServiceTest {
     then(roomRepository).should().findAllByUserId(userId, skip, pageable.getOffset());
   }
 
+  @Test
   void delete() {
     //given
     Long wishRoomId = TestId.WISH_ROOM;
     //when
     wishRoomService.delete(TestUser.ID, wishRoomId);
     //then
-    then(wishRoomValidateService).should().shouldBeWishRoom(TestUser.ID, wishRoomId);
+    then(wishRoomValidateService).should().shouldAlreadyBeWishRoomElseThrow(TestUser.ID, wishRoomId);
     then(wishRoomRepository).should().delete(wishRoomId);
   }
 }

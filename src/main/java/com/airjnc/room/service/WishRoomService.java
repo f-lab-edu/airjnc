@@ -22,7 +22,7 @@ public class WishRoomService {
   private final RoomRepository roomRepository;
 
   public void create(Long userId, Long roomId) {
-    wishRoomValidateService.shouldBeNotWishRoom(userId, roomId);
+    wishRoomValidateService.noAlreadyWishRoomElseThrow(userId, roomId);
     wishRoomRepository.create(userId, roomId);
   }
 
@@ -33,7 +33,7 @@ public class WishRoomService {
   }
 
   public void delete(Long userId, Long wishRoomId) {
-    wishRoomValidateService.shouldBeWishRoom(userId, wishRoomId);
+    wishRoomValidateService.shouldAlreadyBeWishRoomElseThrow(userId, wishRoomId);
     wishRoomRepository.delete(wishRoomId);
   }
 }

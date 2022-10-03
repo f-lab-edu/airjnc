@@ -14,23 +14,23 @@ public class WishRoomValidateService {
 
   private final WishRoomRepository wishRoomRepository;
 
-  public void shouldBeNotWishRoom(Long userId, Long roomId) {
+  public void noAlreadyWishRoomElseThrow(Long userId, Long roomId) {
     boolean exists = wishRoomRepository.existsByUserIdAndRoomId(userId, roomId);
     if (!exists) {
       return;
     }
     throw new AlreadyWishRoomException(
-        ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "alreadyWishRoom")
+            ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "alreadyWishRoom")
     );
   }
 
-  public void shouldBeWishRoom(Long userId, Long id) {
+  public void shouldAlreadyBeWishRoomElseThrow(Long userId, Long id) {
     WishRoomDto dto = wishRoomRepository.findById(id);
     if (dto.getUserId().equals(userId)) {
       return;
     }
     throw new NotWishRoomException(
-        ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "notWishRoom")
+            ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "notWishRoom")
     );
   }
 }
