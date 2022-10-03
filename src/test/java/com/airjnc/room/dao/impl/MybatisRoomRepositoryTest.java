@@ -10,6 +10,7 @@ import com.airjnc.room.dto.response.Room;
 import com.airjnc.room.dto.response.SimpleRoom;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.testdata.TestId;
+import com.testutil.testdata.TestUser;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,18 @@ class MybatisRoomRepositoryTest {
     //when
     List<SimpleRoom> list = roomRepository.findAllByCategory(dto);
     //then
+  }
+
+  @Test
+  public void findAllByUserId() {
+    //when
+    List<SimpleRoom> list = roomRepository.findAllByUserId(TestUser.ID, 0L, 20L);
+    //then
+    assertThat(list.size()).isEqualTo(1);
+    SimpleRoom simpleRoom = list.get(0);
+    assertThat(simpleRoom.getTitle()).isNotNull();
+    assertThat(simpleRoom.getPricePerNight()).isNotNull();
+    assertThat(simpleRoom.getThumbnailList().size()).isNotZero();
   }
 
   @Test

@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.airjnc.room.dao.WishRoomMapper">
-  <select id="existsByUserIdAndRoomId" resultType="boolean">
-    SELECT EXISTS(SELECT 1 FROM wish_room WHERE user_id = #{userId} AND room_id = #{roomId})
-  </select>
-  <insert id="create">
-    INSERT INTO wish_room (user_id, room_id)
-    VALUES (#{userId}, #{roomId})
-  </insert>
+    <select id="existsByUserIdAndRoomId" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM wish_room WHERE user_id = #{userId} AND room_id = #{roomId})
+    </select>
+    <select id="findById" resultType="com.airjnc.room.dto.WishRoomDto">
+        SELECT id, user_id, room_id
+        FROM wish_room
+        WHERE id = #{id};
+    </select>
+    <insert id="create">
+        INSERT INTO wish_room (user_id, room_id)
+        VALUES (#{userId}, #{roomId})
+    </insert>
+    <select id="count" resultType="int">
+        SELECT count(wr.id)
+        FROM wish_room wr
+                 INNER JOIN room r on wr.room_id = r.id AND r.status = 'IN_OPERATION'
+        WHERE user_id = #{userId}
+    </select>
+    <delete id="delete">
+        DELETE
+        FROM wish_room
+        WHERE id = #{id}
+    </delete>
 </mapper>

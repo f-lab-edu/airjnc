@@ -1,10 +1,10 @@
 package com.airjnc.common.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.testutil.annotation.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @UnitTest
 class CommonHashServiceTest {
@@ -17,7 +17,7 @@ class CommonHashServiceTest {
   }
 
   @Test
-  void plainShouldBeHashed() {
+  void encrypt() {
     //given
     String plain = "q1w2e3r4!";
     //when
@@ -27,7 +27,7 @@ class CommonHashServiceTest {
   }
 
   @Test
-  void plainShouldBeMatchToB() {
+  void isMatch() {
     //given
     String plain = "q1w2e3r4!";
     String hash = commonHashService.encrypt(plain);

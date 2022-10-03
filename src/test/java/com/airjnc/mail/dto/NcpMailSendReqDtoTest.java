@@ -1,16 +1,18 @@
 package com.airjnc.mail.dto;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.airjnc.mail.dto.NcpMailSendReqDto.Recipient;
 import com.testutil.annotation.UnitTest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 // ncp 에서 api 요청시에 보낼 수 있는 데이터의 스펙이 정해져 있고, 이에 맞춰서 잘 보내고 있는 지 확인하기 위해 테스트 진행
 @UnitTest
 class NcpMailSendReqDtoTest {
 
   @Test
+  @DisplayName("NCP Mailer 요청 데이터 검증 -1")
   void checkNcpMailerRequestFields() throws NoSuchFieldException {
     //when
     Class<NcpMailSendReqDto> clazz = NcpMailSendReqDto.class;
@@ -26,6 +28,7 @@ class NcpMailSendReqDtoTest {
   }
 
   @Test
+  @DisplayName("NCP Mailer 요청 데이터 검증 -2")
   void checkRecipientFields() throws NoSuchFieldException {
     //when
     Class<Recipient> clazz = Recipient.class;

@@ -34,13 +34,8 @@ CREATE TABLE IF NOT EXISTS `host`
 
 CREATE TABLE IF NOT EXISTS `room_category`
 (
-    `id`               BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name`             VARCHAR(20)     NOT NULL,
-    -- 해당 카테고리에 속하는 방의 개수[room_count]가 2개 이상인가?
-    -- 넣은 이유 -> 클라이언트 측에서 숙소 유형 "산장, B&B" 둘 중에
-    --      산장을 택하면 "숙소에 방이 총 몇 개인가요?" 라는 문구가 안나오고
-    --      B&B을 택하면 "숙소에 방이 총 몇 개인가요?" 라는 문구가 나오게 하기 위함
-    `is_several_rooms` BOOLEAN         NOT NULL,
+    `id`   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(20)     NOT NULL,
 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;

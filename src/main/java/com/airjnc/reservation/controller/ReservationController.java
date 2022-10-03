@@ -16,10 +16,10 @@ public class ReservationController {
 
   private final ReservationService reservationService;
 
-  @DeleteMapping("/{reservationId}")
+  @DeleteMapping("/{id}")
   @CheckAuth
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void cancel(@CurrentUserId Long userId, @PathVariable Long reservationId) {
-    reservationService.cancel(userId, reservationId);
+  public void cancel(@CurrentUserId Long userId, @PathVariable Long id) {
+    reservationService.cancel(userId, id);
   }
 }

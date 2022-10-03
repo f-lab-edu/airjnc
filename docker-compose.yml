@@ -1,9 +1,0 @@
-version: '3.7'
-
-services:
-  app:
-    image: airjnc:master
-    container_name: API-master
-    user: root
-    ports:
-      - 8080:8080

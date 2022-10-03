@@ -27,6 +27,12 @@ public class MybatisRoomRepository implements RoomRepository {
   }
 
   @Override
+  public List<SimpleRoom> findAllByUserId(Long userId, Long skip, Long offset) {
+    return roomMapper.findAllByUserId(userId, skip, offset);
+  }
+
+
+  @Override
   public Room findById(Long id) {
     return roomMapper.findById(id).orElseThrow(NotFoundException::new);
   }

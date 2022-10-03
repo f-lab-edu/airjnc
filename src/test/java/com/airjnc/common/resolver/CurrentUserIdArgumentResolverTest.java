@@ -1,13 +1,8 @@
 package com.airjnc.common.resolver;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-
 import com.airjnc.common.interceptor.CheckAuthInterceptor;
 import com.testutil.annotation.UnitTest;
 import com.testutil.testdata.TestUser;
-import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +13,12 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 @UnitTest
@@ -42,7 +43,7 @@ class CurrentUserIdArgumentResolverTest {
     req.setAttribute(CheckAuthInterceptor.AUTH_KEY, userId);
     //when
     Object result = currentUserIdArgumentResolver.resolveArgument(
-        mock(MethodParameter.class), mock(ModelAndViewContainer.class), webRequest, mock(WebDataBinderFactory.class)
+            mock(MethodParameter.class), mock(ModelAndViewContainer.class), webRequest, mock(WebDataBinderFactory.class)
     );
     //then
     assertThat(result).isEqualTo(userId);
