@@ -20,12 +20,20 @@ public class ReservationService {
   private final ReservationValidateService reservationValidateService;
 
   @Transactional
+  public void cancel(Long userId, Long reservationId) {
+    ReservationEntity reservation = reservationRepository.findById(reservationId);
+    reservationValidateService.shouldBeIsMine(reservation, userId);
+    reservationValidateService.nowShouldBeBeforeStartDate(reservation);
+    reservationRepository.cancel(reservationId);
+    reservationRepository.cancelDate(reservationId);
+  }
+
   public void reservation(Long userId, Long roomId, ReservationReq req) {
     Room room = roomService.getRoomById(roomId);
     // check reservation date [최소/최대 숙박 기간 내로 예약해야 한다.]
     reservationValidateService.checkReservationBetween(
-        room.getMinNumberOfNights(), room.getMaxNumberOfNights(),
-        req.getStartDate(), req.getEndDate()
+            room.getMinNumberOfNights(), room.getMaxNumberOfNights(),
+            req.getStartDate(), req.getEndDate()
     );
     // check max_guest_count [최대 예약 명수 내로 예약해야 한다.]
     reservationValidateService.guestCountShouldNotBeExceed(room, req.getGuestCount());

@@ -1,6 +1,7 @@
 package com.airjnc.room.controller;
 
 import com.airjnc.common.service.StateService;
+import com.airjnc.reservation.service.ReservationService;
 import com.airjnc.room.dao.RoomRepository;
 import com.airjnc.room.domain.RoomStatus;
 import com.airjnc.room.dto.request.RoomGetAllReq;
@@ -42,6 +43,9 @@ class RoomControllerTest {
 
   @MockBean
   WishRoomService wishRoomService;
+
+  @MockBean
+  ReservationService reservationService;
 
   @Autowired
   MockMvc mockMvc;

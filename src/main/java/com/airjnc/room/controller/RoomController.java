@@ -2,6 +2,8 @@ package com.airjnc.room.controller;
 
 import com.airjnc.common.annotation.CheckAuth;
 import com.airjnc.common.annotation.CurrentUserId;
+import com.airjnc.reservation.dto.request.ReservationReq;
+import com.airjnc.reservation.service.ReservationService;
 import com.airjnc.room.dao.RoomRepository;
 import com.airjnc.room.dto.request.RoomGetAllReq;
 import com.airjnc.room.dto.response.Room;
@@ -24,6 +26,7 @@ public class RoomController {
   private final WishRoomService wishRoomService;
 
   private final RoomRepository roomRepository;
+  private final ReservationService reservationService;
 
   @GetMapping
   public Page<SimpleRoom> getAll(@Validated @ModelAttribute RoomGetAllReq req, Pageable pageable) {
@@ -42,4 +45,11 @@ public class RoomController {
     wishRoomService.create(userId, id);
   }
 
+  @PostMapping("/{id}/reservation")
+  @CheckAuth
+  @ResponseStatus(HttpStatus.CREATED)
+  public void reservation(@CurrentUserId Long userId, @PathVariable Long roomId,
+                          @Validated @RequestBody ReservationReq req) {
+    reservationService.reservation(userId, roomId, req);
+  }
 }
