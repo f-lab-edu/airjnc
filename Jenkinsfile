@@ -30,7 +30,7 @@ pipeline {
 
     stage('Build Docker Image') {
       when {
-        expression { env.ghprbTargetBranch == 'master' || env.BRANCH_NAME == 'master'}
+        expression { env.ghprbTargetBranch == 'master'}
       }
       steps {
         script {
@@ -41,7 +41,7 @@ pipeline {
 
     stage('Push Docker Image') {
       when {
-        expression { env.ghprbTargetBranch == 'master' || env.BRANCH_NAME == 'master'}
+        expression { env.ghprbTargetBranch == 'master' }
       }
       steps {
         script {
@@ -55,7 +55,7 @@ pipeline {
 
     stage('Deploy Docker Image') {
       when {
-        expression { env.ghprbTargetBranch == 'master' || env.BRANCH_NAME == 'master'}
+        expression { env.ghprbTargetBranch == 'master'}
       }
       steps {
         sshPublisher(

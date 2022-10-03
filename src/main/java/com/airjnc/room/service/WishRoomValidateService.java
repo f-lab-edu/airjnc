@@ -2,7 +2,9 @@ package com.airjnc.room.service;
 
 import com.airjnc.common.util.factory.ErrorsFactory;
 import com.airjnc.room.dao.WishRoomRepository;
+import com.airjnc.room.dto.WishRoomDto;
 import com.airjnc.room.exception.AlreadyWishRoomException;
+import com.airjnc.room.exception.NotWishRoomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +24,13 @@ public class WishRoomValidateService {
     );
   }
 
+  public void shouldBeWishRoom(Long userId, Long id) {
+    WishRoomDto dto = wishRoomRepository.findById(id);
+    if (dto.getUserId().equals(userId)) {
+      return;
+    }
+    throw new NotWishRoomException(
+        ErrorsFactory.createAndReject(this.getClass().getSimpleName(), "notWishRoom")
+    );
+  }
 }

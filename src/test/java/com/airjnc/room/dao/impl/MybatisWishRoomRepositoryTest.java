@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.airjnc.common.service.CommonValidateService;
 import com.airjnc.room.dao.WishRoomMapper;
 import com.airjnc.room.dao.WishRoomRepository;
+import com.airjnc.room.dto.WishRoomDto;
 import com.testutil.annotation.IntegrationTest;
 import com.testutil.annotation.MybatisTest;
 import com.testutil.testdata.TestId;
@@ -26,6 +27,7 @@ class MybatisWishRoomRepositoryTest {
   CommonValidateService commonValidateService;
 
   WishRoomRepository wishRoomRepository;
+
 
   @BeforeEach
   void beforeEach() {
@@ -52,5 +54,13 @@ class MybatisWishRoomRepositoryTest {
     //then
     assertThat(exists1).isTrue();
     assertThat(exists2).isFalse();
+  }
+
+  @Test
+  void findById() {
+    //when
+    WishRoomDto dto = wishRoomRepository.findById(TestId.WISH_ROOM);
+    //then
+    assertThat(dto.getId()).isEqualTo(TestId.WISH_ROOM);
   }
 }
