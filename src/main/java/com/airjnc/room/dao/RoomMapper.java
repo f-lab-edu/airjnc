@@ -16,5 +16,8 @@ public interface RoomMapper {
 
   List<SimpleRoom> findAllByCategory(FindAllByCategoryDto findAllByCategoryDto);
 
+  List<SimpleRoom> findAllByUserId(@Param("userId") Long userId, @Param("skip") Long skip,
+      @Param("offset") Long offset);
+
   Optional<Room> findById(Long id);
 }

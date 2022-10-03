@@ -4,6 +4,8 @@ import com.airjnc.room.dto.WishRoomDto;
 
 public interface WishRoomRepository {
 
+  int count(Long userId);
+
   void create(Long userId, Long roomId);
 
   void delete(Long id);

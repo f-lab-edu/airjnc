@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface WishRoomMapper {
 
+  int count(Long userId);
+
   int create(@Param("userId") Long userId, @Param("roomId") Long roomId);
 
   int delete(Long id);
