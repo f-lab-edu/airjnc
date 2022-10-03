@@ -1,19 +1,19 @@
 package com.airjnc.room.controller;
 
+import com.airjnc.common.annotation.CheckAuth;
+import com.airjnc.common.annotation.CurrentUserId;
 import com.airjnc.room.dao.RoomRepository;
 import com.airjnc.room.dto.request.RoomGetAllReq;
 import com.airjnc.room.dto.response.Room;
 import com.airjnc.room.dto.response.SimpleRoom;
 import com.airjnc.room.service.RoomService;
+import com.airjnc.room.service.WishRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rooms")
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoomController {
 
   private final RoomService roomService;
+  private final WishRoomService wishRoomService;
 
   private final RoomRepository roomRepository;
 
@@ -34,5 +35,11 @@ public class RoomController {
     return roomRepository.findById(id);
   }
 
+  @PostMapping("/{id}/wish")
+  @CheckAuth
+  @ResponseStatus(HttpStatus.CREATED)
+  public void create(@CurrentUserId Long userId, @PathVariable Long id) {
+    wishRoomService.create(userId, id);
+  }
 
 }
