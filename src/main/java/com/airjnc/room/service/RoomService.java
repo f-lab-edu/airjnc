@@ -3,6 +3,7 @@ package com.airjnc.room.service;
 import com.airjnc.room.dao.RoomRepository;
 import com.airjnc.room.dto.FindAllByCategoryDto;
 import com.airjnc.room.dto.request.RoomGetAllReq;
+import com.airjnc.room.dto.response.Room;
 import com.airjnc.room.dto.response.SimpleRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,10 @@ import java.util.List;
 public class RoomService {
 
   private final RoomRepository roomRepository;
+
+  public Room getRoomById(Long roomId) {
+    return roomRepository.findById(roomId);
+  }
 
   public Page<SimpleRoom> getAll(RoomGetAllReq req, Pageable pageable) {
     FindAllByCategoryDto findAllByCategoryDto = FindAllByCategoryDto.builder()
