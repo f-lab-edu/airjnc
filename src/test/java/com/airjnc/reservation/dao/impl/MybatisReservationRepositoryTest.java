@@ -7,6 +7,7 @@ import com.airjnc.reservation.domain.ReservationDateEntity;
 import com.airjnc.reservation.domain.ReservationEntity;
 import com.airjnc.reservation.dto.ReservationDate;
 import com.airjnc.reservation.dto.request.ReservationReq;
+import com.airjnc.reservation.dto.response.Reservation;
 import com.testutil.annotation.MybatisTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,6 +88,23 @@ class MybatisReservationRepositoryTest {
   }
 
   @Test
+  void findAllByUser() {
+    Long userId = 1L;
+    long offset = 10L;
+    long skip = 0;
+    List<Reservation> list = reservationMapper.findAllByUserId(userId, offset, skip);
+    assertThat(list.size()).isNotEqualTo(0);
+    for (Reservation reservation : list) {
+      assertThat(reservation.getUserId()).isEqualTo(userId);
+    }
+  }
+
+  @Test
+  void count() {
+    int count = reservationMapper.count(1L);
+    assertThat(count).isNotEqualTo(0);
+  }
+
   @Transactional
   void createReservationDate() {
     Long roomId = 1L;
