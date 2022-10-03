@@ -17,6 +17,8 @@ public class Room {
 
   private String description;
 
+  private Integer pricePerNight;
+
   private Integer bedCount;
 
   private Integer bedroomCount;
@@ -45,6 +47,7 @@ public class Room {
   public Room(Long id, String title, String description, Integer bedCount, Integer bedroomCount,
       Integer bathroomCount, Integer maxGuestCount, Integer roomCount, Integer minNumberOfNights,
       Integer maxNumberOfNights, String checkIn, String checkOut, String address, RoomStatus status,
+      Integer pricePerNight,
       List<String> photoList) {
     this.id = id;
     this.title = title;
@@ -60,6 +63,7 @@ public class Room {
     this.checkOut = checkOut;
     this.address = address;
     this.status = status;
+    this.pricePerNight = pricePerNight;
     this.photoList = photoList;
   }
 }

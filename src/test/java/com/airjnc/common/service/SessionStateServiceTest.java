@@ -25,7 +25,7 @@ class SessionStateServiceTest {
   SessionStateService sessionStateService;
 
   @Test
-  void sessionShouldBeRemoved() {
+  void delete() {
     //when
     sessionStateService.delete(SessionKey.USER);
     //then
@@ -33,7 +33,7 @@ class SessionStateServiceTest {
   }
 
   @Test
-  void sessionShouldBeSaved() {
+  void create() {
     //given
     Long userId = TestUser.ID;
     //when
@@ -43,7 +43,7 @@ class SessionStateServiceTest {
   }
 
   @Test
-  void shouldReturnUserId() {
+  void get() {
     //given
     Long userId = TestUser.ID;
     given(httpSession.getAttribute(SessionKey.USER.name())).willReturn(userId);

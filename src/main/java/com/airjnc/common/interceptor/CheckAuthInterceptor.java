@@ -9,12 +9,13 @@ import com.airjnc.user.domain.UserRole;
 import com.airjnc.user.dto.UserWhereDto.UserStatus;
 import com.airjnc.user.dto.response.UserResp;
 import com.airjnc.user.service.UserService;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 // 1. HTTP REQUEST -> WAS -> Servlet Filter -> Interceptor(preHandle) -> Controller
 // 2. Controller -> Interceptor(postHandle) -> Servlet Filter -> WAS -> HTTP RESPONSE

@@ -1,31 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.airjnc.reservation.dao.ReservationMapper">
-  <select id="findById" resultType="ReservationEntity">
-    select *
-    from room_reservation
-    where id = #{id}
-  </select>
-  <update id="cancel">
-    UPDATE room_reservation
-    SET deleted_at = now()
-    WHERE id = #{id}
-  </update>
+    <select id="findById" resultType="ReservationEntity">
+        select *
+        from room_reservation
+        where id = #{id}
+    </select>
+    <update id="cancel">
+        UPDATE room_reservation
+        SET deleted_at = now()
+        WHERE id = #{id}
+    </update>
 
-  <update id="cancelDate">
-    UPDATE room_reservation_date
-    SET is_canceled = TRUE
-    WHERE room_reservation_id = #{id}
-  </update>
-  <select id="findAllByUserId" resultType="com.airjnc.reservation.dto.response.Reservation">
-    select *
-    from room_reservation
-    where user_id = #{userId}
-    LIMIT #{skip}, #{offset}
-  </select>
-  <select id="count" resultType="int">
-    select count(*)
-    from room_reservation
-    where user_id = #{userId}
-  </select>
+    <update id="cancelDate">
+        UPDATE room_reservation_date
+        SET is_canceled = TRUE
+        WHERE room_reservation_id = #{id}
+    </update>
+    <select id="findAllByUserId" resultType="com.airjnc.reservation.dto.response.Reservation">
+        select *
+        from room_reservation
+        where user_id = #{userId}
+        LIMIT #{skip}, #{offset}
+    </select>
+    <select id="count" resultType="int">
+        select count(*)
+        from room_reservation
+        where user_id = #{userId}
+    </select>
+    <select id="findAllByDateWithLock" resultType="com.airjnc.reservation.dto.ReservationDate">
+        select date, count(*) as count
+        from room_reservation_date
+        where room_id = #{roomId}
+          AND is_canceled IS FALSE
+          AND date between #{startDate} and #{endDate}
+        group by date
+            for
+        update;
+    </select>
+
+    <insert id="createReservation" keyProperty="id" useGeneratedKeys="true">
+        insert into room_reservation (user_count, start_date, end_date, total_price, user_id, room_id)
+        VALUES (#{userCount}, #{startDate}, #{endDate}, #{totalPrice}, #{userId}, #{roomId})
+    </insert>
+
+    <insert id="createReservationDate" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO room_reservation_date (date, room_id, room_reservation_id) VALUES
+        <foreach collection="dates" index="index" item="item" nullable="false" separator=",">
+            (#{item.date}, #{item.roomId}, #{item.roomReservationId})
+        </foreach>
+    </insert>
 </mapper>

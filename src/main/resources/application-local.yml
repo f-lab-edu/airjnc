@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/airjnc?serverTimezone=UTC&characterEncoding=UTF-8
+    username: test
+    password: q1w2e3
+  messages:
+    basename: errors
+  session:
+    store-type: redis
+  redis:
+    session:
+      host: localhost
+      password: q1w2e3
+      port: 6379
+      ttl:
+        certificationCode: 3m
+
+logging:
+  level:
+    org:
+      springframework:
+        jdbc: debug
+    com:
+      airjnc: trace
+cloud:
+  naver:
+    credentials:
+      accessKey: zwIICC8SxBZwOZZDxOth
+      secretKey: DitvlIZzh6sjVH8AVKB8YKUmGcMtBGdP1JwA8TmJ
+    mail:
+      templateSid:
+        resetPassword: 6833
+      uri:
+        root: https://mail.apigw.ntruss.com
+        send: /api/v1/mails
