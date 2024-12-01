@@ -38,3 +38,6 @@ out/
 db-storage
 generated
 report
+
+application-local.properties
+application-prd.properties
